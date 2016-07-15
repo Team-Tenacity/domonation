@@ -15,6 +15,7 @@ export function decrementSuccess(counter){
 export function increment(counter) {
     return function(dispatch) {
         console.log('entered increment function');
+        let newCount = ++counter;
         dispatch(incrementSuccess(counter));
     }
 }
@@ -22,6 +23,7 @@ export function increment(counter) {
 export function decrement(counter) {
     return function(dispatch) {
         console.log('entered increment function');
+        let newCount = --counter;
         dispatch(decrementSuccess(counter));
     }
 }

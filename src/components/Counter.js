@@ -19,12 +19,12 @@ class Counter extends React.Component{
     }
 
     increment(event) {
-        let count = this.state.counter++;
+        let count = ++this.state.counter;
         this.props.actions.increment(count);
         console.log(this.state.counter);
     }
     decrement(event) {
-        let count = this.state.counter--;
+        let count = --this.state.counter;
         this.props.actions.decrement(count);
         console.log(this.state.counter);
     }
