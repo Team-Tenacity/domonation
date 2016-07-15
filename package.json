@@ -27,6 +27,9 @@
     "cors": "^2.7.1",
     "express": "^4.14.0",
     "massive": "^2.4.0",
+    "oauth": "^0.9.14",
+    "oauth-1.0a": "^1.0.1",
+    "path": "^0.12.7",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-redux": "^4.4.5",
@@ -35,7 +38,13 @@
     "redux": "^3.5.2",
     "redux-immutable-state-invariant": "^1.2.3",
     "redux-thunk": "^2.1.0",
+    "request": "^2.73.0",
+    "sys": "0.0.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1"
   }
 }

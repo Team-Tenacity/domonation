@@ -4,7 +4,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as counterActions from '../actions/counterActions';
+import * as twitterActions from '../actions/twitterActions';
+import {browserHistory} from 'react-router';
 
 
 class Counter extends React.Component{
@@ -16,6 +17,7 @@ class Counter extends React.Component{
         };
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
+        this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
 
     increment(event) {
@@ -28,6 +30,9 @@ class Counter extends React.Component{
         this.props.actions.decrement(count);
         console.log(this.state.counter);
     }
+    getTwitterFeed() {
+        this.props.actions.twitterGet();
+    }
     render(){
         console.log(this.state.counter);
         console.log('this is my counter props', this.props);
@@ -36,6 +41,7 @@ class Counter extends React.Component{
                 {this.state.counter}
                 <button onClick={this.increment}>+</button>
                 <button onClick={this.decrement}>-</button>
+                <button onClick={this.getTwitterFeed}>Get Twitter Feed</button>
             </div>
         )
     }
@@ -49,7 +55,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(counterActions, dispatch)
+        actions: bindActionCreators(twitterActions, dispatch)
     };
 }
 

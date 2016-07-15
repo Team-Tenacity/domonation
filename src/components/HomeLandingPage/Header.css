@@ -1,0 +1,21 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    height: 75px;
+}
+
+.logo {
+    height: 60px;
+    width: 60px;
+    background: #99CCEE;
+    color: #fff;
+
+}
+.header-options {
+    height: 100%;
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
