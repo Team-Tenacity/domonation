@@ -1,0 +1,72 @@
+.upper-nav-div {
+  position: absolute;
+  width: 100vw;
+  height: 62px;
+  background-color: #555555;
+}
+
+.left-half {
+  position: absolute;
+  left: 0;
+  display: flex;
+
+}
+
+.logo-div {
+  background-color: #9bcbea;
+}
+
+.logo-div img {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+}
+
+.plus-icon {
+  font-size: 36px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #333;
+  padding-top: 12px;
+}
+
+.cobrand-div {
+  background-color: #555555;
+  display: inline-block;
+}
+
+.cobrand-div img {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+}
+
+
+
+.right-half {
+  position: absolute;
+  right: 0;
+  display: flex;
+  height: 62px;
+  width: 250px;
+  padding-left: 30px;
+}
+
+.glyphicon-div {
+  background-color: transparent;
+  width: 50px;
+  height: 50px;
+  margin-right: 5px;
+  margin-top: 15px;
+}
+
+.glyphicon {
+  color: #8a8a8a;
+  font-size: 24px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.glyphicon:hover {
+  color: #9bcbea;
+}
