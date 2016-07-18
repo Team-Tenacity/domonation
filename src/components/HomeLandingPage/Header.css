@@ -1,21 +1,87 @@
+
+
 .header {
     display: flex;
     flex-direction: row;
-    height: 75px;
+    height: 60px;
+    color: #555555;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background: #fff;
+}
+
+.header a:hover {
+    color:#99CCEE;
+    text-decoration: none;
+}
+
+.header a:visited:active {
+    text-decoration: none;
+}
+
+.header a:visited{
+    text-decoration: line-through;
+
 }
 
 .logo {
-    height: 60px;
-    width: 60px;
+    height: 100%;
     background: #99CCEE;
     color: #fff;
 
 }
-.header-options {
+
+.logo img {
+    height: 100%;
+}
+.header-menu-options {
     height: 100%;
     width: 600px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+}
+
+.header-menu-options div {
+    margin-left: 34px;
+}
+
+.header-menu-options div:hover {
+    color: #99CCEE;
+    cursor: pointer;
+
+}
+
+.header-other-options {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.header-other-options div {
+    margin-right: 24px;
+}
+
+.header-other-options div:hover {
+    color: #99CCEE;
+    cursor: pointer;
+}
+.demo-button {
+    height: 35px;
+    width: 130px;
+    background: #FF9922;
+    color: #fff;
+    border: none;
+    font-size: .8em;
+    transition-duration: .3s
+}
+
+.demo-button:hover {
+    background: #99CCEE;
 }

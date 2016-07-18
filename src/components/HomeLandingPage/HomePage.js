@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import Header from './Header'
+import MainContent from './MainContent'
 
 class HomePage extends React.Component {
     
@@ -8,6 +9,7 @@ class HomePage extends React.Component {
         return (
             <div>
                 <Header />
+                <MainContent />
             </div>
         )
     }
