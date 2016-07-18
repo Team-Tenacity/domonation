@@ -42,6 +42,7 @@
     "redux-thunk": "^2.1.0",
     "request": "^2.73.0",
     "sys": "0.0.1",
+    "underscore": "^1.8.3",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },

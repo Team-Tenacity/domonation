@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
-import counter from './twitterReducer';
+import twitter from './twitterReducer';
 
 
 const rootReducer = combineReducers({
-    counter
+    twitter
 });
 
 export default rootReducer;

@@ -11,7 +11,7 @@ var oauth = OAuth({
 });
 
 var request_data = {
-    url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=cjpwrs',
+    url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=devmtn',
     method: 'GET',
 };
 
@@ -29,8 +29,9 @@ const twitterController = {
             form: request_data.data,
             headers: oauth.toHeader(oauth.authorize(request_data, token))
         }, function(error, response, body) {
-            console.log(response);
-            return res.json(response.body);
+            var parsed = JSON.parse(response.body);
+            console.log(parsed[0]);
+            return res.json(parsed);
         });
     }
 }
