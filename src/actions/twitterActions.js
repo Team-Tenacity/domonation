@@ -42,11 +42,8 @@ export function twitterGet() {
     return function(dispatch) {
         axios.get('http://localhost:3001/api/twitter/timeline')
             .then(response => {
-                return response})
-                .then(data => {
-                console.log(data.data);
-                //dispatch(loadUsersSuccess(data))
-                });
+                console.log(response.data);
+                return response});
     }
 }
 
