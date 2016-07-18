@@ -14,8 +14,8 @@ const Header = () => {
                     <div>Company</div>
                 </div>
                 <div className="header-other-options">
-                    <div><Link to="counter">Sign In</Link></div>
-                    <div>Buy</div>
+                    <div><Link to="charts">Sign In</Link></div>
+                    <div><Link to="counter">Buy</Link></div>
                     <div><button className="demo-button">WATCH DEMO</button></div>
                 </div>
             </div>

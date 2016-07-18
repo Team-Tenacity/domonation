@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
     entry: "./src/index.js",
     output: {
@@ -13,6 +15,12 @@ module.exports = {
     devtool: "source-map",
     module: {
         loaders: [
+            // {
+            //     test: /\.jsx?$/,
+            //     loaders: ['react-hot'],
+            //     include: path.join(__dirname, 'public')
+            //
+            // },
             {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
