@@ -1,12 +1,14 @@
 module.exports = {
     entry: "./src/index.js",
     output: {
-        filename: "public/bundle.js"
+        filename: "bundle.js",
+        path: "./public"
     },
 
     devServer: {
         port: 3333,
-        inline: true
+        inline: true,
+        contentBase: './src'
     },
     devtool: "source-map",
     module: {
