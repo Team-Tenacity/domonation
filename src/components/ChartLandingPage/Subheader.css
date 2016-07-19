@@ -1,0 +1,186 @@
+.subheader {
+  display: flex;
+  height: 39px;
+  align-items: center;
+  background-color: #333;
+}
+
+.subheader-views {
+  display: flex;
+  justify-content: space-around;
+}
+
+/*Left side of subheader*/
+
+.option {
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
+  font-size: small;
+  margin: 4px 6px 4px 6px;
+  padding: 6px 8px 8px 8px;
+
+}
+
+.option:active {
+  background-color: #5e5f61;
+  padding: 6px 8px 8px 8px;
+  border-radius: 4px;
+}
+
+.option:hover {
+  background-color: #5e5f61;
+  padding: 6px 8px 8px 8px;
+  border-radius: 4px;
+}
+
+.spacer-bar {
+  border-right: 1px solid #5e5f61;
+}
+
+/*Options with drop down*/
+.option-drop {
+  position: relative;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
+  font-size: small;
+  top: 4px;
+  min-width: 60px;
+}
+
+.option-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.dropdown  {
+  display: none;
+  position: absolute;
+  background-color: #77797c;
+  padding: 0 0 6px 0;
+  border-radius: 0 4px 4px 4px;
+  min-width: 10em;
+  height: 34px;
+  left: 0px;
+  top: 31px;
+  margin: 0;
+  z-index: 5;
+}
+
+.dropdown-option {
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
+  font-size: small;
+  margin: 4px 6px 4px 6px;
+  padding: 6px 8px 8px 8px;
+}
+
+.option-wrapper:hover {
+  background-color: gray;
+  border-radius: 4px;
+}
+
+.option-wrapper:hover .dropdown {
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
+  font-size: small;
+}
+
+.dropdown:hover .option-wrapper {
+  background-color: #5e5f61;
+  padding: 6px 8px 8px 8px;
+  border-radius: 4px;
+}
+
+.option-drop:hover {
+  background-color: #5e5f61;
+  padding-right: -4px;
+  border-radius: 4px;
+}
+
+.dropdown-option:hover {
+  background-color: #5e5f61;
+  border-radius: 8px;
+}
+
+/* Chevron */
+.Chevron{
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    height: 8px; /*height should be double border*/
+    z-index: 0;
+    padding-right: 4px;
+}
+.Chevron:before,
+.Chevron:after{
+    position: absolute;
+    display: block;
+    content: "";
+    border: 4px solid transparent;/*adjust size*/
+}
+
+/*Change four 'top' values below to rotate (top/right/bottom/left)*/
+.Chevron:before{
+    top: -8px;
+    border-top-color: white; /*Chevron Color*/
+}
+.Chevron:after{
+    top: -9px; /*adjust thickness*/
+    border-top-color: #333; /*Match background colour*/
+}
+
+
+.option-wrapper:hover .Chevron:after {
+  border-top-color: gray; /*Match background colour*/
+}
+
+.option-drop:hover .Chevron:after {
+  border-top-color: #5e5f61; /*Match background colour*/
+}
+
+/* Right side of subheader */
+
+.manage-pages {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.icon-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 50px;
+}
+
+.icon-right {
+  float: right;
+  height: 16px;
+  width: 16px;
+}
+
+.desc {
+  position: absolute;
+  display: none;
+  background-color: black
+}
+
+.icon-container:hover {
+  background-color: #5e5f61;
+}
+
+.icon-container:hover .desc {
+  transition-delay: 2s;
+  display: flex;
+}

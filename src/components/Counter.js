@@ -7,6 +7,8 @@ import {bindActionCreators} from 'redux';
 import * as twitterActions from '../actions/twitterActions';
 import {browserHistory} from 'react-router';
 
+// for testing/design purposes
+
 
 class Counter extends React.Component{
     constructor(props, context) {
