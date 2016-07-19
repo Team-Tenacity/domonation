@@ -21,12 +21,12 @@ class Counter extends React.Component{
         this.props.actions.twitterGet();
     }
 
-    increment(event) {
+    increment() {
         let count = ++this.state.counter;
         this.props.actions.increment(count);
         console.log(this.state.counter);
     }
-    decrement(event) {
+    decrement() {
         let count = --this.state.counter;
         this.props.actions.decrement(count);
         console.log(this.state.counter);
@@ -42,7 +42,6 @@ class Counter extends React.Component{
                 {this.state.counter}
                 <button onClick={this.increment}>+</button>
                 <button onClick={this.decrement}>-</button>
-                <button onClick={this.getTwitterFeed}>Get Twitter Feed</button>
             </div>
         )
     }

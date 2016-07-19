@@ -29,9 +29,15 @@ const twitterController = {
             form: request_data.data,
             headers: oauth.toHeader(oauth.authorize(request_data, token))
         }, function(error, response, body) {
-            var parsed = JSON.parse(response.body);
-            console.log(parsed[0]);
-            return res.json(parsed);
+            if(error) {
+                console.log(error);
+                return res.json(error);
+            }
+            else {
+                var parsed = JSON.parse(response.body);
+                console.log(parsed[0]);
+                return res.json(parsed);
+            }
         });
     }
 }
