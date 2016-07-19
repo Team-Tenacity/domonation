@@ -1,6 +1,3 @@
-/**
- * Created by cjpowers on 7/14/16.
- */
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -15,19 +12,23 @@ class Counter extends React.Component{
         super(props, context);
 
         this.state = {
-            counter: this.props.counter
+            counter: this.props.twitter.counter
         };
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
         this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
 
-    increment(event) {
+    componentWillMount() {
+        this.props.actions.twitterGet();
+    }
+
+    increment() {
         let count = ++this.state.counter;
         this.props.actions.increment(count);
         console.log(this.state.counter);
     }
-    decrement(event) {
+    decrement() {
         let count = --this.state.counter;
         this.props.actions.decrement(count);
         console.log(this.state.counter);
@@ -43,7 +44,6 @@ class Counter extends React.Component{
                 {this.state.counter}
                 <button onClick={this.increment}>+</button>
                 <button onClick={this.decrement}>-</button>
-                <button onClick={this.getTwitterFeed}>Get Twitter Feed</button>
             </div>
         )
     }
@@ -51,7 +51,7 @@ class Counter extends React.Component{
 
 function mapStateToProps(state, ownProps) {
     return {
-        counter: state.counter
+        twitter: state.twitter
     };
 }
 

@@ -1,2 +1,4 @@
 export const INCREMENT = 'INCREMENT';
 export const DECREMENT = 'DECREMENT';
+
+export const TWITTER_GET_SUCCESS = 'TWITTER_GET_SUCCESS';
