@@ -30,7 +30,7 @@ module.exports = {
                 }
             },
             {test: /\.css$/, loader: 'style!css', exclude: /node_modules/},
-            {test: /\.png$/, loader: 'url', exclude: /node_modules/}
+            {test: /\.png$/, loader: 'url-loader?limit=10000', exclude: /node_modules/}
         ]
     }
 };
