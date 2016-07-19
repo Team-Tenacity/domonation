@@ -3,6 +3,9 @@
   height: 39px;
   align-items: center;
   background-color: #333;
+  position: absolute;
+  top: 62px;
+  width: 100%;
 }
 
 .subheader-views {
