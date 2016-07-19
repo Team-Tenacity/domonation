@@ -1,10 +1,10 @@
 import React from 'react';
-import ExampleCard from "./ExampleCards.js";
 import {Link} from 'react-router';
 
 
 import UpperNav from "./UpperNav";
 import Subheader from './Subheader';
+import ExampleCard from "./ExampleCards.js";
 
 
 class ChartLandingPage extends React.Component {
