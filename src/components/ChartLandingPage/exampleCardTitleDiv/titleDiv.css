@@ -1,0 +1,85 @@
+.main-title-container {
+  position: absolute;
+  top: 62px;
+  display: flex;
+  margin: 20px 0px 20px 30px;
+  width: 98%;
+}
+
+.title-divs-container-left {
+  font-size: 36px;
+  font-weight: 100;
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+.title-divs-container-right {
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+
+.title-domo-logo {
+  display: flex;
+  font-weight: 100;
+}
+
+.title-logo {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-right: 4px;
+}
+
+.text-container {
+  font-size: smaller;
+}
+
+.lower-text-container {
+  font-size: medium;
+}
+
+.title-shared-container {
+
+}
+
+.title-shared {
+  height: 20px;
+  width: 30px;
+}
+
+.title-users {
+  height: 20px;
+  width: 30px;
+}
+
+.title-add-card {
+  height: 33px;
+  width: 116px;
+  font-size: 10px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: rgba(255,255,255,0.5);
+}
+
+.title-chevron {
+  height: 10;
+  width:20;
+}
+
+.title-page-options {
+  height: 33px;
+  width: 65px;
+}
+
+.title-wrench {
+
+}
+
+.title-chevron {
+
+}
