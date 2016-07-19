@@ -1,5 +1,5 @@
 .upper-nav-div {
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 62px;
   background-color: #555555;
@@ -9,7 +9,6 @@
   position: absolute;
   left: 0;
   display: flex;
-
 }
 
 .logo-div {
@@ -60,7 +59,7 @@
   margin-top: 15px;
 }
 
-.glyphicon {
+.glyphicon-div .glyphicon {
   color: #8a8a8a;
   font-size: 24px;
   vertical-align: middle;
