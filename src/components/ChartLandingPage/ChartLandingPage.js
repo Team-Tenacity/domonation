@@ -4,9 +4,8 @@ import {Link} from 'react-router';
 
 import UpperNav from "./UpperNav";
 import Subheader from './Subheader';
-
-
 import TitleDiv from './exampleCardTitleDiv/titleDiv';
+
 
 class ChartLandingPage extends React.Component {
     render() {

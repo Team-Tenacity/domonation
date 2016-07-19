@@ -1,5 +1,7 @@
 import React from 'react';
 import SharedDiv from './SharedDiv';
+import DomoDiv from './DomoDiv';
+import AddCardButton from './AddCardButton';
 
 import './titleDiv.css'
 
@@ -13,23 +15,12 @@ const TitleDiv = () => {
             </div>
           </div>
           <div className="title-divs-container-right">
-              <div className="title-domo-logo">
-              <img className="title-logo" src="https://support.domo.com/public/images/logo-400.png"/>
-                  <div className="text-container">
-                    Owner
-                    <div className="lower-text-container">
-                      DomoSupport
-                    </div>
-                  </div>
-              </div>
+              <DomoDiv />
               <SharedDiv />
-              <button className="title-add-card">
-                <span>ADD CARD</span>
-                <i className="title-chevron"></i>
-              </button>
+              <AddCardButton />
               <div className="title-page-options">
-                <i className="title-wrench" ></i>
-                <i className="title-chevron"></i>
+                <img className="title-wrench" src="http://www.iconpng.com/png/windows-8-metro-invert/configure_alt_2.png" />
+                <img className="title-chevron2" src="https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-down-01-128.png" />
               </div>
           </div>
       </div>

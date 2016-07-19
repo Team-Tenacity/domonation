@@ -1,6 +1,6 @@
 .main-title-container {
   position: absolute;
-  top: 62px;
+  top: 101px;
   display: flex;
   margin: 20px 0px 20px 30px;
   width: 98%;
@@ -15,32 +15,10 @@
 }
 
 .title-divs-container-right {
-  width: 50%;
+  width: 678px;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-
-
-.title-domo-logo {
-  display: flex;
-  font-weight: 100;
-}
-
-.title-logo {
-  border-radius: 50%;
-  height: 30px;
-  width: 30px;
-  margin-right: 4px;
-}
-
-.text-container {
-  font-size: smaller;
-}
-
-.lower-text-container {
-  font-size: medium;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .title-shared-container {
@@ -60,26 +38,47 @@
 .title-add-card {
   height: 33px;
   width: 116px;
-  font-size: 10px;
+  font-size: 12px;
   border: 1px solid gray;
-  border-radius: 4px;
+  border-radius: 2px;
   background-color: rgba(255,255,255,0.5);
 }
 
+.title-add-text {
+  margin-right: 4px;
+  height: 15px;
+}
+
 .title-chevron {
-  height: 10;
-  width:20;
+  max-height: 13px;
+  margin-top: 2px;
+}
+
+.title-add-card:hover {
+  background-color: #fbfbfb;
 }
 
 .title-page-options {
   height: 33px;
   width: 65px;
+  border: 1px solid gray;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255,255,255,0.5);
 }
 
 .title-wrench {
-
+  height: 15px;
+  width: 14px;
+  margin-right: 5px;
 }
 
-.title-chevron {
+.title-chevron2 {
+  height: 13px;
+}
 
+.title-page-options:hover {
+  background-color: #fbfbfb;
 }

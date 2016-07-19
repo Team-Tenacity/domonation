@@ -1,3 +1,7 @@
+body {
+  background-color: #fbfbfb;
+}
+
 .shared-container {
   height: 34px;
   display: flex;
@@ -33,17 +37,36 @@
 }
 
 .shared-plus-right {
-
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 23px;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .shared-plus {
-
+  height: 13px;
+  width: 13px;
 }
 
 .shared-people {
-
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 }
 
-.person {
+.avatar {
+  height: 30px;
+  width: 30px;
+  margin-right: 5px;
+  overflow: auto;
+  border-radius: 50%;
+}
 
+.shared-count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
 }
