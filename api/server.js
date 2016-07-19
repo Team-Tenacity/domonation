@@ -45,7 +45,6 @@ app.get('/api/twitter/timeline', twitterController.index);
 
 
 
-
 app.listen(port, function() {
     console.log("Started server on port ", port);
 });
