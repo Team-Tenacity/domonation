@@ -3,6 +3,7 @@ import * as types from './actionTypes';
 // import request from 'request';
 var config = '../../config.json';
 import axios from 'axios';
+import _ from 'underscore';
 // var request = require('request');
 // var OAuth   = require('oauth-1.0a');
 
@@ -36,14 +37,33 @@ export function decrementSuccess(counter){
     return { type: types.DECREMENT, counter }
 }
 
+export function twitterGetSuccess(userTweets){
+    return { type: types.TWITTER_GET_SUCCESS, userTweets}
+}
+
 
 
 export function twitterGet() {
     return function(dispatch) {
         axios.get('http://localhost:3001/api/twitter/timeline')
             .then(response => {
-                console.log(response.data);
-                return response});
+                var userTweets = _.map(response.data, function (tweet) {
+                    console.log(tweet.text);
+                    return (
+                    {
+                        title: tweet.text,
+                        retweet_count: tweet.retweet_count,
+                        favorite_count: tweet.favorite_count,
+                        created_at: tweet.created_at
+
+                    }
+                    )
+                });
+                //console.log(test);
+                //console.log(response.data[0]);
+                //return response.data});
+                dispatch(twitterGetSuccess(userTweets))
+            })
     }
 }
 

@@ -20,7 +20,7 @@ App.propTypes = {
 
 function mapStateToProps(state, ownProps) {
     return {
-        counter: state.counter
+        twitter: state.twitter
     };
 }
 

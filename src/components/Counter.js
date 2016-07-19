@@ -13,11 +13,15 @@ class Counter extends React.Component{
         super(props, context);
 
         this.state = {
-            counter: this.props.counter
+            counter: this.props.twitter.counter
         };
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
         this.getTwitterFeed = this.getTwitterFeed.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.actions.twitterGet();
     }
 
     increment(event) {
@@ -49,7 +53,7 @@ class Counter extends React.Component{
 
 function mapStateToProps(state, ownProps) {
     return {
-        counter: state.counter
+        twitter: state.twitter
     };
 }
 
