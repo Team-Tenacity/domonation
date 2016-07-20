@@ -5,6 +5,7 @@
   border: 1px solid gray;
   border-radius: 2px;
   background-color: rgba(255,255,255,0.5);
+  position: relative;
 }
 
 .title-add-text {
@@ -19,4 +20,8 @@
 
 .title-add-card:hover {
   background-color: #e8e8e8;
+}
+
+.popup {
+  display: none;
 }
