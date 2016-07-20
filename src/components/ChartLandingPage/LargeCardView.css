@@ -1,0 +1,57 @@
+.path-header {
+  height: 39px;
+  width: auto;
+  background-color: #fbfbfb;
+  border-bottom: solid .5px #989898;
+  display: flex;
+  padding-left: 50px;
+  vertical-align: middle;
+  line-height: 39px;
+  position: relative;
+  top: 101px;
+  margin-bottom: 10px;
+}
+
+.path-h1 {
+  color: #6497ba;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .75px;
+}
+
+.path-h2 {
+  margin-left: 5px;
+  color: #989898;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .75px;
+}
+
+.description-header {
+  height: 62px;
+  width: auto;
+  background-color: #ffffff;
+  display: flex;
+  padding-left: 50px;
+  vertical-align: middle;
+  line-height: 62px;
+  position: relative;
+  top: 101px;
+}
+
+.title-h2 {
+  color: #000;
+  font-size: 24px;
+  font-weight: lighter;
+  letter-spacing: .75px;
+  margin-right: 975px;
+}
+
+.description-glyphicon {
+margin-right: 35px;
+}
+
+.description-glyphicon .glyphicon {
+  color: #a3a3a3;
+  font-size: 24px;
+}
