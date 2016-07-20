@@ -33,8 +33,9 @@
 
 }
 
-.glyphicon {
+.add-card.glyphicon {
   margin-bottom: 10px;
+  font-size: 20px
 }
 
 .add-card-option:hover {

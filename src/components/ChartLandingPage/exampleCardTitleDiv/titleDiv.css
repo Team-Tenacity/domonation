@@ -35,29 +35,6 @@
   width: 30px;
 }
 
-.title-add-card {
-  height: 33px;
-  width: 116px;
-  font-size: 12px;
-  border: 1px solid gray;
-  border-radius: 2px;
-  background-color: rgba(255,255,255,0.5);
-}
-
-.title-add-text {
-  margin-right: 4px;
-  height: 15px;
-}
-
-.title-chevron {
-  max-height: 13px;
-  margin-top: 2px;
-}
-
-.title-add-card:hover {
-  background-color: #fbfbfb;
-}
-
 .title-page-options {
   height: 33px;
   width: 65px;
@@ -80,5 +57,5 @@
 }
 
 .title-page-options:hover {
-  background-color: #fbfbfb;
+  background-color: #e8e8e8;
 }
