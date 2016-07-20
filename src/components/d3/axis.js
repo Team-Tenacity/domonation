@@ -18,9 +18,6 @@ export default class Axis extends React.Component {
         else if(this.props.orient === 'bottom'){
             d3.select(node).call(d3.axisBottom(this.props.scale))
         }
-
-        // var axis = d3.svg.axis().orient(this.props.orient).ticks(5).scale(this.props.scale);
-        // d3.select(node).call(axis);
     }
 
     render() {

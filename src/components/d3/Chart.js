@@ -1,6 +1,7 @@
 // unfinished/src/components/chart.jsx
 import React       from 'react';
 import ScatterPlot from './ScatterPlot';
+import BarChart from './BarChart'
 
 const styles = {
     width   : 500,
@@ -30,14 +31,16 @@ export default class Chart extends React.Component{
     }
 
     render() {
-        return <div>
-            <h1>Playing With React and D3</h1>
+        return (
+        <div>
             <ScatterPlot {...this.state} {...styles} />
+            <BarChart {...this.state} {...styles} />
             <div className="controls">
                 <button className="btn randomize" onClick={() => this.randomizeData()}>
                     Randomize Data
                 </button>
             </div>
         </div>
+        )
     }
 }
