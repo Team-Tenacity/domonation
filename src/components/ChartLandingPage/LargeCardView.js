@@ -28,6 +28,15 @@ const LargeCard = () => {
                     <span className="glyphicon glyphicon-resize-full"></span>
                 </div>
             </div>
+            <div className="large-graph-div">
+                <div className="left-pointer-div">
+                    <span className="glyphicon glyphicon-chevron-left"></span>
+                </div>
+                <img src="https://docs.oracle.com/cd/E23943_01/bi.1111/e10544/img/style_cond_format.gif" />
+                <div className="right-pointer-div">
+                    <span className="glyphicon glyphicon-chevron-right"></span>
+                </div>
+            </div>
     </div>
   )
 }
