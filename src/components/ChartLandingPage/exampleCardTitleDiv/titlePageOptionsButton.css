@@ -1,3 +1,33 @@
+.page-options-wrapper {
+  position: relative;
+  width: 100px;
+}
+
+.page-options-button-desc {
+  visibility: hidden;
+  position: element(#title-page-options);
+  background-color: #333;
+  color: white;
+  width: 100px;
+  font-size: smaller;
+  height: 20px;
+  margin-bottom: -13px;
+  font-size: 12px;
+  border-radius: 2px;
+  transition: visibility 0s 0s linear;
+  overflow: visible;
+}
+
+.page-options-button-triangle {
+  visibility: hidden;
+  position: element(#title-page-options);
+  color: #333;
+  font-size: 8px;
+  z-index: 1;
+  top: 4px;
+  transition: visibility 0s 0s linear;
+}
+
 .title-page-options {
   height: 33px;
   width: 65px;
@@ -21,4 +51,18 @@
 
 .title-page-options:hover {
   background-color: #e8e8e8;
+}
+
+.page-options-wrapper:hover .page-options-button-desc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+  color: white;
+  transition: visibility .25s 1s linear;
+}
+
+.page-options-wrapper:hover .page-options-button-triangle {
+  visibility: visible;
+  transition: visibility .25s 1s linear;
 }

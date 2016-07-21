@@ -5,6 +5,8 @@
   margin: 20px 0px 20px 30px;
   width: 98%;
   height: 36px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .title-divs-container-left {
@@ -20,6 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  right: 5px;
 }
 
 .title-shared-container {

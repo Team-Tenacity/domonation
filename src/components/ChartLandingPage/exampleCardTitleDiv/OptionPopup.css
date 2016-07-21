@@ -9,6 +9,8 @@
   border: 4px solid #d2d1d1;
   border-radius: 4px;
   overflow: visible;
+  left: auto;
+  right: 2px;
 }
 
 .options-list-container {

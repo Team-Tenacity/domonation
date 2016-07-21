@@ -1,3 +1,26 @@
+.add-button-desc {
+  visibility: hidden;
+  position: element(#add-button);
+  background-color: #333;
+  width: 135px;
+  font-size: smaller;
+  height: 20px;
+  margin-bottom: 3px;
+  font-size: 12px;
+  border-radius: 2px;
+  transition: visibility 0s 0s linear;
+}
+
+.add-card-button-triangle {
+  visibility: hidden;
+  position: element(#add-button);
+  color: #333;
+  right: -62px;
+  font-size: 8px;
+  top: -20px;
+  z-index: 1;
+}
+
 .title-add-card {
   height: 33px;
   width: 116px;
@@ -6,6 +29,7 @@
   border-radius: 2px;
   background-color: rgba(255,255,255,0.5);
   position: relative;
+
 }
 
 .title-add-text {
@@ -20,6 +44,20 @@
 
 .title-add-card:hover {
   background-color: #e8e8e8;
+}
+
+.add-button-wrapper:hover .add-button-desc{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+  color: white;
+  transition: visibility .25s 1s linear;
+}
+
+.add-button-wrapper:hover .add-card-button-triangle {
+  visibility: visible;
+  transition: visibility .25s 1s linear;
 }
 
 .popup {

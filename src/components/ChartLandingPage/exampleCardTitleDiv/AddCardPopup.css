@@ -10,7 +10,8 @@
   border: 4px solid #d2d1d1;
   border-radius: 4px;
   overflow: visible;
-
+  left: auto;
+  right: 29px;
 }
 
 
@@ -22,6 +23,25 @@
   font-size: small;
   font-weight: 100;
   color: #555555;
+  position: relative;
+}
+
+.options-wrapper {
+  position: relative;
+}
+
+.build-new-desc {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  width: 135px;
+  background: #333;
+  opacity: .8;
+  border-radius: 2px;
+  color: white;
+  position: element(#options-wrapper);
+  z-index: 5;
 }
 
 .add-card-option {
@@ -43,6 +63,10 @@
 .add-card-option:hover {
   background-color: #4b87b0;
   color: white;
+}
+
+.options-wrapper:hover .build-new-desc {
+  display: flex;
 }
 
 .add-card-option:hover .glyphicon {
