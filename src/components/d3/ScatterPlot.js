@@ -22,10 +22,11 @@ const marshalProps = (props) => {
 
 export default (props) => {
     const d3Props = marshalProps(props);
-    return (
-        <svg width={d3Props.width} height={d3Props.height}>
-            <DataCircles {...d3Props}/>
-            <XYAxis {...d3Props}/>
-        </svg>
-    )
+    
+
+    return <svg width={d3Props.width} height={d3Props.height}>
+        <DataCircles {...d3Props}/>
+        <XYAxis {...d3Props}/>
+    </svg>
 }
+

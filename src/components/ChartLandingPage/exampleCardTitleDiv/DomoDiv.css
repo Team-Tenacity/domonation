@@ -1,0 +1,19 @@
+.title-domo-logo {
+  display: flex;
+  font-weight: 100;
+}
+
+.title-logo {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-right: 4px;
+}
+
+.text-container {
+  font-size: smaller;
+}
+
+.lower-text-container {
+  font-size: medium;
+}
