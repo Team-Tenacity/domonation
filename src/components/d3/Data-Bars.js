@@ -1,13 +1,17 @@
 import React from 'react';
+import * as d3 from 'd3';
 
 const renderRects = (props) => {
+    var parseDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
     console.log('data bars props', props);
     return (data, index) => {
         const rectProps = {
-            x: props.xScale(index),
-            y: props.height - props.padding - props.yScale(data[1]),
-            width: 8,
-            height: props.yScale(data[1]),
+            //x: props.xScale(Date.parse(data.created_at)),
+            x: props.xScale(index) + props.padding/2,
+            y: props.height - props.padding - props.yScale(data.favorite_count),
+            width: props.width / props.data.length - 10,
+            height: props.yScale(data.favorite_count),
+            fill: "#99CCEE",
             key: index
         };
         return <rect {...rectProps} />;
