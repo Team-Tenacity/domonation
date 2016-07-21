@@ -69,10 +69,71 @@
   justify-content: center;
   align-items: center;
   border: 1px solid #eee;
+  position: relative;
+}
+
+.default-description {
+  top: 36px;
+  left: -40px;
+  visibility: hidden;
+  background-color: #333;
+  border-radius: 2px;
+  opacity: .9;
+  color: white;
+  width: 148px;
+  height: 20px;
+  font-size: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: visibility 0s 0s linear
+}
+
+.desc-medium {
+  left: -56px;
+}
+
+.desc-large {
+  left: -70px;
+}
+
+.default-desc-arrow {
+  visibility: hidden;
+  font-size: 10px;
+  top: 7px;
+  opacity: .9;
+}
+
+.glyph-pad {
+  padding-left: 10px;
 }
 
 .options-box:hover {
   background-color: #e8e8e8;
+  flex-direction: column;
+}
+
+.options-box:hover .default-description {
+  display: flex;
+  visibility: visible;
+  transition: visibility .25s .75s linear
+}
+
+.options-box:hover .default-desc-arrow {
+  display: flex;
+  visibility: visible;
+  transition: visibility .25s .75s linear
+}
+
+.options-box:hover .glyphicon-options-page {
+  padding-top: 6.5px;
+}
+
+.options-box:hover .glyph-pad {
+  padding-left: 0px;
+}
+
+.options-box:hover .glyphicon-stop {
+  top: -1px
 }
 
 .glyphicon-options-page {
@@ -84,7 +145,12 @@
 }
 
 .glyphicon-stop {
-  font-size: 18px;
-  margin-bottom: 1px;
+  font-size: 18.5px;
+  top: 0px;
   color: #555555
+}
+
+.default-description {
+  font-size: small;
+  position: absolute;
 }
