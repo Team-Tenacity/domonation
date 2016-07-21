@@ -7,10 +7,10 @@ const renderRects = (props) => {
     return (data, index) => {
         const rectProps = {
             //x: props.xScale(Date.parse(data.created_at)),
-            x: props.xScale(index) + props.padding/2,
-            y: props.height - props.padding - props.yScale(data.favorite_count),
-            width: props.width / props.data.length - 10,
-            height: props.yScale(data.favorite_count),
+            x: props.xScale(index) + props.padding/4,
+            y: props.height - props.padding - props.yBarScale(data.favorite_count),
+            width: props.width / (props.data.length * 2),
+            height: props.yBarScale(data.favorite_count),
             fill: "#99CCEE",
             key: index
         };

@@ -5,9 +5,9 @@ import LineChart from './LineChart';
 import LineChartTest from './LineChartTest';
 
 const styles = {
-    width   : 500,
-    height  : 300,
-    padding : 30,
+    width   : 200,
+    height  : 150,
+    padding : 25,
 };
 
 
