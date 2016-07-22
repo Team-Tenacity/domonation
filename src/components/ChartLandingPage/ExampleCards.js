@@ -6,7 +6,7 @@ require("./ExampleCards.css");
 const ExampleCard = () => {
   return (
       <div className="deck-div">
-        <Link to="chartDetail">
+        <Link to="chartDetail" className="large-view-link">
           <div className="card-div">
                   <div className="gear-menu-div">
                     <span className="glyphicon glyphicon-wrench"></span>
