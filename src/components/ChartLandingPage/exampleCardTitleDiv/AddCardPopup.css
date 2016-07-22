@@ -1,6 +1,5 @@
 .add-card-container {
   top: 49px;
-  right: 50px;
   height: 128px;
   width: 235px;
   position: absolute;
@@ -10,7 +9,11 @@
   background-color: white;
   border: 4px solid #d2d1d1;
   border-radius: 4px;
+  overflow: visible;
+  left: auto;
+  right: 29px;
 }
+
 
 .option-container {
   display: flex;
@@ -20,6 +23,63 @@
   font-size: small;
   font-weight: 100;
   color: #555555;
+  position: relative;
+}
+
+.options-wrapper {
+  position: relative;
+}
+
+.build-new-desc {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  width: 135px;
+  background: #333;
+  opacity: .9;
+  border-radius: 2px;
+  color: white;
+  position: absolute;
+  z-index: 5;
+  top: -28px;
+  left: -18px;
+}
+
+.add-card-option-triangle {
+  display: none;
+  top: 13px;
+  left: -55px;
+  color: #333;
+  opacity: .9;
+  font-size: smaller;
+}
+
+.glyphicon-triangle-bottom:hover {
+  color: #333;
+}
+
+.assign-build-new-desc {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 135px;
+  background: #333;
+  opacity: .9;
+  border-radius: 2px;
+  color: white;
+  position: absolute;
+  z-index: 5;
+  top: -48px;
+  left: 85px;
+}
+
+.build-new-text {
+  width: 100%;
+  padding-top: 6px;
+  padding-left: 10px;
 }
 
 .add-card-option {
@@ -43,6 +103,30 @@
   color: white;
 }
 
+#add-card-option:hover .build-new-desc {
+  display: flex;
+}
+
+#add-card-option:hover .add-card-option-triangle {
+  display: flex;
+  color: #333;
+}
+
 .add-card-option:hover .glyphicon {
   color: white;
+}
+
+#assign-card-option:hover .assign-build-new-desc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.assign-build-triangle {
+  top: 4px;
+}
+
+
+#assign-card-option:hover .assign-build-triangle {
+  color: #333;
 }

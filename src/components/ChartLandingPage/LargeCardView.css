@@ -1,0 +1,110 @@
+.large-card-div {
+  background-color: #ffffff;
+  height: 100vh;
+}
+
+.path-header {
+  height: 39px;
+  width: auto;
+  background-color: #fbfbfb;
+  border-bottom: solid .5px #989898;
+  display: flex;
+  padding-left: 50px;
+  vertical-align: middle;
+  line-height: 39px;
+  position: relative;
+  top: 101px;
+  margin-bottom: 10px;
+}
+
+.path-h1 {
+  color: #6497ba;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .75px;
+}
+
+.path-h2 {
+  margin-left: 5px;
+  color: #989898;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .75px;
+}
+
+.description-header {
+  height: 62px;
+  width: auto;
+  background-color: #ffffff;
+  display: flex;
+  padding-left: 50px;
+  vertical-align: middle;
+  line-height: 62px;
+  position: relative;
+  top: 91px;
+}
+
+.title-h2 {
+  color: #000;
+  font-size: 24px;
+  font-weight: lighter;
+  letter-spacing: .75px;
+  margin-right: 975px;
+}
+
+.description-glyphicon {
+margin-right: 35px;
+margin-top: 5px;
+}
+
+.description-glyphicon .glyphicon {
+  color: #a3a3a3;
+  font-size: 24px;
+}
+
+.large-graph-div {
+  height: 65vh;
+  position: relative;
+  top: 100px;
+  text-align: center;
+  /*display: flex;*/
+}
+
+.large-graph-div img {
+  width: 1000px;
+  height: auto;
+}
+
+.left-pointer-div {
+  background-color: #f0f0f0;
+  height: 216px;
+  width: 28px;
+  position: absolute;
+  left: 0;
+  top: 100px;
+  border-radius: 0px 5px 5px 0px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 200px;
+}
+
+.left-pointer-div .glyphicon {
+  color: #989898;
+}
+
+.right-pointer-div {
+  background-color: #f0f0f0;
+  height: 216px;
+  width: 28px;
+  position: absolute;
+  right: 0;
+  bottom: 160px;
+  border-radius: 5px 0px 0px 5px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 200px;
+}
+
+.right-pointer-div .glyphicon {
+  color: #989898;
+}
