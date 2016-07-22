@@ -48,7 +48,7 @@ export function twitterGet() {
         axios.get('http://localhost:3001/api/twitter/timeline')
             .then(response => {
                 var userTweets = _.map(response.data, function (tweet) {
-                    console.log(tweet.text);
+                    //console.log(tweet.text);
                     return (
                     {
                         title: tweet.text,

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as twitterActions from '../actions/twitterActions';
 import {browserHistory} from 'react-router';
+import Chart from './d3/Chart';
 
 // for testing/design purposes
 
@@ -44,6 +45,7 @@ class Counter extends React.Component{
                 {this.state.counter}
                 <button onClick={this.increment}>+</button>
                 <button onClick={this.decrement}>-</button>
+                <Chart data={this.props.twitter.twitterData} />
             </div>
         )
     }
