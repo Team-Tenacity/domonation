@@ -19,7 +19,7 @@ const ExampleCard = ({data}) => {
                   <div className="spacer-div"></div>
 
                   <div className="image-div">
-                      <Chart data={data} />
+                      <Chart data={data} height="150" width="200" padding="25" />
                   </div>
               </div>
 
