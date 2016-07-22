@@ -22,6 +22,10 @@
 
 }
 
+.large-view-link {
+  margin-right: .60%;
+}
+
 .card-div:hover {
   border: solid 4px rgb(156, 202, 235);
 }

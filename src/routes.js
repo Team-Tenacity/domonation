@@ -5,7 +5,7 @@ import Counter from './components/Counter';
 import HomePage from './components/HomeLandingPage/HomePage';
 import ChartLandingPage from './components/ChartLandingPage/ChartLandingPage';
 import Chart from './components/d3/Chart';
-
+import LargeCard from "./components/ChartLandingPage/LargeCardView.js";
 
 export default (
     <Route path="/" component={App}>
@@ -13,5 +13,6 @@ export default (
         <Route path="/counter" component={Counter} />
         <Route path="/charts" component={ChartLandingPage} />
         <Route path="/chart" component={Chart} />
+        <Route path="/chartDetail" component={LargeCard} />
     </Route>
 );

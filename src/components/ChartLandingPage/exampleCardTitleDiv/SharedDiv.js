@@ -11,7 +11,7 @@ const SharedDiv = () => {
                 <div className="shared-text-bottom">93 people</div>
             </div>
             <div className="shared-plus-right">
-                <i className="fa fa-plus-circle"></i>
+                <i className="glyphicon glyphicon-plus-sign"></i>
             </div>
         </div>
         <div className="shared-people">

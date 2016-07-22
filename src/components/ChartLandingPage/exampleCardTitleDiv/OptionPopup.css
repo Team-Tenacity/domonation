@@ -1,0 +1,156 @@
+.option-popup-container {
+  top: 49px;
+  width: 212px;
+  height: 257px;
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  background-color: white;
+  border: 4px solid #d2d1d1;
+  border-radius: 4px;
+  overflow: visible;
+  left: auto;
+  right: 2px;
+}
+
+.options-list-container {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.options-list {
+  padding-left: 9px;
+  height: 33px;
+  width: 210px;
+  display: flex;
+  font-weight: normal;
+  align-items: center;
+  font-size: 15px;
+}
+
+.options-list:hover {
+  background-color: rgb(156, 202, 235)
+}
+
+.options-list-text {
+  margin-left: 7px;
+}
+
+.options-break {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.last {
+  margin-bottom: 12px;
+}
+
+.options-graph-size {
+  display: flex;
+  padding-left: 0px;
+}
+
+.custom {
+  height: 14px;
+  width: 14px;
+  margin-top: 2px;
+}
+
+.options-graph-size-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.options-box {
+  width: 42.5px;
+  height: 33px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #eee;
+  position: relative;
+}
+
+.default-description {
+  top: 36px;
+  left: -40px;
+  visibility: hidden;
+  background-color: #333;
+  border-radius: 2px;
+  opacity: .9;
+  color: white;
+  width: 148px;
+  height: 20px;
+  font-size: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: visibility 0s 0s linear
+}
+
+.desc-medium {
+  left: -56px;
+}
+
+.desc-large {
+  left: -70px;
+}
+
+.default-desc-arrow {
+  visibility: hidden;
+  font-size: 10px;
+  top: 7px;
+  opacity: .9;
+}
+
+.glyph-pad {
+  padding-left: 10px;
+}
+
+.options-box:hover {
+  background-color: #e8e8e8;
+  flex-direction: column;
+}
+
+.options-box:hover .default-description {
+  display: flex;
+  visibility: visible;
+  transition: visibility .25s .75s linear
+}
+
+.options-box:hover .default-desc-arrow {
+  display: flex;
+  visibility: visible;
+  transition: visibility .25s .75s linear
+}
+
+.options-box:hover .glyphicon-options-page {
+  padding-top: 6.5px;
+}
+
+.options-box:hover .glyph-pad {
+  padding-left: 0px;
+}
+
+.options-box:hover .glyphicon-stop {
+  top: -1px
+}
+
+.glyphicon-options-page {
+  color: #555555;
+}
+
+.glyphicon-options-page:hover {
+  color: #555555;
+}
+
+.glyphicon-stop {
+  font-size: 18.5px;
+  top: 0px;
+  color: #555555
+}
+
+.default-description {
+  font-size: small;
+  position: absolute;
+}
