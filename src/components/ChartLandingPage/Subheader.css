@@ -213,7 +213,7 @@ a:hover {
 }
 
 .desc {
-  display: none;
+  visibility: hidden;
   position: absolute;
   background-color: #333;
   padding: 0 0 6px 0;
@@ -223,6 +223,7 @@ a:hover {
   top: -48px;
   margin: 0;
   z-index: 5;
+  transition: visibility 0s 0s linear;
 }
 
 .text {
@@ -230,15 +231,28 @@ a:hover {
   text-decoration: none;
 }
 
+.subheader-glyphicon-triangle-bottom {
+  top: 23px;
+  right: -11px;
+  font-size: 10px;
+
+}
+
 .icon-container:hover {
   background-color: #5e5f61;
 }
 
 .icon-container:hover .desc {
+  visibility: visible;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white;
   font-size: small;
+  transition: visibility 0s 0.5s linear;
+}
+
+.icon-container:hover .glyphicon-triangle-bottom {
+  color: #333;
 }

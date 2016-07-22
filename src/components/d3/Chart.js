@@ -1,43 +1,39 @@
-// unfinished/src/components/chart.jsx
 import React       from 'react';
 import ScatterPlot from './ScatterPlot';
+import BarChart from './BarChart';
+import LineChart from './LineChart';
+import LineChartTest from './LineChartTest';
 
 const styles = {
-    width   : 500,
-    height  : 300,
-    padding : 30,
+    width   : 200,
+    height  : 150,
+    padding : 25,
 };
 
-// The number of data points for the chart.
-const numDataPoints = 50;
 
-// A function that returns a random number from 0 to 1000
-const randomNum     = () => Math.floor(Math.random() * 1000);
-
-// A function that creates an array of 50 elements of (x, y) coordinates.
-const randomDataSet = () => {
-    return Array.apply(null, {length: numDataPoints}).map(() => [randomNum(), randomNum()]);
-}
 
 export default class Chart extends React.Component{
     constructor(props) {
         super(props);
-        this.state = { data: randomDataSet() };
+        console.log(props);
+        this.state = { data: [{
+            created_at: "Tue Jul 19 15:53:00 +0000 2016",
+            favorite_count: 5}] };
     }
 
-    randomizeData() {
-        this.setState({ data: randomDataSet() });
+    componentWillReceiveProps(nextProps) {
+        console.log('received props!');
+        this.setState({ data: nextProps.data})
     }
+
 
     render() {
-        return <div>
-            <h1>Playing With React and D3</h1>
-            <ScatterPlot {...this.state} {...styles} />
-            <div className="controls">
-                <button className="btn randomize" onClick={() => this.randomizeData()}>
-                    Randomize Data
-                </button>
-            </div>
+        console.log('this is chart props ', this.props );
+        return (
+        <div>
+            <BarChart {...this.state} {...styles} />
+            <LineChartTest/>
         </div>
+        )
     }
 }

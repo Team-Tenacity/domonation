@@ -9,9 +9,17 @@ body {
 
 .shared-plus-container {
   display: flex;
-  width: 89px;
+  width: 92px;
   margin-right: 15px;
   align-items: flex-end;
+}
+
+.shared-plus-container:hover .shared-text-bottom {
+  color: #4b87b0;
+}
+
+.shared-plus-container:hover .glyphicon-plus-sign {
+  color: #4b87b0;
 }
 
 .shared-plus-left {

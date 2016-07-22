@@ -27,11 +27,11 @@ const Subheader = () => {
           </div>
           <div className="manage-pages">
             <div className="icon-container">
-              <div className="chevron"></div>
               <img className="icon-right" src={icon} />
               <div className="desc">
               <div className="text">
               Manage Pages
+              <i className="glyphicon subheader-glyphicon-triangle-bottom glyphicon-triangle-bottom"></i>
               </div>
               </div>
             </div>
