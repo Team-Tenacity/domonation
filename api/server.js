@@ -4,6 +4,7 @@ var cors = require('cors');
 var massive = require('massive');
 var path = require('path');
 var config = require('../config.json');
+var mongoose = require('mongoose');
 
 /*********Controllers************/
 const twitterController = require('./controllers/twitterController');
@@ -14,6 +15,14 @@ var app = express();
 // var massiveInstance = massive.connectSync({connectionString : config.connectionString})
 // app.set('db', massiveInstance);
 // var db = app.get('db');
+
+mongoose.set("debug", true);
+mongoose.connect(config.database); 
+mongoose.connection.once("open", function(){
+  console.log("Connected to MongoDB");
+});
+
+
 
 app.use(bodyParser.json());
 app.use(cors());
