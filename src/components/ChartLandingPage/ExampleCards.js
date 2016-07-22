@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router";
 import Chart from '../d3/Chart';
 
 require("./ExampleCards.css");
@@ -6,6 +7,7 @@ require("./ExampleCards.css");
 const ExampleCard = ({data}) => {
   return (
       <div className="deck-div">
+        <Link to="chartDetail" className="large-view-link">
           <div className="card-div">
                   <div className="gear-menu-div">
                     <span className="glyphicon glyphicon-wrench"></span>
@@ -24,7 +26,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -33,7 +35,7 @@ const ExampleCard = ({data}) => {
                       </div>
                   </div>
           </div>
-
+        </Link>
           <div className="card-div">
           <div className="gear-menu-div">
             <span className="glyphicon glyphicon-wrench"></span>
@@ -52,7 +54,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -80,7 +82,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -108,7 +110,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -136,7 +138,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -164,7 +166,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -192,7 +194,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -220,7 +222,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -248,7 +250,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -276,7 +278,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -304,7 +306,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
@@ -332,7 +334,7 @@ const ExampleCard = ({data}) => {
               </div>
 
                   <div className="footer-div">
-                      <img src="https://support.domo.com/avatar/userImage/100?key=avatars/support/A1/38D352E4BCF367C068802EC949A4A4.jpg" />
+                      <img src="https://support.domo.com/public/images/logo-400.png" />
                       <div className="small-glyph-div-left">
                           <span className="glyphicon glyphicon-eye-open"></span>
                       </div>
