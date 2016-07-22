@@ -6,17 +6,18 @@ var path = require('path');
 var config = require('../config.json');
 var mongoose = require('mongoose');
 
-
-var port = config.port;
-
 /*********Controllers************/
 const twitterController = require('./controllers/twitterController');
+const userController = require('./controllers/userController');
 
-
+//var db = massive.connectSync({db : "testdb"});
 var app = express();
+// var massiveInstance = massive.connectSync({connectionString : config.connectionString})
+// app.set('db', massiveInstance);
+// var db = app.get('db');
 
 mongoose.set("debug", true);
-mongoose.connect(config.database); 
+mongoose.connect(config.database);
 mongoose.connection.once("open", function(){
   console.log("Connected to MongoDB");
 });
@@ -25,15 +26,37 @@ mongoose.connection.once("open", function(){
 
 app.use(bodyParser.json());
 app.use(cors());
+
 app.use(express.static('public'));
 
+var port = config.port;
 
 app.use(cors());
 
+// app.post('/api/cartcreate', function(req, res){
+//     console.log(req.body);
+//     db.shoppingcart.save({ownerid: req.body.userid}, function(err, response){
+//         if(err) console.log(err);
+//         else {
+//             db.shoppingcart.findOne({ownerid: req.body.userid}, function(err, cart){
+//                 console.log(cart);
+//                 req.body.cartid = cart.id;
+//                 console.log(req.body);
+//                 res.json(req.body);
+//             });
+//         }
+//     })
+// })
+//
 
-/********Twitter Endpoints**************/
+/**************Twitter Endpoints**************/
 app.get('/api/twitter/timeline', twitterController.index);
 
+
+
+/**************Database Endpoints**************/
+app.post('/api/user', userController.create);
+app.post('/api/login', userController.show);
 
 
 app.listen(port, function() {
