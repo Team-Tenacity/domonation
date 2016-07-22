@@ -1,6 +1,7 @@
 .title-domo-logo {
   display: flex;
   font-weight: 100;
+  margin-right: 5px;
 }
 
 .title-logo {
