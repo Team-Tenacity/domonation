@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import LoginModal from "./LoginModal";
+import SignInModal from "./SignInModal";
 
 require('./Header.css');
 
@@ -16,6 +17,7 @@ const Header = () => {
                     <div><Link to="chart">Company</Link></div>
                 </div>
                 <div className="header-other-options">
+                    <div><SignInModal /></div>
                     <div><LoginModal /></div>
                     <div><Link to="charts">Sign In</Link></div>
                     <div><Link to="counter">Buy</Link></div>

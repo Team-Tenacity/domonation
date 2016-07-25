@@ -2,9 +2,9 @@ import React from "react";
 var ReactDOM = require('react-dom');
 var Modal = require('react-modal');
 
-require('./LoginModal.css');
+require('./SignInModal.css');
 
-  class LoginModal extends React.Component {
+  class SignInModal extends React.Component {
     constructor (props) {
       super(props);
       this.state = {open: false};
@@ -19,16 +19,13 @@ require('./LoginModal.css');
     render () {
       return (
         <div>
-          <button onClick={this.openModal}>Sign Up Test</button>
+          <button onClick={this.openModal}>Sign In Test</button>
               <Modal isOpen={this.state.open} shouldCloseOnOverlayClick={true} className="login-modal">
                 <img src="https://support.domo.com/public/images/logo-400.png" height="100" width="100" />
                     <div className="inside-modal-div">
-                        <input placeholder="First Name"></input>
-                        <input placeholder="Last Name"></input>
                         <input placeholder="Email Address"></input>
                         <input placeholder="Password" type="password"></input>
-                        <input placeholder="Twitter Handle"></input>
-                        <button onClick={this.closeModal} className="sign-up-button">Sign Up!</button>
+                        <button onClick={this.closeModal} className="sign-up-button">Sign In!</button>
                     </div>
               </Modal>
         </div>
@@ -36,4 +33,4 @@ require('./LoginModal.css');
     }
   }
 
-  export default LoginModal;
+  export default SignInModal;
