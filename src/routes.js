@@ -14,7 +14,7 @@ export default (
         <Route path="/counter" component={Counter} />
         <Route path="/charts" component={ChartLandingPage}>
             <IndexRoute component={TwitterCharts} />
-            <Route path="/chartDetail" component={LargeCard} />
+            <Route path="/chartDetail/:id" component={LargeCard} />
         </Route>
         <Route path="/chart" component={Chart} />
         
