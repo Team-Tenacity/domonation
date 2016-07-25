@@ -4,8 +4,8 @@ import DataCircles  from './data-circles';
 import DataBars from './Data-Bars'
 import XYAxis       from './x-y-axis';
 
-const xMax   = (data)  => d3.max(data, (d) => d.favorite_count);
-const yMax   = (data)  => d3.max(data, (d) => d.favorite_count);
+const xMax   = (data)  => d3.max(data, (d) => d.series1);
+const yMax   = (data)  => d3.max(data, (d) => d.series1);
 
 var parseDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
 
