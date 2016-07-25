@@ -33,9 +33,8 @@ class ChartLandingPage extends React.Component {
         return (
             <div>
                 <UpperNav />
-                <ExampleCard data={this.props.twitter.twitterData}/>
                 <Subheader />
-                <TitleDiv />
+                {this.props.children}
             </div>
         )
     }
