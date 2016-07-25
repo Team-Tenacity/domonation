@@ -17,9 +17,9 @@ export default class Chart extends React.Component{
         super(props);
         console.log(props);
         this.state = {
-            width   : props.width,
-            height  : props.height,
-            padding : props.padding,
+            width   : parseInt(props.width),
+            height  : parseInt(props.height),
+            padding : parseInt(props.padding),
             data: [{
             created_at: "Tue Jul 19 15:53:00 +0000 2016",
             favorite_count: 5}] };
