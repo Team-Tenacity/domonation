@@ -8,9 +8,9 @@ const renderRects = (props) => {
         const rectProps = {
             //x: props.xScale(Date.parse(data.created_at)),
             x: props.xScale(index) + props.padding/4,
-            y: props.height - props.padding - props.yBarScale(data.favorite_count),
+            y: props.height - props.padding - props.yBarScale(data.series1),
             width: props.width / (props.data.length * 2),
-            height: props.yBarScale(data.favorite_count),
+            height: props.yBarScale(data.series1),
             fill: "#99CCEE",
             key: index
         };

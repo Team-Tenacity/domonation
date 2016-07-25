@@ -5,6 +5,8 @@ import {bindActionCreators} from 'redux';
 import * as twitterActions from '../../actions/twitterActions';
 import Chart from '../d3/Chart';
 
+import * as _ from 'underscore';
+
 require("./LargeCardView.css");
 
 class LargeCard extends React.Component {
@@ -47,7 +49,7 @@ class LargeCard extends React.Component {
                     <div className="left-pointer-div">
                         <span className="glyphicon glyphicon-chevron-left"></span>
                     </div>
-                    <Chart data={this.props.twitter.twitterData} height="300" width="500" padding="30"/>
+                    <Chart data={_.map(this.props.twitter.twitterData,function(tweet, index){return{series1:tweet.favorite_count}})} height="300" width="500" padding="30"/>
                     <div className="right-pointer-div">
                         <span className="glyphicon glyphicon-chevron-right"></span>
                     </div>

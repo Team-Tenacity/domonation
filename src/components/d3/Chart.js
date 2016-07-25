@@ -22,7 +22,7 @@ export default class Chart extends React.Component{
             padding : parseInt(props.padding),
             data: [{
             created_at: "Tue Jul 19 15:53:00 +0000 2016",
-            favorite_count: 5}] };
+            series1: 5}] };
     }
 
     componentWillReceiveProps(nextProps) {
