@@ -27,6 +27,7 @@ export function twitterGet() {
 
                             {
                             id: 1,
+                            card_name: "Favorites per tweet",
                             title: tweet.text,
                             series2: tweet.retweet_count,
                             series1: tweet.favorite_count,
@@ -41,6 +42,7 @@ export function twitterGet() {
 
                     {
                         id: 2,
+                        card_name: "Retweets per tweet",
                         title: tweet.text,
                         series1: tweet.retweet_count,
                         series2: tweet.favorite_count,

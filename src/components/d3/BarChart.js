@@ -26,18 +26,17 @@ const xScale = (props) => {
         .range([props.padding, props.width - props.padding])
 }
 const yScale = (props) => {
-    console.log(props.data);
     return d3.scaleLinear()
         .domain([0,yMax(props.data)])
         .range([props.height - props.padding, 0]);
 };
 
 const yBarScale = (props) => {
-    console.log(props.data);
     return d3.scaleLinear()
         .domain([0,yMax(props.data)])
         .range([0, props.height - props.padding]);
 };
+
 const marshalProps = (props) => {
     const scales = { xScale: xScale(props), yScale: yScale(props), yBarScale: yBarScale(props) };
     return Object.assign({}, props, scales);
