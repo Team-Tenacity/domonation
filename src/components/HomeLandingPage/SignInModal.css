@@ -1,0 +1,52 @@
+.login-modal {
+position: absolute;
+height: 400px;
+width: 400px;
+top: 66px;
+left: 580px;
+right: 40px;
+bottom: 40px;
+border: 1px solid rgb(204, 204, 204);
+overflow: auto;
+border-radius: 4px;
+outline: none;
+/*padding: 20px;*/
+background: rgb(255, 255, 255);
+text-align: center;
+}
+
+.exit-button {
+  position: absolute;
+  right: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.login-modal img {
+  margin-top: 40px;
+}
+
+.inside-modal-div {
+  position: relative;
+  background-color: transparent;
+  width: 85%;
+  margin: 0 auto;
+  top: 40px;
+}
+
+.inside-modal-div input {
+  margin-bottom: 15px;
+  width: 300px;
+  height: 40px;
+  border-radius: 5px;
+  border: solid 1px #cccccc;
+}
+
+.sign-up-button {
+  color: white;
+  width: 302px;
+  height: 40px;
+  background-color: #FC8F13;
+  border: none;
+  border-radius: 5px;
+}

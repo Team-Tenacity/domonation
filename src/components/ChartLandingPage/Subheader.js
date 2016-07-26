@@ -8,19 +8,19 @@ const Subheader = () => {
     return (
       <div className="subheader">
           <div className="subheader-views  spacer-bar">
-              <div className="option">Overview</div>
-              <div className="option">Favorites</div>
-              <div className="option">Alerts</div>
+              <div className="option"><Link to="charts">Overview</Link></div>
+              <div className="option"><Link to="charts">Favorites</Link></div>
+              <div className="option"><Link to="charts">Alerts</Link></div>
           </div>
           <div className="subheader-views">
           <div className="option-wrapper">
             <div className="option-drop option">
-              Twitter
+              <Link to="charts">Twitter</Link>
               <div className="Chevron"></div>
             </div>
               <ul className="dropdown">
                 <li>
-                  <a className="dropdown-option">Test</a>
+                  <Link to="charts" className="dropdown-option">Insights</Link>
                 </li>
               </ul>
           </div>
