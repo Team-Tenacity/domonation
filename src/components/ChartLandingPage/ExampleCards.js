@@ -14,11 +14,27 @@ require("./ExampleCards.css");
 class ExampleCard extends React.Component {
     constructor(props){
         super(props);
-        this.state = {data:{}}
-        this.getTwitterFeed = this.getTwitterFeed.bind(this);
+        this.state = {twitter:[
+            [
+                {
+                    card_name: 'Loading'
+                }
+            ],
+            [
+                {
+                    card_name: 'Loading'
+                }
+            ]
+        ]}
+        // this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
-    componentWillMount() {
-        this.props.actions.twitterGet();
+    // componentWillMount() {
+    //     this.props.actions.twitterGet();
+    // }
+
+    componentWillReceiveProps(nextProps) {
+        console.log('received props!');
+        this.setState({ twitter: nextProps.twitter})
     }
 
     getTwitterFeed() {
@@ -39,13 +55,13 @@ class ExampleCard extends React.Component {
                             </div>
                             <div className="content-div">
                                 <div className="header-text">
-                                    <h1>Favorites per tweet</h1>
+                                    <h1>{this.state.twitter[0][0].card_name}</h1>
                                 </div>
 
                                 <div className="spacer-div"></div>
 
                                 <div className="image-div">
-                                    <Chart data={this.props.twitter.twitterData[0]} height="150" width="200" padding="25"/>
+                                    <Chart data={this.props.twitter[0]} height="150" width="200" padding="25"/>
                                 </div>
                             </div>
 
@@ -70,13 +86,13 @@ class ExampleCard extends React.Component {
                         </div>
                         <div className="content-div">
                             <div className="header-text">
-                                <h1>Retweets per tweet</h1>
+                                <h1>{this.state.twitter[1][0].card_name}</h1>
                             </div>
 
                             <div className="spacer-div"></div>
 
                             <div className="image-div">
-                                <Chart data={this.props.twitter.twitterData[1]} height="150" width="200" padding="25"/>
+                                <Chart data={this.props.twitter[1]} height="150" width="200" padding="25"/>
                             </div>
                         </div>
 
@@ -156,7 +172,7 @@ class ExampleCard extends React.Component {
 }
 function mapStateToProps(state, ownProps) {
     return {
-        twitter: state.twitter
+        twitter: state.twitter.twitterData
     };
 }
 

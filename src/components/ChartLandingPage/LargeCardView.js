@@ -13,25 +13,25 @@ class LargeCard extends React.Component {
     constructor(props){
         super(props);
         this.state = {data:{}}
-        this.getTwitterFeed = this.getTwitterFeed.bind(this);
+        //this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
-    componentWillMount() {
-        this.props.actions.twitterGet();
-    }
-
-    getTwitterFeed() {
-        this.props.actions.twitterGet();
-    }
+    // componentWillMount() {
+    //     this.props.actions.twitterGet();
+    // }
+    //
+    // getTwitterFeed() {
+    //     this.props.actions.twitterGet();
+    // }
 
     render() {
         return (
             <div className="large-card-div">
                 <div className="path-header">
                     <h1 className="path-h1"><Link to="charts">TWITTER</Link>></h1>
-                    <h2 className="path-h2">LIKES PER TWEET</h2>
+                    <h2 className="path-h2">{this.props.twitter[0].card_name}</h2>
                 </div>
                 <div className="description-header">
-                    <h2 className="title-h2">LIKES PER TWEET</h2>
+                    <h2 className="title-h2">{this.props.twitter[0].card_name}</h2>
                     <div className="description-glyphicon">
                         <span className="glyphicon glyphicon-filter"></span>
                     </div>
