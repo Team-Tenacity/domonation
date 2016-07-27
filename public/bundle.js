@@ -29993,7 +29993,7 @@
 	 * Created by cjpowers on 7/14/16.
 	 */
 	function counterReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { counter: _initialState2.default.counter, twitterData: {} } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { counter: _initialState2.default.counter, twitterData: {}, showDomoBuzz: _initialState2.default.showDomoBuzz } : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
@@ -30011,6 +30011,12 @@
 	            return {
 	                counter: state.counter,
 	                twitterData: action.userTweets
+	            };
+	        case types.TOGGLE_SUCCESS:
+	            return {
+	                counter: state.counter,
+	                twitterData: state.twitterData,
+	                showDomoBuzz: action.response
 	            };
 	        default:
 	            return state;
@@ -30031,6 +30037,8 @@
 
 	var TWITTER_GET_SUCCESS = exports.TWITTER_GET_SUCCESS = 'TWITTER_GET_SUCCESS';
 
+	var TOGGLE_SUCCESS = exports.TOGGLE_SUCCESS = 'TOGGLE_SUCCESS';
+
 /***/ },
 /* 486 */
 /***/ function(module, exports) {
@@ -30041,7 +30049,8 @@
 	    value: true
 	});
 	exports.default = {
-	    counter: 1
+	    counter: 1,
+	    showDomoBuzz: false
 	};
 
 /***/ },
@@ -36445,7 +36454,7 @@
 
 	var _HomePage2 = _interopRequireDefault(_HomePage);
 
-	var _ChartLandingPage = __webpack_require__(698);
+	var _ChartLandingPage = __webpack_require__(724);
 
 	var _ChartLandingPage2 = _interopRequireDefault(_ChartLandingPage);
 
@@ -36453,11 +36462,11 @@
 
 	var _Chart2 = _interopRequireDefault(_Chart);
 
-	var _LargeCardView = __webpack_require__(730);
+	var _LargeCardView = __webpack_require__(735);
 
 	var _LargeCardView2 = _interopRequireDefault(_LargeCardView);
 
-	var _ExampleCards = __webpack_require__(727);
+	var _ExampleCards = __webpack_require__(738);
 
 	var _ExampleCards2 = _interopRequireDefault(_ExampleCards);
 
@@ -36472,7 +36481,7 @@
 	        _reactRouter.Route,
 	        { path: '/charts', component: _ChartLandingPage2.default },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _ExampleCards2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/chartDetail', component: _LargeCardView2.default })
+	        _react2.default.createElement(_reactRouter.Route, { path: '/chartDetail/:id', component: _LargeCardView2.default })
 	    ),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/chart', component: _Chart2.default })
 	);
@@ -36678,6 +36687,8 @@
 	exports.incrementSuccess = incrementSuccess;
 	exports.decrementSuccess = decrementSuccess;
 	exports.twitterGetSuccess = twitterGetSuccess;
+	exports.toggleSuccess = toggleSuccess;
+	exports.toggleDomoBuzz = toggleDomoBuzz;
 	exports.twitterGet = twitterGet;
 	exports.increment = increment;
 	exports.decrement = decrement;
@@ -36698,35 +36709,7 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	// import OAuth from 'oauth-1.0a';
-	// import request from 'request';
 	var config = '../../config.json';
-
-	// var request = require('request');
-	// var OAuth   = require('oauth-1.0a');
-
-	// var oauth = OAuth({
-	//     consumer: {
-	//         public: config.twitterConsumerKey,
-	//         secret: config.twitterConsumerSecret
-	//     },
-	//     signature_method: 'HMAC-SHA1'
-	// });
-	//
-	// var token = {
-	//     public: config.twitterAccessToken,
-	//     secret: config.twitterAccessTokenSecret
-	// };
-	//
-	// var request_data = {
-	//     url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=domotalk',
-	//     method: 'GET'
-	// };
-	//
-	// export function twitterGetSuccess(data){
-	//     return { type: types.INCREMENT, data }
-	// }
-	//
 	function incrementSuccess(counter) {
 	    return { type: types.INCREMENT, counter: counter };
 	}
@@ -36739,23 +36722,48 @@
 	    return { type: types.TWITTER_GET_SUCCESS, userTweets: userTweets };
 	}
 
+	function toggleSuccess(response) {
+	    return { type: types.TOGGLE_SUCCESS, response: response };
+	}
+
+	function toggleDomoBuzz(response) {
+	    return function (dispatch) {
+	        dispatch(toggleSuccess(response));
+	    };
+	}
+
 	function twitterGet() {
 	    return function (dispatch) {
-	        _axios2.default.get('http://localhost:3001/api/twitter/timeline').then(function (response) {
+	        _axios2.default.get('/api/twitter/timeline').then(function (response) {
 	            var userTweets = _underscore2.default.map(response.data, function (tweet) {
 	                //console.log(tweet.text);
 	                return {
+	                    id: 1,
+	                    card_name: "Favorites per tweet",
 	                    title: tweet.text,
-	                    retweet_count: tweet.retweet_count,
-	                    favorite_count: tweet.favorite_count,
-	                    created_at: tweet.created_at
+	                    series2: tweet.retweet_count,
+	                    series1: tweet.favorite_count,
+	                    date: tweet.created_at
 
 	                };
 	            });
+	            var userTweets2 = _underscore2.default.map(response.data, function (tweet) {
+	                //console.log(tweet.text);
+	                return {
+	                    id: 2,
+	                    card_name: "Retweets per tweet",
+	                    title: tweet.text,
+	                    series1: tweet.retweet_count,
+	                    series2: tweet.favorite_count,
+	                    date: tweet.created_at
+
+	                };
+	            });
+	            var tweets = [userTweets, userTweets2];
 	            //console.log(test);
 	            //console.log(response.data[0]);
 	            //return response.data});
-	            dispatch(twitterGetSuccess(userTweets));
+	            dispatch(twitterGetSuccess(tweets));
 	        });
 	    };
 	}
@@ -39726,7 +39734,9 @@
 	            padding: parseInt(props.padding),
 	            data: [{
 	                created_at: "Tue Jul 19 15:53:00 +0000 2016",
-	                series1: 5 }] };
+	                series1: 5
+	            }]
+	        };
 	        return _this;
 	    }
 
@@ -39740,11 +39750,12 @@
 	        key: 'render',
 	        value: function render() {
 	            console.log('this is chart props ', this.props);
+	            console.log('these are the refs ', this.refs);
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_BarChart2.default, this.state),
-	                _react2.default.createElement(_LineChartTest2.default, null)
+	                _react2.default.createElement(_BarChart2.default, this.state)
 	            );
 	        }
 	    }]);
@@ -56225,14 +56236,13 @@
 	    return d3.scaleLinear().domain([0, props.data.length]).range([props.padding, props.width - props.padding]);
 	};
 	var yScale = function yScale(props) {
-	    console.log(props.data);
 	    return d3.scaleLinear().domain([0, yMax(props.data)]).range([props.height - props.padding, 0]);
 	};
 
 	var yBarScale = function yBarScale(props) {
-	    console.log(props.data);
 	    return d3.scaleLinear().domain([0, yMax(props.data)]).range([0, props.height - props.padding]);
 	};
+
 	var marshalProps = function marshalProps(props) {
 	    var scales = { xScale: xScale(props), yScale: yScale(props), yBarScale: yBarScale(props) };
 	    return Object.assign({}, props, scales);
@@ -90284,7 +90294,7 @@
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _MainContent = __webpack_require__(695);
+	var _MainContent = __webpack_require__(721);
 
 	var _MainContent2 = _interopRequireDefault(_MainContent);
 
@@ -90340,9 +90350,17 @@
 
 	var _reactRouter = __webpack_require__(501);
 
+	var _LoginModal = __webpack_require__(691);
+
+	var _LoginModal2 = _interopRequireDefault(_LoginModal);
+
+	var _SignInModal = __webpack_require__(716);
+
+	var _SignInModal2 = _interopRequireDefault(_SignInModal);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(691);
+	__webpack_require__(719);
 
 	var Header = function Header() {
 	    return _react2.default.createElement(
@@ -90359,7 +90377,7 @@
 	            _react2.default.createElement(
 	                'div',
 	                null,
-	                'Product'
+	                'Products'
 	            ),
 	            _react2.default.createElement(
 	                'div',
@@ -90384,6 +90402,16 @@
 	        _react2.default.createElement(
 	            'div',
 	            { className: 'header-other-options' },
+	            _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_SignInModal2.default, null)
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_LoginModal2.default, null)
+	            ),
 	            _react2.default.createElement(
 	                'div',
 	                null,
@@ -90421,20 +90449,2080 @@
 /* 691 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReactDOM = __webpack_require__(330);
+	var Modal = __webpack_require__(692);
+
+	__webpack_require__(712);
+
+	var LoginModal = function (_React$Component) {
+	  _inherits(LoginModal, _React$Component);
+
+	  function LoginModal(props) {
+	    _classCallCheck(this, LoginModal);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginModal).call(this, props));
+
+	    _this.state = { open: false };
+	    _this.openModal = _this.openModal.bind(_this);
+	    _this.closeModal = _this.closeModal.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(LoginModal, [{
+	    key: 'openModal',
+	    value: function openModal() {
+	      this.setState({ open: true });
+	    }
+	  }, {
+	    key: 'closeModal',
+	    value: function closeModal() {
+	      this.setState({ open: false });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.openModal },
+	          'Sign Up Test'
+	        ),
+	        _react2.default.createElement(
+	          Modal,
+	          { isOpen: this.state.open, shouldCloseOnOverlayClick: true, className: 'login-modal' },
+	          _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'inside-modal-div' },
+	            _react2.default.createElement('input', { placeholder: 'First Name' }),
+	            _react2.default.createElement('input', { placeholder: 'Last Name' }),
+	            _react2.default.createElement('input', { placeholder: 'Email Address' }),
+	            _react2.default.createElement('input', { placeholder: 'Password', type: 'password' }),
+	            _react2.default.createElement('input', { placeholder: 'Twitter Handle' }),
+	            _react2.default.createElement(
+	              'button',
+	              { onClick: this.closeModal, className: 'sign-up-button' },
+	              'Sign Up!'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return LoginModal;
+	}(_react2.default.Component);
+
+	exports.default = LoginModal;
+
+/***/ },
+/* 692 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(693);
+
+
+
+/***/ },
+/* 693 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(299);
+	var ReactDOM = __webpack_require__(330);
+	var ExecutionEnvironment = __webpack_require__(694);
+	var ModalPortal = React.createFactory(__webpack_require__(695));
+	var ariaAppHider = __webpack_require__(710);
+	var elementClass = __webpack_require__(711);
+	var renderSubtreeIntoContainer = __webpack_require__(330).unstable_renderSubtreeIntoContainer;
+	var Assign = __webpack_require__(699);
+
+	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
+	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
+
+	var Modal = React.createClass({
+
+	  displayName: 'Modal',
+	  statics: {
+	    setAppElement: function(element) {
+	        AppElement = ariaAppHider.setElement(element);
+	    },
+	    injectCSS: function() {
+	      "production" !== process.env.NODE_ENV
+	        && console.warn('React-Modal: injectCSS has been deprecated ' +
+	                        'and no longer has any effect. It will be removed in a later version');
+	    }
+	  },
+
+	  propTypes: {
+	    isOpen: React.PropTypes.bool.isRequired,
+	    style: React.PropTypes.shape({
+	      content: React.PropTypes.object,
+	      overlay: React.PropTypes.object
+	    }),
+	    appElement: React.PropTypes.instanceOf(SafeHTMLElement),
+	    onAfterOpen: React.PropTypes.func,
+	    onRequestClose: React.PropTypes.func,
+	    closeTimeoutMS: React.PropTypes.number,
+	    ariaHideApp: React.PropTypes.bool,
+	    shouldCloseOnOverlayClick: React.PropTypes.bool
+	  },
+
+	  getDefaultProps: function () {
+	    return {
+	      isOpen: false,
+	      ariaHideApp: true,
+	      closeTimeoutMS: 0,
+	      shouldCloseOnOverlayClick: true
+	    };
+	  },
+
+	  componentDidMount: function() {
+	    this.node = document.createElement('div');
+	    this.node.className = 'ReactModalPortal';
+	    document.body.appendChild(this.node);
+	    this.renderPortal(this.props);
+	  },
+
+	  componentWillReceiveProps: function(newProps) {
+	    this.renderPortal(newProps);
+	  },
+
+	  componentWillUnmount: function() {
+	    ReactDOM.unmountComponentAtNode(this.node);
+	    document.body.removeChild(this.node);
+	    elementClass(document.body).remove('ReactModal__Body--open');
+	  },
+
+	  renderPortal: function(props) {
+	    if (props.isOpen) {
+	      elementClass(document.body).add('ReactModal__Body--open');
+	    } else {
+	      elementClass(document.body).remove('ReactModal__Body--open');
+	    }
+
+	    if (props.ariaHideApp) {
+	      ariaAppHider.toggle(props.isOpen, props.appElement);
+	    }
+
+	    this.portal = renderSubtreeIntoContainer(this, ModalPortal(Assign({}, props, {defaultStyles: Modal.defaultStyles})), this.node);
+	  },
+
+	  render: function () {
+	    return React.DOM.noscript();
+	  }
+	});
+
+	Modal.defaultStyles = {
+	  overlay: {
+	    position        : 'fixed',
+	    top             : 0,
+	    left            : 0,
+	    right           : 0,
+	    bottom          : 0,
+	    backgroundColor : 'rgba(255, 255, 255, 0.75)'
+	  },
+	  content: {
+	    position                : 'absolute',
+	    top                     : '40px',
+	    left                    : '40px',
+	    right                   : '40px',
+	    bottom                  : '40px',
+	    border                  : '1px solid #ccc',
+	    background              : '#fff',
+	    overflow                : 'auto',
+	    WebkitOverflowScrolling : 'touch',
+	    borderRadius            : '4px',
+	    outline                 : 'none',
+	    padding                 : '20px'
+	  }
+	}
+
+	module.exports = Modal
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
+
+/***/ },
+/* 694 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Based on code that is Copyright 2013-2015, Facebook, Inc.
+	  All rights reserved.
+	*/
+
+	(function () {
+		'use strict';
+
+		var canUseDOM = !!(
+			typeof window !== 'undefined' &&
+			window.document &&
+			window.document.createElement
+		);
+
+		var ExecutionEnvironment = {
+
+			canUseDOM: canUseDOM,
+
+			canUseWorkers: typeof Worker !== 'undefined',
+
+			canUseEventListeners:
+				canUseDOM && !!(window.addEventListener || window.attachEvent),
+
+			canUseViewport: canUseDOM && !!window.screen
+
+		};
+
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return ExecutionEnvironment;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = ExecutionEnvironment;
+		} else {
+			window.ExecutionEnvironment = ExecutionEnvironment;
+		}
+
+	}());
+
+
+/***/ },
+/* 695 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(299);
+	var div = React.DOM.div;
+	var focusManager = __webpack_require__(696);
+	var scopeTab = __webpack_require__(698);
+	var Assign = __webpack_require__(699);
+
+	// so that our CSS is statically analyzable
+	var CLASS_NAMES = {
+	  overlay: {
+	    base: 'ReactModal__Overlay',
+	    afterOpen: 'ReactModal__Overlay--after-open',
+	    beforeClose: 'ReactModal__Overlay--before-close'
+	  },
+	  content: {
+	    base: 'ReactModal__Content',
+	    afterOpen: 'ReactModal__Content--after-open',
+	    beforeClose: 'ReactModal__Content--before-close'
+	  }
+	};
+
+	var ModalPortal = module.exports = React.createClass({
+
+	  displayName: 'ModalPortal',
+
+	  getDefaultProps: function() {
+	    return {
+	      style: {
+	        overlay: {},
+	        content: {}
+	      }
+	    };
+	  },
+
+	  getInitialState: function() {
+	    return {
+	      afterOpen: false,
+	      beforeClose: false
+	    };
+	  },
+
+	  componentDidMount: function() {
+	    // Focus needs to be set when mounting and already open
+	    if (this.props.isOpen) {
+	      this.setFocusAfterRender(true);
+	      this.open();
+	    }
+	  },
+
+	  componentWillUnmount: function() {
+	    clearTimeout(this.closeTimer);
+	  },
+
+	  componentWillReceiveProps: function(newProps) {
+	    // Focus only needs to be set once when the modal is being opened
+	    if (!this.props.isOpen && newProps.isOpen) {
+	      this.setFocusAfterRender(true);
+	      this.open();
+	    } else if (this.props.isOpen && !newProps.isOpen) {
+	      this.close();
+	    }
+	  },
+
+	  componentDidUpdate: function () {
+	    if (this.focusAfterRender) {
+	      this.focusContent();
+	      this.setFocusAfterRender(false);
+	    }
+	  },
+
+	  setFocusAfterRender: function (focus) {
+	    this.focusAfterRender = focus;
+	  },
+
+	  open: function() {
+	    if (this.state.afterOpen && this.state.beforeClose) {
+	      clearTimeout(this.closeTimer);
+	      this.setState({ beforeClose: false });
+	    } else {
+	      focusManager.setupScopedFocus(this.node);
+	      focusManager.markForFocusLater();
+	      this.setState({isOpen: true}, function() {
+	        this.setState({afterOpen: true});
+
+	        if (this.props.isOpen && this.props.onAfterOpen) {
+	          this.props.onAfterOpen();
+	        }
+	      }.bind(this));
+	    }
+	  },
+
+	  close: function() {
+	    if (!this.ownerHandlesClose())
+	      return;
+	    if (this.props.closeTimeoutMS > 0)
+	      this.closeWithTimeout();
+	    else
+	      this.closeWithoutTimeout();
+	  },
+
+	  focusContent: function() {
+	    this.refs.content.focus();
+	  },
+
+	  closeWithTimeout: function() {
+	    this.setState({beforeClose: true}, function() {
+	      this.closeTimer = setTimeout(this.closeWithoutTimeout, this.props.closeTimeoutMS);
+	    }.bind(this));
+	  },
+
+	  closeWithoutTimeout: function() {
+	    this.setState({
+	      beforeClose: false,
+	      isOpen: false,
+	      afterOpen: false,
+	    }, this.afterClose);
+	  },
+
+	  afterClose: function() {
+	    focusManager.returnFocus();
+	    focusManager.teardownScopedFocus();
+	  },
+
+	  handleKeyDown: function(event) {
+	    if (event.keyCode == 9 /*tab*/) scopeTab(this.refs.content, event);
+	    if (event.keyCode == 27 /*esc*/) {
+	      event.preventDefault();
+	      this.requestClose(event);
+	    }
+	  },
+
+	  handleOverlayClick: function(event) {
+	    var node = event.target
+
+	    while (node) {
+	      if (node === this.refs.content) return
+	      node = node.parentNode
+	    }
+
+	    if (this.props.shouldCloseOnOverlayClick) {
+	      if (this.ownerHandlesClose())
+	        this.requestClose(event);
+	      else
+	        this.focusContent();
+	    }
+	  },
+
+	  requestClose: function(event) {
+	    if (this.ownerHandlesClose())
+	      this.props.onRequestClose(event);
+	  },
+
+	  ownerHandlesClose: function() {
+	    return this.props.onRequestClose;
+	  },
+
+	  shouldBeClosed: function() {
+	    return !this.props.isOpen && !this.state.beforeClose;
+	  },
+
+	  buildClassName: function(which, additional) {
+	    var className = CLASS_NAMES[which].base;
+	    if (this.state.afterOpen)
+	      className += ' '+CLASS_NAMES[which].afterOpen;
+	    if (this.state.beforeClose)
+	      className += ' '+CLASS_NAMES[which].beforeClose;
+	    return additional ? className + ' ' + additional : className;
+	  },
+
+	  render: function() {
+	    var contentStyles = (this.props.className) ? {} : this.props.defaultStyles.content;
+	    var overlayStyles = (this.props.overlayClassName) ? {} : this.props.defaultStyles.overlay;
+
+	    return this.shouldBeClosed() ? div() : (
+	      div({
+	        ref: "overlay",
+	        className: this.buildClassName('overlay', this.props.overlayClassName),
+	        style: Assign({}, overlayStyles, this.props.style.overlay || {}),
+	        onClick: this.handleOverlayClick
+	      },
+	        div({
+	          ref: "content",
+	          style: Assign({}, contentStyles, this.props.style.content || {}),
+	          className: this.buildClassName('content', this.props.className),
+	          tabIndex: "-1",
+	          onKeyDown: this.handleKeyDown
+	        },
+	          this.props.children
+	        )
+	      )
+	    );
+	  }
+	});
+
+
+/***/ },
+/* 696 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var findTabbable = __webpack_require__(697);
+	var modalElement = null;
+	var focusLaterElement = null;
+	var needToFocus = false;
+
+	function handleBlur(event) {
+	  needToFocus = true;
+	}
+
+	function handleFocus(event) {
+	  if (needToFocus) {
+	    needToFocus = false;
+	    if (!modalElement) {
+	      return;
+	    }
+	    // need to see how jQuery shims document.on('focusin') so we don't need the
+	    // setTimeout, firefox doesn't support focusin, if it did, we could focus
+	    // the element outside of a setTimeout. Side-effect of this implementation 
+	    // is that the document.body gets focus, and then we focus our element right 
+	    // after, seems fine.
+	    setTimeout(function() {
+	      if (modalElement.contains(document.activeElement))
+	        return;
+	      var el = (findTabbable(modalElement)[0] || modalElement);
+	      el.focus();
+	    }, 0);
+	  }
+	}
+
+	exports.markForFocusLater = function() {
+	  focusLaterElement = document.activeElement;
+	};
+
+	exports.returnFocus = function() {
+	  try {
+	    focusLaterElement.focus();
+	  }
+	  catch (e) {
+	    console.warn('You tried to return focus to '+focusLaterElement+' but it is not in the DOM anymore');
+	  }
+	  focusLaterElement = null;
+	};
+
+	exports.setupScopedFocus = function(element) {
+	  modalElement = element;
+
+	  if (window.addEventListener) {
+	    window.addEventListener('blur', handleBlur, false);
+	    document.addEventListener('focus', handleFocus, true);
+	  } else {
+	    window.attachEvent('onBlur', handleBlur);
+	    document.attachEvent('onFocus', handleFocus);
+	  }
+	};
+
+	exports.teardownScopedFocus = function() {
+	  modalElement = null;
+
+	  if (window.addEventListener) {
+	    window.removeEventListener('blur', handleBlur);
+	    document.removeEventListener('focus', handleFocus);
+	  } else {
+	    window.detachEvent('onBlur', handleBlur);
+	    document.detachEvent('onFocus', handleFocus);
+	  }
+	};
+
+
+
+
+/***/ },
+/* 697 */
+/***/ function(module, exports) {
+
+	/*!
+	 * Adapted from jQuery UI core
+	 *
+	 * http://jqueryui.com
+	 *
+	 * Copyright 2014 jQuery Foundation and other contributors
+	 * Released under the MIT license.
+	 * http://jquery.org/license
+	 *
+	 * http://api.jqueryui.com/category/ui-core/
+	 */
+
+	function focusable(element, isTabIndexNotNaN) {
+	  var nodeName = element.nodeName.toLowerCase();
+	  return (/input|select|textarea|button|object/.test(nodeName) ?
+	    !element.disabled :
+	    "a" === nodeName ?
+	      element.href || isTabIndexNotNaN :
+	      isTabIndexNotNaN) && visible(element);
+	}
+
+	function hidden(el) {
+	  return (el.offsetWidth <= 0 && el.offsetHeight <= 0) ||
+	    el.style.display === 'none';
+	}
+
+	function visible(element) {
+	  while (element) {
+	    if (element === document.body) break;
+	    if (hidden(element)) return false;
+	    element = element.parentNode;
+	  }
+	  return true;
+	}
+
+	function tabbable(element) {
+	  var tabIndex = element.getAttribute('tabindex');
+	  if (tabIndex === null) tabIndex = undefined;
+	  var isTabIndexNaN = isNaN(tabIndex);
+	  return (isTabIndexNaN || tabIndex >= 0) && focusable(element, !isTabIndexNaN);
+	}
+
+	function findTabbableDescendants(element) {
+	  return [].slice.call(element.querySelectorAll('*'), 0).filter(function(el) {
+	    return tabbable(el);
+	  });
+	}
+
+	module.exports = findTabbableDescendants;
+
+
+
+/***/ },
+/* 698 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var findTabbable = __webpack_require__(697);
+
+	module.exports = function(node, event) {
+	  var tabbable = findTabbable(node);
+	  if (!tabbable.length) {
+	      event.preventDefault();
+	      return;
+	  }
+	  var finalTabbable = tabbable[event.shiftKey ? 0 : tabbable.length - 1];
+	  var leavingFinalTabbable = (
+	    finalTabbable === document.activeElement ||
+	    // handle immediate shift+tab after opening with mouse
+	    node === document.activeElement
+	  );
+	  if (!leavingFinalTabbable) return;
+	  event.preventDefault();
+	  var target = tabbable[event.shiftKey ? tabbable.length - 1 : 0];
+	  target.focus();
+	};
+
+
+/***/ },
+/* 699 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * lodash 3.2.0 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	var baseAssign = __webpack_require__(700),
+	    createAssigner = __webpack_require__(706),
+	    keys = __webpack_require__(702);
+
+	/**
+	 * A specialized version of `_.assign` for customizing assigned values without
+	 * support for argument juggling, multiple sources, and `this` binding `customizer`
+	 * functions.
+	 *
+	 * @private
+	 * @param {Object} object The destination object.
+	 * @param {Object} source The source object.
+	 * @param {Function} customizer The function to customize assigned values.
+	 * @returns {Object} Returns `object`.
+	 */
+	function assignWith(object, source, customizer) {
+	  var index = -1,
+	      props = keys(source),
+	      length = props.length;
+
+	  while (++index < length) {
+	    var key = props[index],
+	        value = object[key],
+	        result = customizer(value, source[key], key, object, source);
+
+	    if ((result === result ? (result !== value) : (value === value)) ||
+	        (value === undefined && !(key in object))) {
+	      object[key] = result;
+	    }
+	  }
+	  return object;
+	}
+
+	/**
+	 * Assigns own enumerable properties of source object(s) to the destination
+	 * object. Subsequent sources overwrite property assignments of previous sources.
+	 * If `customizer` is provided it is invoked to produce the assigned values.
+	 * The `customizer` is bound to `thisArg` and invoked with five arguments:
+	 * (objectValue, sourceValue, key, object, source).
+	 *
+	 * **Note:** This method mutates `object` and is based on
+	 * [`Object.assign`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.assign).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @alias extend
+	 * @category Object
+	 * @param {Object} object The destination object.
+	 * @param {...Object} [sources] The source objects.
+	 * @param {Function} [customizer] The function to customize assigned values.
+	 * @param {*} [thisArg] The `this` binding of `customizer`.
+	 * @returns {Object} Returns `object`.
+	 * @example
+	 *
+	 * _.assign({ 'user': 'barney' }, { 'age': 40 }, { 'user': 'fred' });
+	 * // => { 'user': 'fred', 'age': 40 }
+	 *
+	 * // using a customizer callback
+	 * var defaults = _.partialRight(_.assign, function(value, other) {
+	 *   return _.isUndefined(value) ? other : value;
+	 * });
+	 *
+	 * defaults({ 'user': 'barney' }, { 'age': 36 }, { 'user': 'fred' });
+	 * // => { 'user': 'barney', 'age': 36 }
+	 */
+	var assign = createAssigner(function(object, source, customizer) {
+	  return customizer
+	    ? assignWith(object, source, customizer)
+	    : baseAssign(object, source);
+	});
+
+	module.exports = assign;
+
+
+/***/ },
+/* 700 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * lodash 3.2.0 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	var baseCopy = __webpack_require__(701),
+	    keys = __webpack_require__(702);
+
+	/**
+	 * The base implementation of `_.assign` without support for argument juggling,
+	 * multiple sources, and `customizer` functions.
+	 *
+	 * @private
+	 * @param {Object} object The destination object.
+	 * @param {Object} source The source object.
+	 * @returns {Object} Returns `object`.
+	 */
+	function baseAssign(object, source) {
+	  return source == null
+	    ? object
+	    : baseCopy(source, keys(source), object);
+	}
+
+	module.exports = baseAssign;
+
+
+/***/ },
+/* 701 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/**
+	 * Copies properties of `source` to `object`.
+	 *
+	 * @private
+	 * @param {Object} source The object to copy properties from.
+	 * @param {Array} props The property names to copy.
+	 * @param {Object} [object={}] The object to copy properties to.
+	 * @returns {Object} Returns `object`.
+	 */
+	function baseCopy(source, props, object) {
+	  object || (object = {});
+
+	  var index = -1,
+	      length = props.length;
+
+	  while (++index < length) {
+	    var key = props[index];
+	    object[key] = source[key];
+	  }
+	  return object;
+	}
+
+	module.exports = baseCopy;
+
+
+/***/ },
+/* 702 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * lodash 3.1.2 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	var getNative = __webpack_require__(703),
+	    isArguments = __webpack_require__(704),
+	    isArray = __webpack_require__(705);
+
+	/** Used to detect unsigned integer values. */
+	var reIsUint = /^\d+$/;
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeKeys = getNative(Object, 'keys');
+
+	/**
+	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseProperty(key) {
+	  return function(object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
+	/**
+	 * Gets the "length" property value of `object`.
+	 *
+	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {*} Returns the "length" value.
+	 */
+	var getLength = baseProperty('length');
+
+	/**
+	 * Checks if `value` is array-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(getLength(value));
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like index.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+	 */
+	function isIndex(value, length) {
+	  value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
+	  length = length == null ? MAX_SAFE_INTEGER : length;
+	  return value > -1 && value % 1 == 0 && value < length;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * A fallback implementation of `Object.keys` which creates an array of the
+	 * own enumerable property names of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 */
+	function shimKeys(object) {
+	  var props = keysIn(object),
+	      propsLength = props.length,
+	      length = propsLength && object.length;
+
+	  var allowIndexes = !!length && isLength(length) &&
+	    (isArray(object) || isArguments(object));
+
+	  var index = -1,
+	      result = [];
+
+	  while (++index < propsLength) {
+	    var key = props[index];
+	    if ((allowIndexes && isIndex(key, length)) || hasOwnProperty.call(object, key)) {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Creates an array of the own enumerable property names of `object`.
+	 *
+	 * **Note:** Non-object values are coerced to objects. See the
+	 * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
+	 * for more details.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.keys(new Foo);
+	 * // => ['a', 'b'] (iteration order is not guaranteed)
+	 *
+	 * _.keys('hi');
+	 * // => ['0', '1']
+	 */
+	var keys = !nativeKeys ? shimKeys : function(object) {
+	  var Ctor = object == null ? undefined : object.constructor;
+	  if ((typeof Ctor == 'function' && Ctor.prototype === object) ||
+	      (typeof object != 'function' && isArrayLike(object))) {
+	    return shimKeys(object);
+	  }
+	  return isObject(object) ? nativeKeys(object) : [];
+	};
+
+	/**
+	 * Creates an array of the own and inherited enumerable property names of `object`.
+	 *
+	 * **Note:** Non-object values are coerced to objects.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.keysIn(new Foo);
+	 * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
+	 */
+	function keysIn(object) {
+	  if (object == null) {
+	    return [];
+	  }
+	  if (!isObject(object)) {
+	    object = Object(object);
+	  }
+	  var length = object.length;
+	  length = (length && isLength(length) &&
+	    (isArray(object) || isArguments(object)) && length) || 0;
+
+	  var Ctor = object.constructor,
+	      index = -1,
+	      isProto = typeof Ctor == 'function' && Ctor.prototype === object,
+	      result = Array(length),
+	      skipIndexes = length > 0;
+
+	  while (++index < length) {
+	    result[index] = (index + '');
+	  }
+	  for (var key in object) {
+	    if (!(skipIndexes && isIndex(key, length)) &&
+	        !(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = keys;
+
+
+/***/ },
+/* 703 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.9.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** `Object#toString` result references. */
+	var funcTag = '[object Function]';
+
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	/**
+	 * Checks if `value` is object-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var fnToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' +
+	  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
+	  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+	);
+
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object == null ? undefined : object[key];
+	  return isNative(value) ? value : undefined;
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in older versions of Chrome and Safari which return 'function' for regexes
+	  // and Safari 8 equivalents which return 'object' for typed array constructors.
+	  return isObject(value) && objToString.call(value) == funcTag;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(fnToString.call(value));
+	  }
+	  return isObjectLike(value) && reIsHostCtor.test(value);
+	}
+
+	module.exports = getNative;
+
+
+/***/ },
+/* 704 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** Used as references for various `Number` constants. */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]';
+
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new accessor function.
+	 */
+	function baseProperty(key) {
+	  return function(object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/** Built-in value references. */
+	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+	/**
+	 * Gets the "length" property value of `object`.
+	 *
+	 * **Note:** This function is used to avoid a
+	 * [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792) that affects
+	 * Safari on at least iOS 8.1-8.3 ARM64.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {*} Returns the "length" value.
+	 */
+	var getLength = baseProperty('length');
+
+	/**
+	 * Checks if `value` is likely an `arguments` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArguments(function() { return arguments; }());
+	 * // => true
+	 *
+	 * _.isArguments([1, 2, 3]);
+	 * // => false
+	 */
+	function isArguments(value) {
+	  // Safari 8.1 incorrectly makes `arguments.callee` enumerable in strict mode.
+	  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+	    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+	}
+
+	/**
+	 * Checks if `value` is array-like. A value is considered array-like if it's
+	 * not a function and has a `value.length` that's an integer greater than or
+	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLike(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLike('abc');
+	 * // => true
+	 *
+	 * _.isArrayLike(_.noop);
+	 * // => false
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(getLength(value)) && !isFunction(value);
+	}
+
+	/**
+	 * This method is like `_.isArrayLike` except that it also checks if `value`
+	 * is an object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array-like object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArrayLikeObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject('abc');
+	 * // => false
+	 *
+	 * _.isArrayLikeObject(_.noop);
+	 * // => false
+	 */
+	function isArrayLikeObject(value) {
+	  return isObjectLike(value) && isArrayLike(value);
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  var tag = isObject(value) ? objectToString.call(value) : '';
+	  return tag == funcTag || tag == genTag;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is loosely based on
+	 * [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isLength(3);
+	 * // => true
+	 *
+	 * _.isLength(Number.MIN_VALUE);
+	 * // => false
+	 *
+	 * _.isLength(Infinity);
+	 * // => false
+	 *
+	 * _.isLength('3');
+	 * // => false
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' &&
+	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	module.exports = isArguments;
+
+
+/***/ },
+/* 705 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** `Object#toString` result references. */
+	var arrayTag = '[object Array]',
+	    funcTag = '[object Function]';
+
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	/**
+	 * Checks if `value` is object-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var fnToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' +
+	  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
+	  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+	);
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeIsArray = getNative(Array, 'isArray');
+
+	/**
+	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object == null ? undefined : object[key];
+	  return isNative(value) ? value : undefined;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(function() { return arguments; }());
+	 * // => false
+	 */
+	var isArray = nativeIsArray || function(value) {
+	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
+	};
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in older versions of Chrome and Safari which return 'function' for regexes
+	  // and Safari 8 equivalents which return 'object' for typed array constructors.
+	  return isObject(value) && objToString.call(value) == funcTag;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(fnToString.call(value));
+	  }
+	  return isObjectLike(value) && reIsHostCtor.test(value);
+	}
+
+	module.exports = isArray;
+
+
+/***/ },
+/* 706 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * lodash 3.1.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	var bindCallback = __webpack_require__(707),
+	    isIterateeCall = __webpack_require__(708),
+	    restParam = __webpack_require__(709);
+
+	/**
+	 * Creates a function that assigns properties of source object(s) to a given
+	 * destination object.
+	 *
+	 * **Note:** This function is used to create `_.assign`, `_.defaults`, and `_.merge`.
+	 *
+	 * @private
+	 * @param {Function} assigner The function to assign values.
+	 * @returns {Function} Returns the new assigner function.
+	 */
+	function createAssigner(assigner) {
+	  return restParam(function(object, sources) {
+	    var index = -1,
+	        length = object == null ? 0 : sources.length,
+	        customizer = length > 2 ? sources[length - 2] : undefined,
+	        guard = length > 2 ? sources[2] : undefined,
+	        thisArg = length > 1 ? sources[length - 1] : undefined;
+
+	    if (typeof customizer == 'function') {
+	      customizer = bindCallback(customizer, thisArg, 5);
+	      length -= 2;
+	    } else {
+	      customizer = typeof thisArg == 'function' ? thisArg : undefined;
+	      length -= (customizer ? 1 : 0);
+	    }
+	    if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+	      customizer = length < 3 ? undefined : customizer;
+	      length = 1;
+	    }
+	    while (++index < length) {
+	      var source = sources[index];
+	      if (source) {
+	        assigner(object, source, customizer);
+	      }
+	    }
+	    return object;
+	  });
+	}
+
+	module.exports = createAssigner;
+
+
+/***/ },
+/* 707 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/**
+	 * A specialized version of `baseCallback` which only supports `this` binding
+	 * and specifying the number of arguments to provide to `func`.
+	 *
+	 * @private
+	 * @param {Function} func The function to bind.
+	 * @param {*} thisArg The `this` binding of `func`.
+	 * @param {number} [argCount] The number of arguments to provide to `func`.
+	 * @returns {Function} Returns the callback.
+	 */
+	function bindCallback(func, thisArg, argCount) {
+	  if (typeof func != 'function') {
+	    return identity;
+	  }
+	  if (thisArg === undefined) {
+	    return func;
+	  }
+	  switch (argCount) {
+	    case 1: return function(value) {
+	      return func.call(thisArg, value);
+	    };
+	    case 3: return function(value, index, collection) {
+	      return func.call(thisArg, value, index, collection);
+	    };
+	    case 4: return function(accumulator, value, index, collection) {
+	      return func.call(thisArg, accumulator, value, index, collection);
+	    };
+	    case 5: return function(value, other, key, object, source) {
+	      return func.call(thisArg, value, other, key, object, source);
+	    };
+	  }
+	  return function() {
+	    return func.apply(thisArg, arguments);
+	  };
+	}
+
+	/**
+	 * This method returns the first argument provided to it.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Utility
+	 * @param {*} value Any value.
+	 * @returns {*} Returns `value`.
+	 * @example
+	 *
+	 * var object = { 'user': 'fred' };
+	 *
+	 * _.identity(object) === object;
+	 * // => true
+	 */
+	function identity(value) {
+	  return value;
+	}
+
+	module.exports = bindCallback;
+
+
+/***/ },
+/* 708 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.9 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** Used to detect unsigned integer values. */
+	var reIsUint = /^\d+$/;
+
+	/**
+	 * Used as the [maximum length](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseProperty(key) {
+	  return function(object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
+	/**
+	 * Gets the "length" property value of `object`.
+	 *
+	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {*} Returns the "length" value.
+	 */
+	var getLength = baseProperty('length');
+
+	/**
+	 * Checks if `value` is array-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(getLength(value));
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like index.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+	 */
+	function isIndex(value, length) {
+	  value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
+	  length = length == null ? MAX_SAFE_INTEGER : length;
+	  return value > -1 && value % 1 == 0 && value < length;
+	}
+
+	/**
+	 * Checks if the provided arguments are from an iteratee call.
+	 *
+	 * @private
+	 * @param {*} value The potential iteratee value argument.
+	 * @param {*} index The potential iteratee index or key argument.
+	 * @param {*} object The potential iteratee object argument.
+	 * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
+	 */
+	function isIterateeCall(value, index, object) {
+	  if (!isObject(object)) {
+	    return false;
+	  }
+	  var type = typeof index;
+	  if (type == 'number'
+	      ? (isArrayLike(object) && isIndex(index, object.length))
+	      : (type == 'string' && index in object)) {
+	    var other = object[index];
+	    return value === value ? (value === other) : (other !== other);
+	  }
+	  return false;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	module.exports = isIterateeCall;
+
+
+/***/ },
+/* 709 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.6.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** Used as the `TypeError` message for "Functions" methods. */
+	var FUNC_ERROR_TEXT = 'Expected a function';
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeMax = Math.max;
+
+	/**
+	 * Creates a function that invokes `func` with the `this` binding of the
+	 * created function and arguments from `start` and beyond provided as an array.
+	 *
+	 * **Note:** This method is based on the [rest parameter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Function
+	 * @param {Function} func The function to apply a rest parameter to.
+	 * @param {number} [start=func.length-1] The start position of the rest parameter.
+	 * @returns {Function} Returns the new function.
+	 * @example
+	 *
+	 * var say = _.restParam(function(what, names) {
+	 *   return what + ' ' + _.initial(names).join(', ') +
+	 *     (_.size(names) > 1 ? ', & ' : '') + _.last(names);
+	 * });
+	 *
+	 * say('hello', 'fred', 'barney', 'pebbles');
+	 * // => 'hello fred, barney, & pebbles'
+	 */
+	function restParam(func, start) {
+	  if (typeof func != 'function') {
+	    throw new TypeError(FUNC_ERROR_TEXT);
+	  }
+	  start = nativeMax(start === undefined ? (func.length - 1) : (+start || 0), 0);
+	  return function() {
+	    var args = arguments,
+	        index = -1,
+	        length = nativeMax(args.length - start, 0),
+	        rest = Array(length);
+
+	    while (++index < length) {
+	      rest[index] = args[start + index];
+	    }
+	    switch (start) {
+	      case 0: return func.call(this, rest);
+	      case 1: return func.call(this, args[0], rest);
+	      case 2: return func.call(this, args[0], args[1], rest);
+	    }
+	    var otherArgs = Array(start + 1);
+	    index = -1;
+	    while (++index < start) {
+	      otherArgs[index] = args[index];
+	    }
+	    otherArgs[start] = rest;
+	    return func.apply(this, otherArgs);
+	  };
+	}
+
+	module.exports = restParam;
+
+
+/***/ },
+/* 710 */
+/***/ function(module, exports) {
+
+	var _element = typeof document !== 'undefined' ? document.body : null;
+
+	function setElement(element) {
+	  if (typeof element === 'string') {
+	    var el = document.querySelectorAll(element);
+	    element = 'length' in el ? el[0] : el;
+	  }
+	  _element = element || _element;
+	  return _element;
+	}
+
+	function hide(appElement) {
+	  validateElement(appElement);
+	  (appElement || _element).setAttribute('aria-hidden', 'true');
+	}
+
+	function show(appElement) {
+	  validateElement(appElement);
+	  (appElement || _element).removeAttribute('aria-hidden');
+	}
+
+	function toggle(shouldHide, appElement) {
+	  if (shouldHide)
+	    hide(appElement);
+	  else
+	    show(appElement);
+	}
+
+	function validateElement(appElement) {
+	  if (!appElement && !_element)
+	    throw new Error('react-modal: You must set an element with `Modal.setAppElement(el)` to make this accessible');
+	}
+
+	function resetForTesting() {
+	  _element = document.body;
+	}
+
+	exports.toggle = toggle;
+	exports.setElement = setElement;
+	exports.show = show;
+	exports.hide = hide;
+	exports.resetForTesting = resetForTesting;
+
+
+/***/ },
+/* 711 */
+/***/ function(module, exports) {
+
+	module.exports = function(opts) {
+	  return new ElementClass(opts)
+	}
+
+	function indexOf(arr, prop) {
+	  if (arr.indexOf) return arr.indexOf(prop)
+	  for (var i = 0, len = arr.length; i < len; i++)
+	    if (arr[i] === prop) return i
+	  return -1
+	}
+
+	function ElementClass(opts) {
+	  if (!(this instanceof ElementClass)) return new ElementClass(opts)
+	  var self = this
+	  if (!opts) opts = {}
+
+	  // similar doing instanceof HTMLElement but works in IE8
+	  if (opts.nodeType) opts = {el: opts}
+
+	  this.opts = opts
+	  this.el = opts.el || document.body
+	  if (typeof this.el !== 'object') this.el = document.querySelector(this.el)
+	}
+
+	ElementClass.prototype.add = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  if (el.className === "") return el.className = className
+	  var classes = el.className.split(' ')
+	  if (indexOf(classes, className) > -1) return classes
+	  classes.push(className)
+	  el.className = classes.join(' ')
+	  return classes
+	}
+
+	ElementClass.prototype.remove = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  if (el.className === "") return
+	  var classes = el.className.split(' ')
+	  var idx = indexOf(classes, className)
+	  if (idx > -1) classes.splice(idx, 1)
+	  el.className = classes.join(' ')
+	  return classes
+	}
+
+	ElementClass.prototype.has = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  var classes = el.className.split(' ')
+	  return indexOf(classes, className) > -1
+	}
+
+	ElementClass.prototype.toggle = function(className) {
+	  var el = this.el
+	  if (!el) return
+	  if (this.has(className)) this.remove(className)
+	  else this.add(className)
+	}
+
+
+/***/ },
+/* 712 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(692);
+	var content = __webpack_require__(713);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./Header.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./Header.css");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./LoginModal.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./LoginModal.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -90444,21 +92532,21 @@
 	}
 
 /***/ },
-/* 692 */
+/* 713 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\n\n.header {\n    display: flex;\n    flex-direction: row;\n    height: 60px;\n    color: #555555;\n    position: fixed;\n    top: 0px;\n    left: 0px;\n    width: 100%;\n    background: #fff;\n}\n\n.header a:hover {\n    color:#99CCEE;\n    text-decoration: none;\n}\n\n.header a:visited:active {\n    text-decoration: none;\n}\n\n.header a:visited{\n    text-decoration: line-through;\n\n}\n\n.logo {\n    height: 100%;\n    background: #99CCEE;\n    color: #fff;\n\n}\n\n.logo img {\n    height: 100%;\n}\n.header-menu-options {\n    height: 100%;\n    width: 600px;\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n}\n\n.header-menu-options div {\n    margin-left: 34px;\n}\n\n.header-menu-options div:hover {\n    color: #99CCEE;\n    cursor: pointer;\n\n}\n\n.header-other-options {\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    position: absolute;\n    right: 0px;\n    top: 0px;\n}\n\n.header-other-options div {\n    margin-right: 24px;\n}\n\n.header-other-options div:hover {\n    color: #99CCEE;\n    cursor: pointer;\n}\n.demo-button {\n    height: 35px;\n    width: 130px;\n    background: #FF9922;\n    color: #fff;\n    border: none;\n    font-size: .8em;\n    transition-duration: .3s\n}\n\n.demo-button:hover {\n    background: #99CCEE;\n}", ""]);
+	exports.push([module.id, "/*.login-modal {\n  width: 30vw;\n  height: 30vh;\n}*/\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 66px;\nleft: 580px;\nright: 40px;\nbottom: 40px;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\n/*padding: 20px;*/\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 693 */
+/* 714 */
 /***/ function(module, exports) {
 
 	/*
@@ -90514,7 +92602,7 @@
 
 
 /***/ },
-/* 694 */
+/* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -90766,7 +92854,176 @@
 
 
 /***/ },
-/* 695 */
+/* 716 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ReactDOM = __webpack_require__(330);
+	var Modal = __webpack_require__(692);
+
+	__webpack_require__(717);
+
+	var SignInModal = function (_React$Component) {
+	  _inherits(SignInModal, _React$Component);
+
+	  function SignInModal(props) {
+	    _classCallCheck(this, SignInModal);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SignInModal).call(this, props));
+
+	    _this.state = { open: false };
+	    _this.openModal = _this.openModal.bind(_this);
+	    _this.closeModal = _this.closeModal.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(SignInModal, [{
+	    key: 'openModal',
+	    value: function openModal() {
+	      this.setState({ open: true });
+	    }
+	  }, {
+	    key: 'closeModal',
+	    value: function closeModal() {
+	      this.setState({ open: false });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.openModal },
+	          'Sign In Test'
+	        ),
+	        _react2.default.createElement(
+	          Modal,
+	          { isOpen: this.state.open, shouldCloseOnOverlayClick: true, className: 'login-modal' },
+	          _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'inside-modal-div' },
+	            _react2.default.createElement('input', { placeholder: 'Email Address' }),
+	            _react2.default.createElement('input', { placeholder: 'Password', type: 'password' }),
+	            _react2.default.createElement(
+	              'button',
+	              { onClick: this.closeModal, className: 'sign-up-button' },
+	              'Sign In!'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SignInModal;
+	}(_react2.default.Component);
+
+	exports.default = SignInModal;
+
+/***/ },
+/* 717 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(718);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(715)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./SignInModal.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./SignInModal.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 718 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(714)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".login-modal {\nposition: absolute;\nheight: 400px;\nwidth: 400px;\ntop: 66px;\nleft: 580px;\nright: 40px;\nbottom: 40px;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\n/*padding: 20px;*/\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 719 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(720);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(715)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./Header.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./Header.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 720 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(714)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n.header {\n    display: flex;\n    flex-direction: row;\n    height: 60px;\n    color: #555555;\n    position: fixed;\n    top: 0px;\n    left: 0px;\n    width: 100%;\n    background: #fff;\n}\n\n.header a:hover {\n    color:#99CCEE;\n    text-decoration: none;\n}\n\n.header a:visited:active {\n    text-decoration: none;\n}\n\n.header a:visited{\n    text-decoration: line-through;\n\n}\n\n.logo {\n    height: 100%;\n    background: #99CCEE;\n    color: #fff;\n\n}\n\n.logo img {\n    height: 100%;\n}\n.header-menu-options {\n    height: 100%;\n    width: 600px;\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n}\n\n.header-menu-options div {\n    margin-left: 34px;\n}\n\n.header-menu-options div:hover {\n    color: #99CCEE;\n    cursor: pointer;\n\n}\n\n.header-other-options {\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    position: absolute;\n    right: 0px;\n    top: 0px;\n}\n\n.header-other-options div {\n    margin-right: 24px;\n}\n\n.header-other-options div:hover {\n    color: #99CCEE;\n    cursor: pointer;\n}\n.demo-button {\n    height: 35px;\n    width: 130px;\n    background: #FF9922;\n    color: #fff;\n    border: none;\n    font-size: .8em;\n    transition-duration: .3s\n}\n\n.demo-button:hover {\n    background: #99CCEE;\n}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 721 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90783,7 +93040,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(696);
+	__webpack_require__(722);
 
 	var MainContent = function MainContent() {
 	    return _react2.default.createElement(
@@ -90810,16 +93067,16 @@
 	exports.default = MainContent;
 
 /***/ },
-/* 696 */
+/* 722 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(697);
+	var content = __webpack_require__(723);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -90836,10 +93093,10 @@
 	}
 
 /***/ },
-/* 697 */
+/* 723 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -90850,7 +93107,7 @@
 
 
 /***/ },
-/* 698 */
+/* 724 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90875,21 +93132,17 @@
 
 	var twitterActions = _interopRequireWildcard(_twitterActions);
 
-	var _UpperNav = __webpack_require__(699);
+	var _UpperNav = __webpack_require__(725);
 
 	var _UpperNav2 = _interopRequireDefault(_UpperNav);
 
-	var _Subheader = __webpack_require__(702);
+	var _Subheader = __webpack_require__(728);
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
-	var _titleDiv = __webpack_require__(705);
+	var _DomoBuzzContainer = __webpack_require__(731);
 
-	var _titleDiv2 = _interopRequireDefault(_titleDiv);
-
-	var _ExampleCards = __webpack_require__(727);
-
-	var _ExampleCards2 = _interopRequireDefault(_ExampleCards);
+	var _DomoBuzzContainer2 = _interopRequireDefault(_DomoBuzzContainer);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -90935,6 +93188,7 @@
 	                null,
 	                _react2.default.createElement(_UpperNav2.default, null),
 	                _react2.default.createElement(_Subheader2.default, null),
+	                _react2.default.createElement(_DomoBuzzContainer2.default, null),
 	                this.props.children
 	            );
 	        }
@@ -90958,90 +93212,158 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ChartLandingPage);
 
 /***/ },
-/* 699 */
+/* 725 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(299);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(501);
+
+	var _reactRedux = __webpack_require__(493);
+
+	var _redux = __webpack_require__(470);
+
+	var _twitterActions = __webpack_require__(564);
+
+	var twitterActions = _interopRequireWildcard(_twitterActions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(700);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var UpperNav = function UpperNav() {
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "upper-nav-div" },
-	        _react2.default.createElement(
-	            "div",
-	            { className: "left-half" },
-	            _react2.default.createElement(
-	                "div",
-	                { className: "logo-div" },
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	__webpack_require__(726);
+
+	var UpperNav = function (_React$Component) {
+	    _inherits(UpperNav, _React$Component);
+
+	    function UpperNav(props) {
+	        _classCallCheck(this, UpperNav);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UpperNav).call(this, props));
+
+	        _this.state = { show: props.show };
+	        _this.toggleDomoBuzz = _this.toggleDomoBuzz.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(UpperNav, [{
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            console.log('received props!');
+	            this.setState({ show: nextProps.show });
+	        }
+	    }, {
+	        key: 'toggleDomoBuzz',
+	        value: function toggleDomoBuzz() {
+	            var curStatus = !this.props.show;
+	            console.log(curStatus);
+	            this.props.actions.toggleDomoBuzz(curStatus);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+
+	            console.log('uppernav props ', this.props);
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'upper-nav-div' },
 	                _react2.default.createElement(
-	                    "a",
-	                    { href: "/" },
-	                    _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png", width: "120", height: "120" })
+	                    'div',
+	                    { className: 'left-half' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'logo-div' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '/' },
+	                            _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', width: '120', height: '120' })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'i',
+	                        { className: 'plus-icon' },
+	                        '+'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'cobrand-div' },
+	                        _react2.default.createElement('img', { src: 'https://devmounta.in/img/logoonly.png', width: '60', height: '60' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'right-half' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'glyphicon-div' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-search' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { onClick: this.toggleDomoBuzz, className: 'glyphicon-div' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-comment' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'glyphicon-div' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-th' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'glyphicon-div' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-user' })
+	                    )
 	                )
-	            ),
-	            _react2.default.createElement(
-	                "i",
-	                { className: "plus-icon" },
-	                "+"
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "cobrand-div" },
-	                _react2.default.createElement("img", { src: "https://devmounta.in/img/logoonly.png", width: "60", height: "60" })
-	            )
-	        ),
-	        _react2.default.createElement(
-	            "div",
-	            { className: "right-half" },
-	            _react2.default.createElement(
-	                "div",
-	                { className: "glyphicon-div" },
-	                _react2.default.createElement("span", { className: "glyphicon glyphicon-search" })
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "glyphicon-div" },
-	                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "glyphicon-div" },
-	                _react2.default.createElement("span", { className: "glyphicon glyphicon-th" })
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "glyphicon-div" },
-	                _react2.default.createElement("span", { className: "glyphicon glyphicon-user" })
-	            )
-	        )
-	    );
-	};
+	            );
+	        }
+	    }]);
 
-	exports.default = UpperNav;
+	    return UpperNav;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state, ownProps) {
+
+	    return {
+	        twitter: state.twitter.twitterData,
+	        show: state.twitter.showDomoBuzz
+	    };
+	}
+
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UpperNav);
 
 /***/ },
-/* 700 */
+/* 726 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(701);
+	var content = __webpack_require__(727);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -91058,10 +93380,10 @@
 	}
 
 /***/ },
-/* 701 */
+/* 727 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -91072,7 +93394,7 @@
 
 
 /***/ },
-/* 702 */
+/* 728 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91087,7 +93409,7 @@
 
 	var _reactRouter = __webpack_require__(501);
 
-	__webpack_require__(703);
+	__webpack_require__(729);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91184,16 +93506,16 @@
 	exports.default = Subheader;
 
 /***/ },
-/* 703 */
+/* 729 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(704);
+	var content = __webpack_require__(730);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -91210,10 +93532,10 @@
 	}
 
 /***/ },
-/* 704 */
+/* 730 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -91224,7 +93546,114 @@
 
 
 /***/ },
-/* 705 */
+/* 731 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _DomoBuzz = __webpack_require__(732);
+
+	var _DomoBuzz2 = _interopRequireDefault(_DomoBuzz);
+
+	var _reactRouter = __webpack_require__(501);
+
+	var _reactRedux = __webpack_require__(493);
+
+	var _redux = __webpack_require__(470);
+
+	var _twitterActions = __webpack_require__(564);
+
+	var twitterActions = _interopRequireWildcard(_twitterActions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	__webpack_require__(733);
+
+	var DomoBuzzContainer = function (_React$Component) {
+	    _inherits(DomoBuzzContainer, _React$Component);
+
+	    function DomoBuzzContainer(props) {
+	        _classCallCheck(this, DomoBuzzContainer);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DomoBuzzContainer).call(this, props));
+
+	        _this.state = { show: props.show };
+	        console.log('test ', props);
+	        _this.toggleDomoBuzz = _this.toggleDomoBuzz.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(DomoBuzzContainer, [{
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            console.log('received props!');
+	            this.setState({ show: nextProps.show });
+	        }
+	    }, {
+	        key: 'toggleDomoBuzz',
+	        value: function toggleDomoBuzz() {
+	            var curStatus = !this.props.show;
+	            console.log(curStatus);
+	            this.props.actions.toggleDomoBuzz(curStatus);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log('these are my domobuzz props ', this.props);
+	            console.log('these are my domobuzz state ', this.state);
+	            var stuff = this.state.show ? 'domobuzz' : 'domobuzz hide';
+	            return _react2.default.createElement(
+	                'div',
+	                { className: stuff },
+	                this.state.show ? _react2.default.createElement(_DomoBuzz2.default, null) : _react2.default.createElement('div', null),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.toggleDomoBuzz },
+	                    'Show/Hide'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return DomoBuzzContainer;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state, ownProps) {
+
+	    return {
+	        twitter: state.twitter.twitterData,
+	        show: state.twitter.showDomoBuzz
+	    };
+	}
+
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DomoBuzzContainer);
+
+/***/ },
+/* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91237,23 +93666,590 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SharedDiv = __webpack_require__(706);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var DomoBuzz = function DomoBuzz() {
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        'Yo'
+	    );
+	};
+	exports.default = DomoBuzz;
+
+/***/ },
+/* 733 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(734);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(715)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./DomoBuzz.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./DomoBuzz.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 734 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(714)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 500px;\n    background: lightgrey;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n}\n\n.hide {\n    display: none;\n}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 735 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(501);
+
+	var _reactRedux = __webpack_require__(493);
+
+	var _redux = __webpack_require__(470);
+
+	var _twitterActions = __webpack_require__(564);
+
+	var twitterActions = _interopRequireWildcard(_twitterActions);
+
+	var _Chart = __webpack_require__(588);
+
+	var _Chart2 = _interopRequireDefault(_Chart);
+
+	var _underscore = __webpack_require__(587);
+
+	var _ = _interopRequireWildcard(_underscore);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	__webpack_require__(736);
+
+	var LargeCard = function (_React$Component) {
+	    _inherits(LargeCard, _React$Component);
+
+	    function LargeCard(props) {
+	        _classCallCheck(this, LargeCard);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LargeCard).call(this, props));
+
+	        _this.state = { data: {} };
+	        //this.getTwitterFeed = this.getTwitterFeed.bind(this);
+	        return _this;
+	    }
+	    // componentWillMount() {
+	    //     this.props.actions.twitterGet();
+	    // }
+	    //
+	    // getTwitterFeed() {
+	    //     this.props.actions.twitterGet();
+	    // }
+
+	    _createClass(LargeCard, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'large-card-div' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'path-header' },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        { className: 'path-h1' },
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: 'charts' },
+	                            'TWITTER'
+	                        ),
+	                        '>'
+	                    ),
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'path-h2' },
+	                        this.props.twitter[0].card_name
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'description-header' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'title-h2' },
+	                        this.props.twitter[0].card_name
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'description-glyphicon' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-filter' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'description-glyphicon' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-bell' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'description-glyphicon' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-star' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'description-glyphicon' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-resize-full' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'large-graph-div' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'left-pointer-div' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-chevron-left' })
+	                    ),
+	                    _react2.default.createElement(_Chart2.default, { data: this.props.twitter, height: '300', width: '500', padding: '30' }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'right-pointer-div' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-chevron-right' })
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LargeCard;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state, ownProps) {
+	    var datasetId = ownProps.params.id; //from the path
+	    console.log('the dataset id is ', datasetId);
+
+	    return {
+	        twitter: state.twitter.twitterData[datasetId]
+	    };
+	}
+
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LargeCard);
+
+/***/ },
+/* 736 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(737);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(715)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./LargeCardView.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./LargeCardView.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 737 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(714)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".large-card-div {\n  background-color: #ffffff;\n  height: 100vh;\n}\n\n.path-header {\n  height: 39px;\n  width: auto;\n  background-color: #fbfbfb;\n  border-bottom: solid .5px #989898;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 39px;\n  position: relative;\n  top: 101px;\n  margin-bottom: 10px;\n}\n\n.path-h1 {\n  color: #6497ba;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.path-h2 {\n  margin-left: 5px;\n  color: #989898;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.description-header {\n  height: 62px;\n  width: auto;\n  background-color: #ffffff;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 62px;\n  position: relative;\n  top: 91px;\n}\n\n.title-h2 {\n  color: #000;\n  font-size: 24px;\n  font-weight: lighter;\n  letter-spacing: .75px;\n  margin-right: 975px;\n}\n\n.description-glyphicon {\nmargin-right: 35px;\nmargin-top: 5px;\n}\n\n.description-glyphicon .glyphicon {\n  color: #a3a3a3;\n  font-size: 24px;\n}\n\n.large-graph-div {\n  height: 65vh;\n  position: relative;\n  top: 100px;\n  text-align: center;\n  /*display: flex;*/\n}\n\n.large-graph-div img {\n  width: 1000px;\n  height: auto;\n}\n\n.left-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  left: 0;\n  top: 100px;\n  border-radius: 0px 5px 5px 0px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n}\n\n.left-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.right-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  right: 0;\n  bottom: 160px;\n  border-radius: 5px 0px 0px 5px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n}\n\n.right-pointer-div .glyphicon {\n  color: #989898;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 738 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(501);
+
+	var _reactRedux = __webpack_require__(493);
+
+	var _redux = __webpack_require__(470);
+
+	var _twitterActions = __webpack_require__(564);
+
+	var twitterActions = _interopRequireWildcard(_twitterActions);
+
+	var _Chart = __webpack_require__(588);
+
+	var _Chart2 = _interopRequireDefault(_Chart);
+
+	var _underscore = __webpack_require__(587);
+
+	var _ = _interopRequireWildcard(_underscore);
+
+	var _titleDiv = __webpack_require__(739);
+
+	var _titleDiv2 = _interopRequireDefault(_titleDiv);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	__webpack_require__(761);
+
+	var ExampleCard = function (_React$Component) {
+	    _inherits(ExampleCard, _React$Component);
+
+	    function ExampleCard(props) {
+	        _classCallCheck(this, ExampleCard);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExampleCard).call(this, props));
+
+	        _this.state = { twitter: [[{
+	                card_name: 'Loading'
+	            }], [{
+	                card_name: 'Loading'
+	            }]] };
+	        // this.getTwitterFeed = this.getTwitterFeed.bind(this);
+	        return _this;
+	    }
+
+	    _createClass(ExampleCard, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this.props.actions.twitterGet();
+	        }
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            console.log('received props!');
+	            this.setState({ twitter: nextProps.twitter });
+	        }
+	    }, {
+	        key: "getTwitterFeed",
+	        value: function getTwitterFeed() {
+	            this.props.actions.twitterGet();
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            console.log(this.props);
+	            console.log(this.state);
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(_titleDiv2.default, null),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "deck-div" },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: "chartDetail/0", className: "large-view-link" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "card-div" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "gear-menu-div" },
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "content-div" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "header-text" },
+	                                    _react2.default.createElement(
+	                                        "h1",
+	                                        null,
+	                                        this.state.twitter[0][0].card_name
+	                                    )
+	                                ),
+	                                _react2.default.createElement("div", { className: "spacer-div" }),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "image-div" },
+	                                    _react2.default.createElement(_Chart2.default, { data: this.state.twitter[0], height: "150", width: "200", padding: "25" })
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "footer-div" },
+	                                _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "small-glyph-div-left" },
+	                                    _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "small-glyph-div-right" },
+	                                    _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: "chartDetail/1", className: "large-view-link" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "card-div" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "gear-menu-div" },
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "content-div" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "header-text" },
+	                                    _react2.default.createElement(
+	                                        "h1",
+	                                        null,
+	                                        this.state.twitter[1][0].card_name
+	                                    )
+	                                ),
+	                                _react2.default.createElement("div", { className: "spacer-div" }),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "image-div" },
+	                                    _react2.default.createElement(_Chart2.default, { data: this.state.twitter[1], height: "150", width: "200", padding: "25" })
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "footer-div" },
+	                                _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "small-glyph-div-left" },
+	                                    _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "small-glyph-div-right" },
+	                                    _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "card-div" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "gear-menu-div" },
+	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
+	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "content-div" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "header-text" },
+	                                _react2.default.createElement(
+	                                    "h1",
+	                                    null,
+	                                    "Running Total Line"
+	                                )
+	                            ),
+	                            _react2.default.createElement("div", { className: "spacer-div" }),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "image-div" },
+	                                _react2.default.createElement("img", {
+	                                    src: "data:image/png;base64,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" })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "footer-div" },
+	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "small-glyph-div-left" },
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "small-glyph-div-right" },
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "card-div" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "gear-menu-div" },
+	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
+	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "content-div" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "header-text" },
+	                                _react2.default.createElement(
+	                                    "h1",
+	                                    null,
+	                                    "Word Cloud"
+	                                )
+	                            ),
+	                            _react2.default.createElement("div", { className: "spacer-div" }),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "image-div" },
+	                                _react2.default.createElement("img", {
+	                                    src: "data:image/png;base64,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" })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "footer-div" },
+	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "small-glyph-div-left" },
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "small-glyph-div-right" },
+	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ExampleCard;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state, ownProps) {
+	    return {
+	        twitter: state.twitter.twitterData
+	    };
+	}
+
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ExampleCard);
+
+/***/ },
+/* 739 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SharedDiv = __webpack_require__(740);
 
 	var _SharedDiv2 = _interopRequireDefault(_SharedDiv);
 
-	var _DomoDiv = __webpack_require__(709);
+	var _DomoDiv = __webpack_require__(743);
 
 	var _DomoDiv2 = _interopRequireDefault(_DomoDiv);
 
-	var _AddCardButton = __webpack_require__(712);
+	var _AddCardButton = __webpack_require__(746);
 
 	var _AddCardButton2 = _interopRequireDefault(_AddCardButton);
 
-	var _titlePageOptionsButton = __webpack_require__(719);
+	var _titlePageOptionsButton = __webpack_require__(753);
 
 	var _titlePageOptionsButton2 = _interopRequireDefault(_titlePageOptionsButton);
 
-	__webpack_require__(725);
+	__webpack_require__(759);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91284,7 +94280,7 @@
 	exports.default = TitleDiv;
 
 /***/ },
-/* 706 */
+/* 740 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91297,7 +94293,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(707);
+	__webpack_require__(741);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91372,16 +94368,16 @@
 	exports.default = SharedDiv;
 
 /***/ },
-/* 707 */
+/* 741 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(708);
+	var content = __webpack_require__(742);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -91398,10 +94394,10 @@
 	}
 
 /***/ },
-/* 708 */
+/* 742 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -91412,7 +94408,7 @@
 
 
 /***/ },
-/* 709 */
+/* 743 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91425,7 +94421,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(710);
+	__webpack_require__(744);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91450,16 +94446,16 @@
 	exports.default = DomoDiv;
 
 /***/ },
-/* 710 */
+/* 744 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(711);
+	var content = __webpack_require__(745);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -91476,10 +94472,10 @@
 	}
 
 /***/ },
-/* 711 */
+/* 745 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -91490,7 +94486,7 @@
 
 
 /***/ },
-/* 712 */
+/* 746 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91509,11 +94505,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _AddCardPopup = __webpack_require__(713);
+	var _AddCardPopup = __webpack_require__(747);
 
 	var _AddCardPopup2 = _interopRequireDefault(_AddCardPopup);
 
-	__webpack_require__(717);
+	__webpack_require__(751);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91578,7 +94574,7 @@
 	exports.default = AddCardButton;
 
 /***/ },
-/* 713 */
+/* 747 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91597,11 +94593,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactOnclickout = __webpack_require__(714);
+	var _reactOnclickout = __webpack_require__(748);
 
 	var _reactOnclickout2 = _interopRequireDefault(_reactOnclickout);
 
-	__webpack_require__(715);
+	__webpack_require__(749);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91685,7 +94681,7 @@
 	exports.default = AddCard;
 
 /***/ },
-/* 714 */
+/* 748 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91763,16 +94759,16 @@
 
 
 /***/ },
-/* 715 */
+/* 749 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(716);
+	var content = __webpack_require__(750);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -91789,10 +94785,10 @@
 	}
 
 /***/ },
-/* 716 */
+/* 750 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -91803,16 +94799,16 @@
 
 
 /***/ },
-/* 717 */
+/* 751 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(718);
+	var content = __webpack_require__(752);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -91829,10 +94825,10 @@
 	}
 
 /***/ },
-/* 718 */
+/* 752 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -91843,7 +94839,7 @@
 
 
 /***/ },
-/* 719 */
+/* 753 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91862,11 +94858,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _OptionPopup = __webpack_require__(720);
+	var _OptionPopup = __webpack_require__(754);
 
 	var _OptionPopup2 = _interopRequireDefault(_OptionPopup);
 
-	__webpack_require__(723);
+	__webpack_require__(757);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91926,7 +94922,7 @@
 	exports.default = OptionButton;
 
 /***/ },
-/* 720 */
+/* 754 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91945,11 +94941,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactOnclickout = __webpack_require__(714);
+	var _reactOnclickout = __webpack_require__(748);
 
 	var _reactOnclickout2 = _interopRequireDefault(_reactOnclickout);
 
-	__webpack_require__(721);
+	__webpack_require__(755);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -92098,16 +95094,16 @@
 	exports.default = OptionPopup;
 
 /***/ },
-/* 721 */
+/* 755 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(722);
+	var content = __webpack_require__(756);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -92124,10 +95120,10 @@
 	}
 
 /***/ },
-/* 722 */
+/* 756 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -92138,16 +95134,16 @@
 
 
 /***/ },
-/* 723 */
+/* 757 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(724);
+	var content = __webpack_require__(758);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -92164,10 +95160,10 @@
 	}
 
 /***/ },
-/* 724 */
+/* 758 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -92178,16 +95174,16 @@
 
 
 /***/ },
-/* 725 */
+/* 759 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(726);
+	var content = __webpack_require__(760);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -92204,10 +95200,10 @@
 	}
 
 /***/ },
-/* 726 */
+/* 760 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
@@ -92218,669 +95214,16 @@
 
 
 /***/ },
-/* 727 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(501);
-
-	var _reactRedux = __webpack_require__(493);
-
-	var _redux = __webpack_require__(470);
-
-	var _twitterActions = __webpack_require__(564);
-
-	var twitterActions = _interopRequireWildcard(_twitterActions);
-
-	var _Chart = __webpack_require__(588);
-
-	var _Chart2 = _interopRequireDefault(_Chart);
-
-	var _underscore = __webpack_require__(587);
-
-	var _ = _interopRequireWildcard(_underscore);
-
-	var _titleDiv = __webpack_require__(705);
-
-	var _titleDiv2 = _interopRequireDefault(_titleDiv);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	__webpack_require__(728);
-
-	var ExampleCard = function (_React$Component) {
-	    _inherits(ExampleCard, _React$Component);
-
-	    function ExampleCard(props) {
-	        _classCallCheck(this, ExampleCard);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExampleCard).call(this, props));
-
-	        _this.state = { data: {} };
-	        _this.getTwitterFeed = _this.getTwitterFeed.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(ExampleCard, [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            this.props.actions.twitterGet();
-	        }
-	    }, {
-	        key: "getTwitterFeed",
-	        value: function getTwitterFeed() {
-	            this.props.actions.twitterGet();
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            console.log(this.props);
-	            console.log(this.state);
-	            return _react2.default.createElement(
-	                "div",
-	                null,
-	                _react2.default.createElement(_titleDiv2.default, null),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "deck-div" },
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: "chartDetail", className: "large-view-link" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "card-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "gear-menu-div" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "content-div" },
-	                                _react2.default.createElement(
-	                                    "div",
-	                                    { className: "header-text" },
-	                                    _react2.default.createElement(
-	                                        "h1",
-	                                        null,
-	                                        "Favorites per tweet"
-	                                    )
-	                                ),
-	                                _react2.default.createElement("div", { className: "spacer-div" }),
-	                                _react2.default.createElement(
-	                                    "div",
-	                                    { className: "image-div" },
-	                                    _react2.default.createElement(_Chart2.default, { data: _.map(this.props.twitter.twitterData, function (tweet, index) {
-	                                            return { series1: tweet.favorite_count };
-	                                        }), height: "150", width: "200", padding: "25" })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "footer-div" },
-	                                _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                                _react2.default.createElement(
-	                                    "div",
-	                                    { className: "small-glyph-div-left" },
-	                                    _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                                ),
-	                                _react2.default.createElement(
-	                                    "div",
-	                                    { className: "small-glyph-div-right" },
-	                                    _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                                )
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Retweets per tweet"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement(_Chart2.default, { data: _.map(this.props.twitter.twitterData, function (tweet, index) {
-	                                        return { series1: tweet.retweet_count };
-	                                    }), height: "150", width: "200", padding: "25" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Running Total Line"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMcAAABzCAIAAACjPIHyAAALPklEQVR4nO2d+1NTVx7A+6/s1JntdrvT9ofVzlptbV3tjLO+llpBoNhCrThqq2BZXSsr1aVCAKGGN8RAwVddVlGXN4EAygoFRQXk/U4ghISQkBhgv+7V6yG5CTfJvXBv8v0Mk7nkXiDMfOZ8v+ec7znntQUE4ZrXVvoDIF4IWoVwD1qFcA9ahXAPWoVwD1qFcA9ahXAPWoVwD1qFcA9ahXAPWoVwD1qFcA9ahXAPWoVwD1qFcA9ahXAPWoVwD1qFcA9ahXDDvGmGvkarEE8Bn3SXJCN736bFQqsQ97FOjIJPo1+tnpRGWnof0e+jVYibmJoqoH3S5pyyatU2t9AqxHWs1qm8s+oTO5+N9jHeR6sQ14CoBz5BEzVvmSXfN1mM9DVahbAFWibInyDqGRtuk++DT5ea0kPyN9JioVXI0lA+De95A17JqDdhUIFPYYVbLtTG9Go66ffRKsQZ9j5Bg/RguBFkOnlr327Z2uyGeK1xwuan0CqEGdKn6cF22qSgvA1RN/bKG1PuDygN5mnGn0WrEAaoUQPwaajrLkS3T3PeW9IkErQKWczLUQPKp4CL6+F1VDfI/OzcfI9Kf/2/fdHXmkIzaun30SrkFYax3toftshy9pwsDoOcyYlPI9qZ83fatsaXHpY35FZ3NDxVmSxW+i5ahTwHWqbEzG0Q6Y4V7nQe6Sif/JLK4RWuGZ9Bq3wdyif/rDXwCteMz0A71NKnyVd2RRU27kgoc+ITBVrli8ybZmYfKJ8W/EOS/LFzn+hIdyTvLkS6xm61YfbZkr8frfItqPGClpBVkqQPA3L+lFwUPjz2hPFJNpHOEWiVr0D51Br6JrRMAbJ1jJm4q5HOEWiVV2O1WnofTd/ImDgb0vLFbxl9Ik3adb7CpUjnCLTKO6FapqFdv1Ed26KSx+Tf/C4ob4ONT+7lTGxAq7wNcqZlrLeJcfbXk5yJDWiV90D6RI+M28z+8u0TBVrlDTD6xBjvuPJJqzaW5LcnHqymv6THlPRdtErcsPEJgJzJP6WSQ59SjtTAK1wzPoNWiRWWPpmfzUEmflBWP6gxePgX2fhEgVaJD8qnnuDf1aeFFSjOUdVzjONPE3pTVGFj7I1WndHiyV9k7xMFWiUmpgfbwaTMk+/8LWtzkPxDxponm/GnOy3MRQcscdUnCrRKNNRXSf2z1kRm/1lWdYaxpoDb8Sf3fKJAq0SA1WLOlAVGStc7nwP2vH9nmbX2t0/WFfdeTvz1/GGFGz5RoFVCRzXYBj5Jc3aZTXrGBzzs35Em/RRRWxDXVPOv7p6HE7NGnLHxLqh1LIW1cZA/BWatUZTEMz5mnZuHSBf58z33fKLHnDgxiQStEhbQj6NWH0TmfpIas1qRETY1+JjxSejfgU/pFU/Mz+Zc/Sue5ExsQKuEAuVTgGxdYua21tA3J6WRVrXD7htEvdCM2rqOMfa/n6uciQ1o1UpinbP2ajpvPMw/U/LNbtla2idHu2IsuBX1wCeQCUziPNI5Aq1absi1vwEX10cWBcnrE6p/Ptqz9y3nPi24HvWmtbPgU8aJemiZ1ENLr+PjCrRqOSBNItf+6ka7GXcVW/yzi0Y1l4x6NpGu8upTg87Mw//kDLSKX7TGieyGeHLt77RePftACTKpv/90yH8V465i7tVn8tencxW0ii/U0yOgUUj+RrBqwqBaIOoz1VFbp/LOmpoq5gw6+nlPKn357tO5ClrFC9AmgU/0jK+jnXpowB6/pHKXTFrOPp2roFUcA906aKKO3wwdUXeSkc6RTy5VqvAxDs4HaBWXjGv6oi5/lioPHDnlNxz8e8ZIR8K+UkU4ORMb0CpPMeonmpS5F/O+iEr9IDBzTckPmxyZNGkwp1c82RpfSn4tWakitJyJDWiV+9A7XkRI12XKAuurpHrtCOOTKp0Rwpx/SiVYBe0Ty98vRp8o0Cp34GPHCxLx+kSBVrmGc588GR0Qcp/OVdAqtjj3yZM6zOWfp+MbtMohFqu5a/xxVWdxZsnxY9mbd2e/58Qn9+owV2qejm/QKmbuDyh3y9YekG+WnP/oyj8/bv4lZmbyVSbu+d4pdOa0IvN0fINWLWLeNDPTWpMl/zwy9YPWfX/QJISbO5ttnnFjHJxE7Jk4G9CqF1CTKm3Br0deWJcq89ffL7EfcOKkote7faJAq15N0lWnfbm/8C8NvRWMjwm5oldo+LpV1Hb149IIWdWZ4zdDyeW/YM/TMV152zCYBD6xqW0i8aaRAlfxYateblc/1tsEPmU3xEOnj7pDDxPsy1LCRXHzwKMhLbmfuHN0GpOI5uz4wEetog6568iJvKCIDsnfSEc9D5drQm8ONEqLqisr6PCdlskeH7KK2g6aKk2B/l3y9a/JTVQ89InMnKCt4uHjiwkvt4o0qWfvW7WnP7koCz5x+TNyExUOffLl9onEC60iTaKKnDrlJ5KLwu0PjkKfeMKrrLIvDB8ee8LHdobok3O8xCrGwnCb4nEKt33y5ZECVxG9VRDvdAU/QqQjfaKLxz3x6Zllbqxf/+juaOXVp5ckzUKuExcaIrbKqlU/X6J5YB0EO5sjpunxJ/emgeki8dzT9+CiRTE03D0FbRWf/41XITKryEwc8idN0iH7I6aD8jY09Fa4V/CECRMniMAq+z4dlYnP6sa7xh9fa8mJLTsK+RPdv+tWj7uROaFPHCJ0q5734/a8QZs0M6Uit744eM0Prhv7FeN6jc8WiQsQAVtltWoz/646unm675GTY+8hc7pY0wkm+WyRuAARqFWG8YHa2O2yjF0nb4bZm0QxaTBD4xSaUQsysWmZxLLw1wsQolX/3wKa+Vhpsk8HmXhc8QOX+nRo0vIgLKusFnOe7PNDae/3d9Xb33WjtBdzphVBQFYN9TdHpK6Pzdmu06tsbrEs7bU/CAq+0KflZ4WtIg8rD85Yc+t2jP0zbEp7sU0SFCtmFcvDyp1s1kvNqNz7T19R+kP0SVCsgFVsDitfcBr1yBkV6NN1tY4bDR6dKYVwy7JaxdKnBcdRDyOdKFgmq8jVUSHyj5z4RG3y5J9SaRP10CcRwbtVdKUK4+ooEkebPKFPooNHq8hKFfvVUST2lU84oyJqeLHqRaWv/yqqUuX+gDL8yg7GNcGkTwMqPc6oeAccW2VT6Wuds2bU/3jwmt/AZDf9DDXrklXa/nWyYlt86b7o8rNHqqgRSzTJO+DMKvvKca1xIvp2eLIi2mR5EbzoSrrQpOpD0RXp2b8Oe9GmTQgNB1Y5WokAUe/O46vQXMG3EN3OXmremVD2raQm9ijOong5blq1qNJ38Rb1NisR9NPmMzmNO86VHo5T3LjSjtHNF3DHKpv6THKfJ3IlwtCoIVZ2f/e58pisxvZuDXefGRE6Llr1ch8Vck3LopUI8s1pt26BTKGSqucrEVKU6JMP4oJV1D4q2pxT85ZZ+wPvkkouHPipGEwKiauExulmZbdmytc3sfBZ2FoFWdTI3reNDbfp46bpqt+WjqHvLtTtiC+FV2yZkAWWVlFK9dVfofcs6NP0t/Rpcis69qfUbEOfkMUsbRUo9WD/O8lF4ZRPrYPd1JjTVymKw6crs+StKtXSR5AhPsUSVvU3FsXH/jEg933wqbmnE8ecEDY4tAp6edVpXwZnrIZWqq7tMcS47XE45oSwgsEq8GlcGiE99e6xrE11SgVm4oir2FoFWVRb8OsR6Ru/zz35jaR6Rxz6hLjMIqtAqZJv3w2S+oUlXN8pKTtT0NQ3ql+pT4aIl1dWGVoUcac3+See/2uiO8f9IAjNC6saS/8dKIndLrmTUNyKPiEe8twqg8m8Lb74qLQQfUI44UVbNTWNPiGc8T/lXV1n6xmtYQAAAABJRU5ErkJggg==" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Word Cloud"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Running Total Line"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Word Cloud"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Running Total Line"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Word Cloud"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Running Total Line"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Word Cloud"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Running Total Line"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "card-div" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "gear-menu-div" },
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-wrench" }),
-	                            _react2.default.createElement("span", { className: "glyphicon glyphicon-chevron-down" })
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "content-div" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "header-text" },
-	                                _react2.default.createElement(
-	                                    "h1",
-	                                    null,
-	                                    "Word Cloud"
-	                                )
-	                            ),
-	                            _react2.default.createElement("div", { className: "spacer-div" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "image-div" },
-	                                _react2.default.createElement("img", {
-	                                    src: "data:image/png;base64,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" })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "footer-div" },
-	                            _react2.default.createElement("img", { src: "https://support.domo.com/public/images/logo-400.png" }),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-left" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-eye-open" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "small-glyph-div-right" },
-	                                _react2.default.createElement("span", { className: "glyphicon glyphicon-comment" })
-	                            )
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return ExampleCard;
-	}(_react2.default.Component);
-
-	function mapStateToProps(state, ownProps) {
-	    return {
-	        twitter: state.twitter
-	    };
-	}
-
-	function mapDispatchToProps(dispatch) {
-	    return {
-	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
-	    };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ExampleCard);
-
-/***/ },
-/* 728 */
+/* 761 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(729);
+	var content = __webpack_require__(762);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
+	var update = __webpack_require__(715)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -92897,216 +95240,15 @@
 	}
 
 /***/ },
-/* 729 */
+/* 762 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(693)();
+	exports = module.exports = __webpack_require__(714)();
 	// imports
 
 
 	// module
 	exports.push([module.id, ".deck-div {\n  width: 100%;\n  min-height: 291px;\n  top: 200px;\n  position: relative;\n  padding-left: 2%;\n  padding-right: 5%;\n  display: flex;\n  background-color: #fbfbfb;\n  flex-wrap: wrap;\n}\n\n.card-div {\n  height: 282px;\n  width: 227px;\n  border: solid 1px #ebebeb;\n  border-radius: 5px;\n  position: relative;\n  margin-right: .60%;\n  margin-bottom: .60%;\n  background-color: #ffffff;\n\n}\n\n.large-view-link {\n  margin-right: .60%;\n}\n\n.card-div:hover {\n  border: solid 4px rgb(156, 202, 235);\n}\n\n.card-div:hover .gear-menu-div {\n  opacity: 1;\n}\n\n.gear-menu-div {\n  opacity: 0;\n  width: 40px;\n  height: 26px;\n  position: absolute;\n  background-color: #d6d6d6;\n  border-radius: 5px;\n  right: 0;\n  padding-top: 3px;\n  margin-top: 5px;\n  margin-right: 5px;\n  text-align: center;\n}\n\n.gear-menu-div .glyphicon {\n  font-weight: lighter;\n  font-size: 10px;\n  color: #555555;\n  letter-spacing: 2px;\n}\n\n\n.content-div {\n  margin-left: 10px;\n  margin-right: 10px;\n  margin-top: 10px;\n}\n\n.header-text h1 {\n  color: #555555;\n  font-weight: bold;\n}\n\n.spacer-div {\n  width: 100%;\n  height: 20px;\n  margin-bottom: 20px;\n}\n\n.image-div img {\n  width: 207px;\n  margin-top: 40px;\n}\n\n.footer-div {\n  position: absolute;\n  width: 226px;\n  height: 34px;\n  border-top: solid 1px #ebebeb;\n  bottom: 0;\n  padding-left: 5px;\n  padding-top: 5px;\n  display: flex;\n}\n\n.footer-div img {\n  height: 22px;\n  width: 22px;\n  border-radius: 50%;\n}\n\n.small-glyph-div-left {\n  position: absolute;\n  background-color: transparent;\n  height: 22px;\n  width: 12px;\n  right: 37px;\n}\n\n.small-glyph-div-right {\n  position: absolute;\n  background-color: transparent;\n  height: 22px;\n  width: 12px;\n  right: 0;\n  margin-right: 15px;\n}\n\n.small-glyph-div-left .glyphicon {\n  color: #8a8a8a;\n  font-size: 12px;\n  vertical-align: middle;\n  text-align: center;\n}\n\n.small-glyph-div-right .glyphicon {\n  color: #8a8a8a;\n  font-size: 12px;\n  vertical-align: middle;\n  text-align: center;\n}\n\n.small-glyph-div-left .glyphicon:hover {\n  color: rgb(156, 202, 235)\n}\n\n.small-glyph-div-right .glyphicon:hover {\n  color: rgb(156, 202, 235)\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 730 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(501);
-
-	var _reactRedux = __webpack_require__(493);
-
-	var _redux = __webpack_require__(470);
-
-	var _twitterActions = __webpack_require__(564);
-
-	var twitterActions = _interopRequireWildcard(_twitterActions);
-
-	var _Chart = __webpack_require__(588);
-
-	var _Chart2 = _interopRequireDefault(_Chart);
-
-	var _underscore = __webpack_require__(587);
-
-	var _ = _interopRequireWildcard(_underscore);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	__webpack_require__(731);
-
-	var LargeCard = function (_React$Component) {
-	    _inherits(LargeCard, _React$Component);
-
-	    function LargeCard(props) {
-	        _classCallCheck(this, LargeCard);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LargeCard).call(this, props));
-
-	        _this.state = { data: {} };
-	        _this.getTwitterFeed = _this.getTwitterFeed.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(LargeCard, [{
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            this.props.actions.twitterGet();
-	        }
-	    }, {
-	        key: 'getTwitterFeed',
-	        value: function getTwitterFeed() {
-	            this.props.actions.twitterGet();
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'large-card-div' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'path-header' },
-	                    _react2.default.createElement(
-	                        'h1',
-	                        { className: 'path-h1' },
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: 'charts' },
-	                            'TWITTER'
-	                        ),
-	                        '>'
-	                    ),
-	                    _react2.default.createElement(
-	                        'h2',
-	                        { className: 'path-h2' },
-	                        'LIKES PER TWEET'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'description-header' },
-	                    _react2.default.createElement(
-	                        'h2',
-	                        { className: 'title-h2' },
-	                        'LIKES PER TWEET'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-filter' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-bell' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-star' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-resize-full' })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'large-graph-div' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'left-pointer-div' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-chevron-left' })
-	                    ),
-	                    _react2.default.createElement(_Chart2.default, { data: _.map(this.props.twitter.twitterData, function (tweet, index) {
-	                            return { series1: tweet.favorite_count };
-	                        }), height: '300', width: '500', padding: '30' }),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'right-pointer-div' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-chevron-right' })
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return LargeCard;
-	}(_react2.default.Component);
-
-	function mapStateToProps(state, ownProps) {
-	    return {
-	        twitter: state.twitter
-	    };
-	}
-
-	function mapDispatchToProps(dispatch) {
-	    return {
-	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
-	    };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LargeCard);
-
-/***/ },
-/* 731 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(732);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(694)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./LargeCardView.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./LargeCardView.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 732 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(693)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".large-card-div {\n  background-color: #ffffff;\n  height: 100vh;\n}\n\n.path-header {\n  height: 39px;\n  width: auto;\n  background-color: #fbfbfb;\n  border-bottom: solid .5px #989898;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 39px;\n  position: relative;\n  top: 101px;\n  margin-bottom: 10px;\n}\n\n.path-h1 {\n  color: #6497ba;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.path-h2 {\n  margin-left: 5px;\n  color: #989898;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.description-header {\n  height: 62px;\n  width: auto;\n  background-color: #ffffff;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 62px;\n  position: relative;\n  top: 91px;\n}\n\n.title-h2 {\n  color: #000;\n  font-size: 24px;\n  font-weight: lighter;\n  letter-spacing: .75px;\n  margin-right: 975px;\n}\n\n.description-glyphicon {\nmargin-right: 35px;\nmargin-top: 5px;\n}\n\n.description-glyphicon .glyphicon {\n  color: #a3a3a3;\n  font-size: 24px;\n}\n\n.large-graph-div {\n  height: 65vh;\n  position: relative;\n  top: 100px;\n  text-align: center;\n  /*display: flex;*/\n}\n\n.large-graph-div img {\n  width: 1000px;\n  height: auto;\n}\n\n.left-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  left: 0;\n  top: 100px;\n  border-radius: 0px 5px 5px 0px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n}\n\n.left-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.right-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  right: 0;\n  bottom: 160px;\n  border-radius: 5px 0px 0px 5px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n}\n\n.right-pointer-div .glyphicon {\n  color: #989898;\n}\n", ""]);
 
 	// exports
 

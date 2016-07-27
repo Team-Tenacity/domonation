@@ -6,8 +6,7 @@ import * as twitterActions from '../../actions/twitterActions';
 
 import UpperNav from "./UpperNav";
 import Subheader from './Subheader';
-import TitleDiv from './exampleCardTitleDiv/titleDiv';
-import ExampleCard from "./ExampleCards.js";
+import DomoBuzz from '../DomoBuzz/DomoBuzzContainer';
 
 
 class ChartLandingPage extends React.Component {
@@ -34,6 +33,7 @@ class ChartLandingPage extends React.Component {
             <div>
                 <UpperNav />
                 <Subheader />
+                <DomoBuzz />
                 {this.props.children}
             </div>
         )

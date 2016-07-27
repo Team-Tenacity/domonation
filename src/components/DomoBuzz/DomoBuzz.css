@@ -1,0 +1,13 @@
+.domobuzz {
+    height: 100vh;
+    width: 500px;
+    background: lightgrey;
+    position: fixed;
+    right:0px;
+    top: 101px;
+    z-index: 1000;
+}
+
+.hide {
+    display: none;
+}

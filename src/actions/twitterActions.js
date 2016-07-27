@@ -1,34 +1,8 @@
 import * as types from './actionTypes';
-// import OAuth from 'oauth-1.0a';
-// import request from 'request';
 var config = '../../config.json';
 import axios from 'axios';
 import _ from 'underscore';
-// var request = require('request');
-// var OAuth   = require('oauth-1.0a');
 
-// var oauth = OAuth({
-//     consumer: {
-//         public: config.twitterConsumerKey,
-//         secret: config.twitterConsumerSecret
-//     },
-//     signature_method: 'HMAC-SHA1'
-// });
-//
-// var token = {
-//     public: config.twitterAccessToken,
-//     secret: config.twitterAccessTokenSecret
-// };
-//
-// var request_data = {
-//     url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=domotalk',
-//     method: 'GET'
-// };
-//
-// export function twitterGetSuccess(data){
-//     return { type: types.INCREMENT, data }
-// }
-//
 export function incrementSuccess(counter){
     return { type: types.INCREMENT, counter }
 }
@@ -41,6 +15,18 @@ export function twitterGetSuccess(userTweets){
     return { type: types.TWITTER_GET_SUCCESS, userTweets}
 }
 
+export function toggleSuccess(response){
+    return {type: types.TOGGLE_SUCCESS, response}
+}
+
+
+
+export function toggleDomoBuzz(response) {
+    return function(dispatch) {
+        dispatch(toggleSuccess(response))
+    }
+}
+
 
 
 export function twitterGet() {
@@ -50,19 +36,38 @@ export function twitterGet() {
                 var userTweets = _.map(response.data, function (tweet) {
                     //console.log(tweet.text);
                     return (
+
+                            {
+                            id: 1,
+                            card_name: "Favorites per tweet",
+                            title: tweet.text,
+                            series2: tweet.retweet_count,
+                            series1: tweet.favorite_count,
+                            date: tweet.created_at
+
+                        }
+                    )
+                });
+                var userTweets2 = _.map(response.data, function (tweet) {
+                    //console.log(tweet.text);
+                    return (
+
                     {
+                        id: 2,
+                        card_name: "Retweets per tweet",
                         title: tweet.text,
-                        retweet_count: tweet.retweet_count,
-                        favorite_count: tweet.favorite_count,
-                        created_at: tweet.created_at
+                        series1: tweet.retweet_count,
+                        series2: tweet.favorite_count,
+                        date: tweet.created_at
 
                     }
                     )
                 });
+                var tweets = [userTweets, userTweets2];
                 //console.log(test);
                 //console.log(response.data[0]);
                 //return response.data});
-                dispatch(twitterGetSuccess(userTweets))
+                dispatch(twitterGetSuccess(tweets))
             })
     }
 }
