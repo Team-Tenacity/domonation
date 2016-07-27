@@ -6,8 +6,19 @@
     right:0px;
     top: 101px;
     z-index: 1000;
+
 }
 
 .hide {
     display: none;
+}
+
+.message-holder {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+
+.message{
+    width: 100%;
 }

@@ -33,8 +33,7 @@ class DomoBuzzContainer extends React.Component {
         let stuff = this.state.show?'domobuzz':'domobuzz hide';
         return (
             <div className={stuff}>
-                    {this.state.show? <DomoBuzz />: <div></div>}
-                    <button onClick={this.toggleDomoBuzz}>Show/Hide</button>
+                   <DomoBuzz />
             </div>
         )
     }
