@@ -2,3 +2,5 @@ export const INCREMENT = 'INCREMENT';
 export const DECREMENT = 'DECREMENT';
 
 export const TWITTER_GET_SUCCESS = 'TWITTER_GET_SUCCESS';
+
+export const TOGGLE_SUCCESS = 'TOGGLE_SUCCESS';

@@ -1,3 +1,4 @@
 export default {
-    counter: 1
+    counter: 1,
+    showDomoBuzz: false
 }
