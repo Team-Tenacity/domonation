@@ -1,24 +1,95 @@
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+
 .domobuzz {
     height: 100vh;
-    width: 500px;
-    background: lightgrey;
+    width: 450px;
+    background: #fff;
     position: fixed;
     right:0px;
     top: 101px;
     z-index: 1000;
+    border-left: solid 1px darkgray;
 
+}
+
+.domobuzz-content{
+    position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 .hide {
     display: none;
 }
 
+.buzz-header {
+    height: 60px;
+    width: 100%;
+    background: #99CCEE;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buzz-header h2 {
+    font-size: 30px;
+    font-family: 'Lobster', cursive;
+    display: inline-block;
+    margin: auto;
+}
+
 .message-holder {
     position: fixed;
-    bottom: 0px;
-    width: 100%;
+    bottom: 10px;
+    width: 450px;
+    display: flex;
+    justify-content: center;
 }
 
 .message{
-    width: 100%;
+    width: 90%;
+    border: solid 1px lightgrey;
+    padding: 10px;
+}
+
+.individual-message {
+    padding: 10px;
+    clear: both;
+    margin-bottom: 25px;
+}
+
+.message-content {
+    float: left;
+    position: relative;
+    width: 86%;
+}
+
+.user-img {
+    height: 45px;
+    width: 45px;
+    margin-right: 5px;
+    overflow: auto;
+    border-radius: 50%;
+    float: left;
+}
+
+.user-name {
+    font-size: 17px;
+    font-weight: bolder;
+    display: inline-block;
+    float: left;
+
+}
+
+.message-date {
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+}
+
+.user-message {
+    margin-top: 25px;
+    clear: both;
 }
