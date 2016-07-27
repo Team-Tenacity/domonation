@@ -29993,30 +29993,37 @@
 	 * Created by cjpowers on 7/14/16.
 	 */
 	function counterReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { counter: _initialState2.default.counter, twitterData: {}, showDomoBuzz: _initialState2.default.showDomoBuzz } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { counter: _initialState2.default.counter, twitterData: {}, showDomoBuzz: _initialState2.default.showDomoBuzz, domoBuzzMessages: _initialState2.default.domoBuzzMessages } : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
 	        case types.INCREMENT:
 	            return {
 	                counter: action.counter,
-	                twitterData: state.twitterData
+	                twitterData: state.twitterData,
+	                showDomoBuzz: state.showDomoBuzz,
+	                domoBuzzMessages: state.domoBuzzMessages
 	            };
 	        case types.DECREMENT:
 	            return {
 	                counter: action.counter,
-	                twitterData: state.twitterData
+	                twitterData: state.twitterData,
+	                showDomoBuzz: state.showDomoBuzz,
+	                domoBuzzMessages: state.domoBuzzMessages
 	            };
 	        case types.TWITTER_GET_SUCCESS:
 	            return {
 	                counter: state.counter,
-	                twitterData: action.userTweets
+	                twitterData: action.userTweets,
+	                showDomoBuzz: state.showDomoBuzz,
+	                domoBuzzMessages: state.domoBuzzMessages
 	            };
 	        case types.TOGGLE_SUCCESS:
 	            return {
 	                counter: state.counter,
 	                twitterData: state.twitterData,
-	                showDomoBuzz: action.response
+	                showDomoBuzz: action.response,
+	                domoBuzzMessages: state.domoBuzzMessages
 	            };
 	        default:
 	            return state;
@@ -30043,14 +30050,30 @@
 /* 486 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	exports.default = {
 	    counter: 1,
-	    showDomoBuzz: false
+	    showDomoBuzz: true,
+	    domoBuzzMessages: [{
+	        user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+	        user_name: 'Darth Vader',
+	        date: 'July 28, 2016 11:01am',
+	        content: 'Data Rules'
+	    }, {
+	        user_image: 'http://i.dailymail.co.uk/i/pix/2016/03/05/20/31E63B1100000578-3478443-image-a-171_1457210994751.jpg',
+	        user_name: 'Luke Skywalker',
+	        date: 'July 28, 2016 11:20am',
+	        content: 'Get a room, dad'
+	    }, {
+	        user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+	        user_name: 'Darth Vader',
+	        date: 'July 28, 2016 11:35am',
+	        content: 'You are short'
+	    }]
 	};
 
 /***/ },
@@ -90405,21 +90428,12 @@
 	            _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_SignInModal2.default, null)
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                null,
 	                _react2.default.createElement(_LoginModal2.default, null)
 	            ),
 	            _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: 'charts' },
-	                    'Sign In'
-	                )
+	                _react2.default.createElement(_SignInModal2.default, null)
 	            ),
 	            _react2.default.createElement(
 	                'div',
@@ -90506,12 +90520,12 @@
 	        null,
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: this.openModal },
-	          'Sign Up Test'
+	          { onClick: this.openModal, className: 'sign-up-nav-button' },
+	          'Sign Up'
 	        ),
 	        _react2.default.createElement(
 	          Modal,
-	          { isOpen: this.state.open, shouldCloseOnOverlayClick: true, className: 'login-modal' },
+	          { isOpen: this.state.open, onRequestClose: this.closeModal, className: 'login-modal' },
 	          _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
 	          _react2.default.createElement(
 	            'div',
@@ -90524,7 +90538,7 @@
 	            _react2.default.createElement(
 	              'button',
 	              { onClick: this.closeModal, className: 'sign-up-button' },
-	              'Sign Up!'
+	              'CONTINUE'
 	            )
 	          )
 	        )
@@ -92540,7 +92554,7 @@
 
 
 	// module
-	exports.push([module.id, "/*.login-modal {\n  width: 30vw;\n  height: 30vh;\n}*/\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 66px;\nleft: 580px;\nright: 40px;\nbottom: 40px;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\n/*padding: 20px;*/\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
+	exports.push([module.id, ".sign-up-nav-button {\n  background-color: transparent;\n  border: none;\n  outline: none;\n}\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 37%;\nleft: 50%;\nright: 40px;\nbottom: 40px;\ntransform: translate(-50%, -50%) !important;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
 
 	// exports
 
@@ -92869,6 +92883,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(501);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -92879,6 +92895,7 @@
 
 	var ReactDOM = __webpack_require__(330);
 	var Modal = __webpack_require__(692);
+
 
 	__webpack_require__(717);
 
@@ -92911,15 +92928,15 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'modal-parent-div' },
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: this.openModal },
-	          'Sign In Test'
+	          { onClick: this.openModal, className: 'sign-in-nav-button' },
+	          'Sign In'
 	        ),
 	        _react2.default.createElement(
 	          Modal,
-	          { isOpen: this.state.open, shouldCloseOnOverlayClick: true, className: 'login-modal' },
+	          { isOpen: this.state.open, onRequestClose: this.closeModal, className: 'signin-modal' },
 	          _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
 	          _react2.default.createElement(
 	            'div',
@@ -92928,8 +92945,12 @@
 	            _react2.default.createElement('input', { placeholder: 'Password', type: 'password' }),
 	            _react2.default.createElement(
 	              'button',
-	              { onClick: this.closeModal, className: 'sign-up-button' },
-	              'Sign In!'
+	              { className: 'sign-up-button' },
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'charts' },
+	                'CONTINUE'
+	              )
 	            )
 	          )
 	        )
@@ -92977,7 +92998,7 @@
 
 
 	// module
-	exports.push([module.id, ".login-modal {\nposition: absolute;\nheight: 400px;\nwidth: 400px;\ntop: 66px;\nleft: 580px;\nright: 40px;\nbottom: 40px;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\n/*padding: 20px;*/\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
+	exports.push([module.id, ".sign-in-nav-button {\n  background-color: transparent;\n  border: none;\n  outline: none;\n}\n\n.signin-modal {\nposition: absolute;\nheight: 400px;\nwidth: 400px;\ntop: 37%;\nleft: 50%;\nright: 40px;\nbottom: 40px;\ntransform: translate(-50%, -50%) !important;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.signin-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
 
 	// exports
 
@@ -93595,7 +93616,10 @@
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DomoBuzzContainer).call(this, props));
 
-	        _this.state = { show: props.show };
+	        _this.state = {
+	            show: props.show,
+	            messages: props.messages
+	        };
 	        console.log('test ', props);
 	        _this.toggleDomoBuzz = _this.toggleDomoBuzz.bind(_this);
 	        return _this;
@@ -93605,7 +93629,10 @@
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
 	            console.log('received props!');
-	            this.setState({ show: nextProps.show });
+	            this.setState({
+	                show: nextProps.show,
+	                messages: nextProps.messages
+	            });
 	        }
 	    }, {
 	        key: 'toggleDomoBuzz',
@@ -93623,12 +93650,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { className: stuff },
-	                this.state.show ? _react2.default.createElement(_DomoBuzz2.default, null) : _react2.default.createElement('div', null),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.toggleDomoBuzz },
-	                    'Show/Hide'
-	                )
+	                _react2.default.createElement(_DomoBuzz2.default, { messages: this.state.messages })
 	            );
 	        }
 	    }]);
@@ -93640,7 +93662,8 @@
 
 	    return {
 	        twitter: state.twitter.twitterData,
-	        show: state.twitter.showDomoBuzz
+	        show: state.twitter.showDomoBuzz,
+	        messages: state.twitter.domoBuzzMessages
 	    };
 	}
 
@@ -93656,7 +93679,7 @@
 /* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -93668,11 +93691,61 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var DomoBuzz = function DomoBuzz() {
+	var DomoBuzz = function DomoBuzz(_ref) {
+	    var messages = _ref.messages;
+
+	    console.log(messages);
 	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        'Yo'
+	        "div",
+	        { className: "domobuzz-content" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "buzz-header" },
+	            _react2.default.createElement(
+	                "h2",
+	                null,
+	                "buzz"
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "buzz-messages" },
+	            messages.map(function (message, index) {
+	                return _react2.default.createElement(
+	                    "div",
+	                    { key: index, className: "individual-message" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "user-img" },
+	                        _react2.default.createElement("img", { className: "user-img", src: message.user_image, alt: "vader" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "message-content" },
+	                        _react2.default.createElement(
+	                            "h3",
+	                            { className: "user-name" },
+	                            message.user_name
+	                        ),
+	                        _react2.default.createElement(
+	                            "p",
+	                            { className: "message-date" },
+	                            message.date
+	                        ),
+	                        _react2.default.createElement(
+	                            "p",
+	                            { className: "user-message" },
+	                            message.content
+	                        )
+	                    )
+	                );
+	            })
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "message-holder" },
+	            _react2.default.createElement("textarea", { className: "message", cols: "30", rows: "1", placeholder: "Write something..." })
+	        )
 	    );
 	};
 	exports.default = DomoBuzz;
@@ -93709,10 +93782,11 @@
 
 	exports = module.exports = __webpack_require__(714)();
 	// imports
-
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Pacifico);", ""]);
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Lobster);", ""]);
 
 	// module
-	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 500px;\n    background: lightgrey;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n}\n\n.hide {\n    display: none;\n}", ""]);
+	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 450px;\n    background: #fff;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n    border-left: solid 1px darkgray;\n\n}\n\n.domobuzz-content{\n    position: relative;\n    height: 100%;\n    width: 100%;\n}\n\n.hide {\n    display: none;\n}\n\n.buzz-header {\n    height: 60px;\n    width: 100%;\n    background: #99CCEE;\n    color: #fff;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n\n.buzz-header h2 {\n    font-size: 30px;\n    font-family: 'Lobster', cursive;\n    display: inline-block;\n    margin: auto;\n}\n\n.message-holder {\n    position: fixed;\n    bottom: 10px;\n    width: 450px;\n    display: flex;\n    justify-content: center;\n}\n\n.message{\n    width: 90%;\n    border: solid 1px lightgrey;\n    padding: 10px;\n}\n\n.individual-message {\n    padding: 10px;\n    clear: both;\n    margin-bottom: 25px;\n}\n\n.message-content {\n    float: left;\n    position: relative;\n    width: 86%;\n}\n\n.user-img {\n    height: 45px;\n    width: 45px;\n    margin-right: 5px;\n    overflow: auto;\n    border-radius: 50%;\n    float: left;\n}\n\n.user-name {\n    font-size: 17px;\n    font-weight: bolder;\n    display: inline-block;\n    float: left;\n\n}\n\n.message-date {\n    display: inline-block;\n    position: absolute;\n    right: 5px;\n}\n\n.user-message {\n    margin-top: 25px;\n    clear: both;\n}", ""]);
 
 	// exports
 
