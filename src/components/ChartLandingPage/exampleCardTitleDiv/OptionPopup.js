@@ -48,7 +48,7 @@ class OptionPopup extends ClickOutComponent {
                       <div className="options-box">
                         <i className="glyphicon glyph-pad glyphicon-options-page glyphicon-th"></i>
                         <i className="glyphicon default-desc-arrow glyphicon-triangle-top"></i>
-                        <div className="default-description">Make all aards small</div>
+                        <div className="default-description">Make all cards small</div>
                       </div>
                       <div className="options-box">
                         <i className="glyphicon glyph-pad glyphicon-options-page glyphicon-th-large"></i>
