@@ -28,9 +28,9 @@ class ExampleCard extends React.Component {
         ]}
         // this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
-    // componentWillMount() {
-    //     this.props.actions.twitterGet();
-    // }
+    componentWillMount() {
+        this.props.actions.twitterGet();
+    }
 
     componentWillReceiveProps(nextProps) {
         console.log('received props!');
@@ -61,7 +61,7 @@ class ExampleCard extends React.Component {
                                 <div className="spacer-div"></div>
 
                                 <div className="image-div">
-                                    <Chart data={this.props.twitter[0]} height="150" width="200" padding="25"/>
+                                    <Chart data={this.state.twitter[0]} height="150" width="200" padding="25"/>
                                 </div>
                             </div>
 
@@ -92,7 +92,7 @@ class ExampleCard extends React.Component {
                             <div className="spacer-div"></div>
 
                             <div className="image-div">
-                                <Chart data={this.props.twitter[1]} height="150" width="200" padding="25"/>
+                                <Chart data={this.state.twitter[1]} height="150" width="200" padding="25"/>
                             </div>
                         </div>
 

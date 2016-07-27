@@ -5,7 +5,7 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 
-export default function counterReducer(state={counter: initialState.counter, twitterData: {}}, action) {
+export default function counterReducer(state={counter: initialState.counter, twitterData: {}, showDomoBuzz:initialState.showDomoBuzz}, action) {
     switch (action.type) {
         case types.INCREMENT:
             return {
@@ -24,6 +24,14 @@ export default function counterReducer(state={counter: initialState.counter, twi
                     twitterData: action.userTweets
                 }
             )
+        case types.TOGGLE_SUCCESS:
+            return (
+                {
+                    counter: state.counter,
+                    twitterData: state.twitterData,
+                    showDomoBuzz: action.response
+                }
+            );
         default:
             return state;
     }
