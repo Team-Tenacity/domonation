@@ -19,8 +19,8 @@ require('./LoginModal.css');
     render () {
       return (
         <div>
-          <button onClick={this.openModal}>Sign Up Test</button>
-              <Modal isOpen={this.state.open} shouldCloseOnOverlayClick={true} className="login-modal">
+          <button onClick={this.openModal} className="sign-up-nav-button">Sign Up</button>
+              <Modal isOpen={this.state.open} onRequestClose={this.closeModal} className="login-modal">
                 <img src="https://support.domo.com/public/images/logo-400.png" height="100" width="100" />
                     <div className="inside-modal-div">
                         <input placeholder="First Name"></input>
@@ -28,7 +28,7 @@ require('./LoginModal.css');
                         <input placeholder="Email Address"></input>
                         <input placeholder="Password" type="password"></input>
                         <input placeholder="Twitter Handle"></input>
-                        <button onClick={this.closeModal} className="sign-up-button">Sign Up!</button>
+                        <button onClick={this.closeModal} className="sign-up-button">CONTINUE</button>
                     </div>
               </Modal>
         </div>
