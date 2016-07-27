@@ -15,6 +15,18 @@ export function twitterGetSuccess(userTweets){
     return { type: types.TWITTER_GET_SUCCESS, userTweets}
 }
 
+export function toggleSuccess(response){
+    return {type: types.TOGGLE_SUCCESS, response}
+}
+
+
+
+export function toggleDomoBuzz(response) {
+    return function(dispatch) {
+        dispatch(toggleSuccess(response))
+    }
+}
+
 
 
 export function twitterGet() {

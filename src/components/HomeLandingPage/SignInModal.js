@@ -1,6 +1,7 @@
 import React from "react";
 var ReactDOM = require('react-dom');
 var Modal = require('react-modal');
+import {Link} from 'react-router';
 
 require('./SignInModal.css');
 
@@ -18,14 +19,14 @@ require('./SignInModal.css');
 
     render () {
       return (
-        <div>
-          <button onClick={this.openModal}>Sign In Test</button>
-              <Modal isOpen={this.state.open} shouldCloseOnOverlayClick={true} className="login-modal">
+        <div className="modal-parent-div">
+          <button onClick={this.openModal} className="sign-in-nav-button">Sign In</button>
+              <Modal isOpen={this.state.open} onRequestClose={this.closeModal} className="signin-modal">
                 <img src="https://support.domo.com/public/images/logo-400.png" height="100" width="100" />
                     <div className="inside-modal-div">
                         <input placeholder="Email Address"></input>
                         <input placeholder="Password" type="password"></input>
-                        <button onClick={this.closeModal} className="sign-up-button">Sign In!</button>
+                        <button className="sign-up-button"><Link to="charts">CONTINUE</Link></button>
                     </div>
               </Modal>
         </div>
