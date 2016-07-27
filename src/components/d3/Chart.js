@@ -21,8 +21,10 @@ export default class Chart extends React.Component{
             height  : parseInt(props.height),
             padding : parseInt(props.padding),
             data: [{
-            created_at: "Tue Jul 19 15:53:00 +0000 2016",
-            series1: 5}] };
+                created_at: "Tue Jul 19 15:53:00 +0000 2016",
+                series1: 5
+            }]
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -33,10 +35,11 @@ export default class Chart extends React.Component{
 
     render() {
         console.log('this is chart props ', this.props );
+        console.log('these are the refs ', this.refs);
+
         return (
         <div>
             <BarChart {...this.state}  />
-            <LineChartTest/>
         </div>
         )
     }
