@@ -58,6 +58,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
+    "bcrypt": "^0.8.7",
     "css-loader": "^0.23.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

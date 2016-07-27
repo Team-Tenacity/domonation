@@ -6,8 +6,7 @@ var path = require('path');
 var config = require('../config.json');
 var mongoose = require('mongoose');
 var session = require('express-session');
-var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
+
 
 
 /*********Controllers************/
@@ -38,34 +37,10 @@ var port = config.port;
 
 app.use(cors());
 
-passport.use(new Strategy(
-  function(username, password, cb) {
-    db.users.findByUsername(username, function(err, user) {
-      if (err) { return cb(err); }
-      if (!user) { return cb(null, false); }
-      if (user.password != password) { return cb(null, false); }
-      return cb(null, user);
-    });
-}));
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
-});
-
-passport.deserializeUser(function(id, cb) {
-  db.users.findById(id, function (err, user) {
-    if (err) { return cb(err); }
-    cb(null, user);
-  });
-});
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 /**************Login Endpoints**************/
-app.post('/api/login', passport.authenticate('local', { failureRedirect: '/' }), authController.login);
-
+app.post('/api/login', authController.login);
 app.get('/api/logout', authController.logout);
 
 
