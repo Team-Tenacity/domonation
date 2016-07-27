@@ -5,10 +5,15 @@ var massive = require('massive');
 var path = require('path');
 var config = require('../config.json');
 var mongoose = require('mongoose');
+var session = require('express-session');
+var passport = require('passport');
+var Strategy = require('passport-local').Strategy;
+
 
 /*********Controllers************/
 const twitterController = require('./controllers/twitterController');
 const userController = require('./controllers/userController');
+const authController = require('./controllers/authController');
 
 //var db = massive.connectSync({db : "testdb"});
 var app = express();
@@ -33,21 +38,36 @@ var port = config.port;
 
 app.use(cors());
 
-// app.post('/api/cartcreate', function(req, res){
-//     console.log(req.body);
-//     db.shoppingcart.save({ownerid: req.body.userid}, function(err, response){
-//         if(err) console.log(err);
-//         else {
-//             db.shoppingcart.findOne({ownerid: req.body.userid}, function(err, cart){
-//                 console.log(cart);
-//                 req.body.cartid = cart.id;
-//                 console.log(req.body);
-//                 res.json(req.body);
-//             });
-//         }
-//     })
-// })
-//
+passport.use(new Strategy(
+  function(username, password, cb) {
+    db.users.findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      if (user.password != password) { return cb(null, false); }
+      return cb(null, user);
+    });
+}));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  db.users.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+/**************Login Endpoints**************/
+app.post('/api/login', passport.authenticate('local', { failureRedirect: '/' }), authController.login);
+
+app.get('/api/logout', authController.logout);
+
 
 /**************Twitter Endpoints**************/
 app.get('/api/twitter/timeline', twitterController.index);

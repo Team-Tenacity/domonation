@@ -12,6 +12,7 @@
   overflow: visible;
   left: auto;
   right: 29px;
+  z-index: 5;
 }
 
 

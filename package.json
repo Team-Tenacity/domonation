@@ -31,6 +31,7 @@
     "d3": "^4.1.1",
     "d3-time-format": "^2.0.0",
     "express": "^4.14.0",
+    "express-session": "^1.14.0",
     "massive": "^2.4.0",
     "mongoose": "^4.5.5",
     "oauth": "^0.9.14",
@@ -57,6 +58,8 @@
   },
   "devDependencies": {
     "css-loader": "^0.23.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "style-loader": "^0.13.1"
   }
 }
