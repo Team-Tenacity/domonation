@@ -20,6 +20,7 @@ class DomoBuzzContainer extends React.Component {
         this.toggleDomoBuzz = this.toggleDomoBuzz.bind(this);
         this.addMessage = this.addMessage.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.getMessages = this.getMessages.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -31,25 +32,35 @@ class DomoBuzzContainer extends React.Component {
             })
     }
 
+    // componentWillMount(){
+    //     this.props.actions.getMessages();
+    // }
+
     toggleDomoBuzz() {
         let curStatus = !this.props.show;
         console.log(curStatus);
         this.props.actions.toggleDomoBuzz(curStatus)
     }
 
-    addMessage() {
-        if(!this.props.user.userId){
-            return alert("Please login before trying to send a message");
+    addMessage(e) {
+
+        if(e.keyCode == 13) {
+            if(!this.props.user.userId){
+                return alert("Please login before trying to send a message");
+            }
+            let newMessage = {
+                user_image: 'https://www.b1g1.com/assets/admin/images/no_image_user.png',
+                user_name: this.props.user.name,
+                user: this.props.user.userId,
+                content: this.state.message
+            }
+            this.setState({message:''});
+            this.props.actions.addMessage(newMessage);
         }
-        let date = new Date();
-        let newMessage = {
-            user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
-            user_name: this.props.user.name,
-            date: date.toDateString,
-            user: this.props.user.userId,
-            content: this.state.message
-        }
-        this.props.actions.addMessage(newMessage);
+    }
+
+    getMessages() {
+        this.props.actions.getMessages();
     }
 
     onChange(event) {

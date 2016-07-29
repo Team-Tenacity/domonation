@@ -18,7 +18,7 @@ module.exports = {
              email: user.email,
              twitterHandle: user.twitterHandle,
              userId: user._id,
-             name: user.name.first + ' ' + user.name.last
+             name: user.name.firstName + ' ' + user.name.lastName
            })
           })
         }

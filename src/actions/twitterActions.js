@@ -32,6 +32,10 @@ export function userRegisterSuccess(user) {
     return {type: types.USER_REGISTER_SUCCESS, user}
 }
 
+export function getMessagesSuccess(messages) {
+    return {type: types.GET_MESSAGES_SUCCESS, messages}
+}
+
 
 
 export function toggleDomoBuzz(response) {
@@ -59,6 +63,30 @@ export function addMessage(message) {
     }
 }
 
+export function getMessages(){
+    return function(dispatch) {
+        axios.get('http://localhost:3001/api/messages')
+            .then(response => {
+                var messages = _.map(response.data, function (message) {
+                    //console.log(tweet.text);
+                    return (
+
+                    {
+                        user: message.user._id,
+                        user_image: "https://www.b1g1.com/assets/admin/images/no_image_user.png",
+                        content: message.content,
+                        date: message.date,
+                        user_name: message.user.name.firstName + " " + message.user.name.lastName
+
+                    }
+                    )
+                });
+                console.log(messages);
+                return dispatch(getMessagesSuccess(messages));
+            })
+    }
+}
+
 export function userLogin(user) {
     console.log('this is my user: ', user);
     return function(dispatch){
@@ -71,9 +99,6 @@ export function userLogin(user) {
     }
 }
 
-
-    }
-}
 
 
 export function registerUser(user) {

@@ -24,7 +24,6 @@ require('./SignInModal.css');
     }
 
     onChange(event) {
-        console.log('updated state');
         const field = event.target.name;
         let property = this.state;
         property[field] = event.target.value;
@@ -40,12 +39,11 @@ require('./SignInModal.css');
             email: this.state.email,
             password: this.state.password
         }
-        this.props.actions.userLogin(user);
+        this.props.actions.userLogin(user)
         this.context.router.push('charts');
     }
 
     render () {
-        console.log(this.state.email);
       return (
         <div className="modal-parent-div">
           <button onClick={this.openModal} className="sign-in-nav-button">Sign In</button>

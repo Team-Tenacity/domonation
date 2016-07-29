@@ -22,8 +22,7 @@ const DomoBuzz = ({messages, onAddMessage, onChange, message}) => {
                 )}
             </div>
             <div className="message-holder">
-                <textarea name="message" value={message} onChange={onChange} className="message" cols="30" rows="1" placeholder="Write something..."></textarea>
-                <button onClick={onAddMessage}>Submit</button>
+                    <textarea onKeyDown={onAddMessage} name="message" value={message} onChange={onChange} className="message" cols="30" rows="1" placeholder="Write something..."></textarea>
             </div>
         </div>
     )

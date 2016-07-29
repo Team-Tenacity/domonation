@@ -24,6 +24,10 @@ class ChartLandingPage extends React.Component {
         this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
     }
 
+    componentWillReceiveProps(nextProps) {
+
+    }
+
     getTwitterFeed() {
         console.log(this.props.twitter);
         this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
