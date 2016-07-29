@@ -38,17 +38,6 @@ class DomoBuzzContainer extends React.Component {
     }
 
     addMessage() {
-<<<<<<< HEAD
-        //console.log('adding message');
-        let newMessage = {
-            user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
-            user_name: 'Darth Vader',
-            date: 'July 28, 2016 11:01am',
-            content: 'Test Message'
-        }
-        this.props.actions.addMessage(newMessage);
-    }
-=======
         if(!this.props.user.userId){
             return alert("Please login before trying to send a message");
         }
@@ -70,7 +59,7 @@ class DomoBuzzContainer extends React.Component {
         property[field] = event.target.value;
         return this.setState({property: property})
     }
->>>>>>> master
+
 
 
     render() {
@@ -81,13 +70,9 @@ class DomoBuzzContainer extends React.Component {
             <div className={stuff}>
                    <DomoBuzz
                        messages={this.state.messages}
-<<<<<<< HEAD
-                        onAddMessage = {this.addMessage}/>
-=======
                         onAddMessage = {this.addMessage}
                         onChange = {this.onChange}
                         message = {this.state.message}/>
->>>>>>> master
             </div>
         )
     }
@@ -99,12 +84,8 @@ function mapStateToProps(state, ownProps) {
     return {
         twitter: state.twitter.twitterData,
         show: state.twitter.showDomoBuzz,
-<<<<<<< HEAD
-        messages: state.twitter.domoBuzzMessages
-=======
         messages: state.twitter.domoBuzzMessages,
         user: state.twitter.user
->>>>>>> master
     };
 }
 

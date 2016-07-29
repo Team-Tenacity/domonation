@@ -41,10 +41,7 @@ require('./SignInModal.css');
             password: this.state.password
         }
         this.props.actions.userLogin(user);
-<<<<<<< HEAD
-=======
         this.context.router.push('charts');
->>>>>>> master
     }
 
     render () {
