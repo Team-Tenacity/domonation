@@ -1,6 +1,9 @@
 export default {
     counter: 1,
     showDomoBuzz: true,
+    twitterData: {},
+    isUserLoggedIn: false,
+    user: {twitterHandle: 'devmtn'},
     domoBuzzMessages: [
         {
             user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',

@@ -1,7 +1,8 @@
 import React from 'react'
 
-const DomoBuzz = ({messages}) => {
-    console.log(messages);
+const DomoBuzz = ({messages, onAddMessage, onChange, message}) => {
+
+    //console.log(messages, onAddMessage);
     return(
         <div className="domobuzz-content">
             <div className="buzz-header"><h2>buzz</h2></div>
@@ -15,13 +16,13 @@ const DomoBuzz = ({messages}) => {
                         <h3 className="user-name">{message.user_name}</h3>
                         <p className="message-date">{message.date}</p>
                         <p className="user-message">{message.content}</p>
-                        
+
                     </div>
                 </div>
                 )}
             </div>
             <div className="message-holder">
-                <textarea className="message" cols="30" rows="1" placeholder="Write something..."></textarea>
+                    <textarea onKeyDown={onAddMessage} name="message" value={message} onChange={onChange} className="message" cols="30" rows="1" placeholder="Write something..."></textarea>
             </div>
         </div>
     )

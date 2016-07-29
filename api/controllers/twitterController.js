@@ -21,8 +21,9 @@ var OAuth   = require('oauth-1.0a');
 // };
 
 
-const twitterController = {
+var twitterController = {
     index: function(req, res) {
+        console.log(req.params.id);
 
         var oauth = OAuth({
             consumer: {
@@ -33,7 +34,7 @@ const twitterController = {
         });
 
         var request_data = {
-            url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=devmtn',
+            url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='+req.params.id,
             method: 'GET',
         };
 
@@ -53,7 +54,7 @@ const twitterController = {
                 return res.json(error);
             }
             else {
-                console.log(body);
+                //console.log(body);
                 return res.json(body);
             }
         });

@@ -1,5 +1,5 @@
-var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
+// var passport = require('passport');
+// var Strategy = require('passport-local').Strategy;
 var User = require('../models/userModel')
 
 module.exports = {
@@ -16,7 +16,9 @@ module.exports = {
           if(!isMatch)  return res.json({ success: false, message: 'Authentication failed. Wrong password.' });
            res.json({
              email: user.email,
-             twHandle: user.twitterHandle
+             twitterHandle: user.twitterHandle,
+             userId: user._id,
+             name: user.name.firstName + ' ' + user.name.lastName
            })
           })
         }

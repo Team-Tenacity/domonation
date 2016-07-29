@@ -14,18 +14,18 @@ class UpperNav extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('received props!');
+        //console.log('received props!');
         this.setState({ show: nextProps.show})
     }
 
     toggleDomoBuzz() {
         let curStatus = !this.props.show;
-        console.log(curStatus);
+        //console.log(curStatus);
         this.props.actions.toggleDomoBuzz(curStatus)
     }
     render() {
 
-        console.log('uppernav props ', this.props)
+        //console.log('uppernav props ', this.props)
         return (
             <div className="upper-nav-div">
                 <div className="left-half">
