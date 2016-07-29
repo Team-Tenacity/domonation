@@ -12,7 +12,7 @@ export default class Axis extends React.Component {
 
     renderAxis() {
         var node  = this.refs.axis;
-        console.log('these are the refs ', this.refs);
+        //console.log('these are the refs ', this.refs);
         if(this.props.orient === 'left'){
             d3.select(node).call(d3.axisLeft(this.props.scale))
         }

@@ -1,7 +1,7 @@
 import React from 'react'
 
-const DomoBuzz = ({messages}) => {
-    console.log(messages);
+const DomoBuzz = ({messages, onAddMessage}) => {
+    //console.log(messages, onAddMessage);
     return(
         <div className="domobuzz-content">
             <div className="buzz-header"><h2>buzz</h2></div>
@@ -22,6 +22,7 @@ const DomoBuzz = ({messages}) => {
             </div>
             <div className="message-holder">
                 <textarea className="message" cols="30" rows="1" placeholder="Write something..."></textarea>
+                <button onClick={onAddMessage}>Submit</button>
             </div>
         </div>
     )

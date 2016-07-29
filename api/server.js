@@ -45,7 +45,7 @@ app.get('/api/logout', authController.logout);
 
 
 /**************Twitter Endpoints**************/
-app.get('/api/twitter/timeline', twitterController.index);
+app.get('/api/twitter/timeline/:id', twitterController.index);
 
 
 

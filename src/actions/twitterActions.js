@@ -19,6 +19,14 @@ export function toggleSuccess(response){
     return {type: types.TOGGLE_SUCCESS, response}
 }
 
+export function addMessageSuccess(message){
+    return {type: types.ADD_MESSAGE_SUCCESS, message}
+}
+
+export function userLoginSuccess(user) {
+    return {type: types.USER_LOGIN_SUCCESS, user}
+}
+
 
 
 export function toggleDomoBuzz(response) {
@@ -27,11 +35,31 @@ export function toggleDomoBuzz(response) {
     }
 }
 
-
-
-export function twitterGet() {
+export function addMessage(message) {
     return function(dispatch) {
-        axios.get('http://localhost:3001/api/twitter/timeline')
+        dispatch(addMessageSuccess(message))
+    }
+}
+
+export function userLogin(user) {
+    console.log('this is my user: ', user);
+    return function(dispatch){
+        axios.post('http://localhost:3001/api/login', user)
+            .then(response => {
+                console.log('this is our response from the server ',response);
+                return dispatch(userLoginSuccess(response.data));
+            })
+
+    }
+}
+
+
+
+export function twitterGet(handle) {
+    console.log(handle);
+    return function(dispatch) {
+
+        axios.get('http://localhost:3001/api/twitter/timeline/'+handle)
             .then(response => {
                 var userTweets = _.map(response.data, function (tweet) {
                     //console.log(tweet.text);
