@@ -7,4 +7,10 @@ var messageSchema = new Schema({
   date: {type: Date, default: Date.now }
 });
 
+// messageSchema.pre('init', function (next, doc, query) {
+//   // hack
+//   query.populate('user');
+//   next();
+// });
+
 module.exports = mongoose.model('Message', messageSchema);
