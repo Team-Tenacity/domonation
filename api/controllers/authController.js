@@ -16,7 +16,9 @@ module.exports = {
           if(!isMatch)  return res.json({ success: false, message: 'Authentication failed. Wrong password.' });
            res.json({
              email: user.email,
-             twitterHandle: user.twitterHandle
+             twitterHandle: user.twitterHandle,
+             userId: user._id,
+             name: user.name.first + ' ' + user.name.last
            })
           })
         }

@@ -36,15 +36,28 @@ export function toggleDomoBuzz(response) {
 }
 
 export function addMessage(message) {
+    let messageObj = {
+        content: message.content,
+        user: message.user
+    }
     return function(dispatch) {
-        dispatch(addMessageSuccess(message))
+        axios.post('http://localhost:3001/api/messages', messageObj)
+            .then(response =>{
+                console.log(response);
+                if(response.status==200) {
+                    return dispatch(addMessageSuccess(message))
+                }
+                else{
+                    return alert('There was an issue sending your message, please try again.')
+                }
+            })
     }
 }
 
 export function userLogin(user) {
     console.log('this is my user: ', user);
     return function(dispatch){
-        axios.post('/api/login', user)
+        axios.post('http://localhost:3001/api/login', user)
             .then(response => {
                 console.log('this is our response from the server ',response);
                 return dispatch(userLoginSuccess(response.data));
@@ -59,7 +72,7 @@ export function twitterGet(handle) {
     console.log(handle);
     return function(dispatch) {
 
-        axios.get('/api/twitter/timeline/'+handle)
+        axios.get('http://localhost:3001/api/twitter/timeline/'+handle)
             .then(response => {
                 var userTweets = _.map(response.data, function (tweet) {
                     //console.log(tweet.text);
