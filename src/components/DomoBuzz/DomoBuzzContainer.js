@@ -10,14 +10,22 @@ require('./DomoBuzz.css');
 class DomoBuzzContainer extends React.Component {
     constructor(props){
         super(props);
-        this.state = {show: props.show};
-        console.log('test ', props);
+        this.state = {
+            show: props.show,
+            messages: props.messages
+        };
+        //console.log('test ', props);
         this.toggleDomoBuzz = this.toggleDomoBuzz.bind(this);
+        this.addMessage = this.addMessage.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('received props!');
-        this.setState({ show: nextProps.show})
+        //console.log('received props!');
+        this.setState(
+            { 
+                show: nextProps.show,
+                messages: nextProps.messages
+            })
     }
 
     toggleDomoBuzz() {
@@ -25,16 +33,28 @@ class DomoBuzzContainer extends React.Component {
         console.log(curStatus);
         this.props.actions.toggleDomoBuzz(curStatus)
     }
+    
+    addMessage() {
+        //console.log('adding message');
+        let newMessage = {
+            user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+            user_name: 'Darth Vader',
+            date: 'July 28, 2016 11:01am',
+            content: 'Test Message'
+        }
+        this.props.actions.addMessage(newMessage);
+    }
 
 
     render() {
-        console.log('these are my domobuzz props ', this.props);
-        console.log('these are my domobuzz state ', this.state);
+        //console.log('these are my domobuzz props ', this.props);
+        //console.log('these are my domobuzz state ', this.state);
         let stuff = this.state.show?'domobuzz':'domobuzz hide';
         return (
             <div className={stuff}>
-                    {this.state.show? <DomoBuzz />: <div></div>}
-                    <button onClick={this.toggleDomoBuzz}>Show/Hide</button>
+                   <DomoBuzz 
+                       messages={this.state.messages}
+                        onAddMessage = {this.addMessage}/>
             </div>
         )
     }
@@ -45,7 +65,8 @@ function mapStateToProps(state, ownProps) {
 
     return {
         twitter: state.twitter.twitterData,
-        show: state.twitter.showDomoBuzz
+        show: state.twitter.showDomoBuzz,
+        messages: state.twitter.domoBuzzMessages
     };
 }
 

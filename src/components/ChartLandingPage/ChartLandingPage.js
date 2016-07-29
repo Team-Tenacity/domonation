@@ -14,21 +14,24 @@ class ChartLandingPage extends React.Component {
         super(props, context);
 
         this.state = {
-            counter: this.props.twitter.counter
+            counter: this.props.twitter.counter,
+            isUserLoggedIn: this.props.twitter.isUserLoggedIn
         };
         this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
 
     componentWillMount() {
-        this.props.actions.twitterGet();
+        this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
     }
 
     getTwitterFeed() {
-        this.props.actions.twitterGet();
+        console.log(this.props.twitter);
+        this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
     }
 
     render() {
-        console.log(this.props);
+        console.log('this is my chart landing page props',this.props);
+        console.log('this is my chart landing page state',this.state);
         return (
             <div>
                 <UpperNav />
@@ -42,7 +45,8 @@ class ChartLandingPage extends React.Component {
 
 function mapStateToProps(state, ownProps) {
     return {
-        twitter: state.twitter
+        twitter: state.twitter,
+        isUserLoggedIn: state.isUserLoggedIn
     };
 }
 

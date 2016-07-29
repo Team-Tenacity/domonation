@@ -29989,35 +29989,25 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	/**
-	 * Created by cjpowers on 7/14/16.
-	 */
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 	function counterReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { counter: _initialState2.default.counter, twitterData: {}, showDomoBuzz: _initialState2.default.showDomoBuzz } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? _initialState2.default : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
 	        case types.INCREMENT:
-	            return {
-	                counter: action.counter,
-	                twitterData: state.twitterData
-	            };
+	            return Object.assign({}, state, { counter: action.counter });
 	        case types.DECREMENT:
-	            return {
-	                counter: action.counter,
-	                twitterData: state.twitterData
-	            };
+	            return Object.assign({}, state, { counter: action.counter });
 	        case types.TWITTER_GET_SUCCESS:
-	            return {
-	                counter: state.counter,
-	                twitterData: action.userTweets
-	            };
+	            return Object.assign({}, state, { twitterData: action.userTweets });
 	        case types.TOGGLE_SUCCESS:
-	            return {
-	                counter: state.counter,
-	                twitterData: state.twitterData,
-	                showDomoBuzz: action.response
-	            };
+	            return Object.assign({}, state, { showDomoBuzz: action.response });
+	        case types.ADD_MESSAGE_SUCCESS:
+	            return Object.assign({}, state, { domoBuzzMessages: [].concat(_toConsumableArray(state.domoBuzzMessages), [action.message]) });
+	        case types.USER_LOGIN_SUCCESS:
+	            return Object.assign({}, state, { user: action.user, isUserLoggedIn: true });
 	        default:
 	            return state;
 	    }
@@ -30039,18 +30029,41 @@
 
 	var TOGGLE_SUCCESS = exports.TOGGLE_SUCCESS = 'TOGGLE_SUCCESS';
 
+	var ADD_MESSAGE_SUCCESS = exports.ADD_MESSAGE_SUCCESS = 'ADD_MESSAGE_SUCCESS';
+
+	var USER_LOGIN_SUCCESS = exports.USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
+
 /***/ },
 /* 486 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	exports.default = {
 	    counter: 1,
-	    showDomoBuzz: false
+	    showDomoBuzz: true,
+	    twitterData: {},
+	    isUserLoggedIn: false,
+	    user: { twitterHandle: 'devmtn' },
+	    domoBuzzMessages: [{
+	        user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+	        user_name: 'Darth Vader',
+	        date: 'July 28, 2016 11:01am',
+	        content: 'Data Rules'
+	    }, {
+	        user_image: 'http://i.dailymail.co.uk/i/pix/2016/03/05/20/31E63B1100000578-3478443-image-a-171_1457210994751.jpg',
+	        user_name: 'Luke Skywalker',
+	        date: 'July 28, 2016 11:20am',
+	        content: 'Get a room, dad'
+	    }, {
+	        user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+	        user_name: 'Darth Vader',
+	        date: 'July 28, 2016 11:35am',
+	        content: 'You are short'
+	    }]
 	};
 
 /***/ },
@@ -36688,7 +36701,11 @@
 	exports.decrementSuccess = decrementSuccess;
 	exports.twitterGetSuccess = twitterGetSuccess;
 	exports.toggleSuccess = toggleSuccess;
+	exports.addMessageSuccess = addMessageSuccess;
+	exports.userLoginSuccess = userLoginSuccess;
 	exports.toggleDomoBuzz = toggleDomoBuzz;
+	exports.addMessage = addMessage;
+	exports.userLogin = userLogin;
 	exports.twitterGet = twitterGet;
 	exports.increment = increment;
 	exports.decrement = decrement;
@@ -36726,15 +36743,41 @@
 	    return { type: types.TOGGLE_SUCCESS, response: response };
 	}
 
+	function addMessageSuccess(message) {
+	    return { type: types.ADD_MESSAGE_SUCCESS, message: message };
+	}
+
+	function userLoginSuccess(user) {
+	    return { type: types.USER_LOGIN_SUCCESS, user: user };
+	}
+
 	function toggleDomoBuzz(response) {
 	    return function (dispatch) {
 	        dispatch(toggleSuccess(response));
 	    };
 	}
 
-	function twitterGet() {
+	function addMessage(message) {
 	    return function (dispatch) {
-	        _axios2.default.get('/api/twitter/timeline').then(function (response) {
+	        dispatch(addMessageSuccess(message));
+	    };
+	}
+
+	function userLogin(user) {
+	    console.log('this is my user: ', user);
+	    return function (dispatch) {
+	        _axios2.default.post('/api/login', user).then(function (response) {
+	            console.log('this is our response from the server ', response);
+	            return dispatch(userLoginSuccess(response.data));
+	        });
+	    };
+	}
+
+	function twitterGet(handle) {
+	    console.log(handle);
+	    return function (dispatch) {
+
+	        _axios2.default.get('/api/twitter/timeline/' + handle).then(function (response) {
 	            var userTweets = _underscore2.default.map(response.data, function (tweet) {
 	                //console.log(tweet.text);
 	                return {
@@ -39725,9 +39768,10 @@
 	    function Chart(props) {
 	        _classCallCheck(this, Chart);
 
+	        //console.log(props);
+
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Chart).call(this, props));
 
-	        console.log(props);
 	        _this.state = {
 	            width: parseInt(props.width),
 	            height: parseInt(props.height),
@@ -39743,14 +39787,14 @@
 	    _createClass(Chart, [{
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log('received props!');
+	            //console.log('received props!');
 	            this.setState({ data: nextProps.data });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log('this is chart props ', this.props);
-	            console.log('these are the refs ', this.refs);
+	            //console.log('this is chart props ', this.props );
+	            //console.log('these are the refs ', this.refs);
 
 	            return _react2.default.createElement(
 	                'div',
@@ -56155,7 +56199,7 @@
 	        key: 'renderAxis',
 	        value: function renderAxis() {
 	            var node = this.refs.axis;
-	            console.log('these are the refs ', this.refs);
+	            //console.log('these are the refs ', this.refs);
 	            if (this.props.orient === 'left') {
 	                d3.select(node).call(d3.axisLeft(this.props.scale));
 	            } else if (this.props.orient === 'bottom') {
@@ -56283,7 +56327,7 @@
 
 	var renderRects = function renderRects(props) {
 	    var parseDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
-	    console.log('data bars props', props);
+	    //console.log('data bars props', props);
 	    return function (data, index) {
 	        var rectProps = {
 	            //x: props.xScale(Date.parse(data.created_at)),
@@ -90405,21 +90449,12 @@
 	            _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_SignInModal2.default, null)
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                null,
 	                _react2.default.createElement(_LoginModal2.default, null)
 	            ),
 	            _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: 'charts' },
-	                    'Sign In'
-	                )
+	                _react2.default.createElement(_SignInModal2.default, null)
 	            ),
 	            _react2.default.createElement(
 	                'div',
@@ -90506,12 +90541,12 @@
 	        null,
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: this.openModal },
-	          'Sign Up Test'
+	          { onClick: this.openModal, className: 'sign-up-nav-button' },
+	          'Sign Up'
 	        ),
 	        _react2.default.createElement(
 	          Modal,
-	          { isOpen: this.state.open, shouldCloseOnOverlayClick: true, className: 'login-modal' },
+	          { isOpen: this.state.open, onRequestClose: this.closeModal, className: 'login-modal' },
 	          _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
 	          _react2.default.createElement(
 	            'div',
@@ -90524,7 +90559,7 @@
 	            _react2.default.createElement(
 	              'button',
 	              { onClick: this.closeModal, className: 'sign-up-button' },
-	              'Sign Up!'
+	              'CONTINUE'
 	            )
 	          )
 	        )
@@ -92540,7 +92575,7 @@
 
 
 	// module
-	exports.push([module.id, "/*.login-modal {\n  width: 30vw;\n  height: 30vh;\n}*/\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 66px;\nleft: 580px;\nright: 40px;\nbottom: 40px;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\n/*padding: 20px;*/\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
+	exports.push([module.id, ".sign-up-nav-button {\n  background-color: transparent;\n  border: none;\n  outline: none;\n}\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%) !important;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
 
 	// exports
 
@@ -92860,7 +92895,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -92868,6 +92903,18 @@
 	var _react = __webpack_require__(299);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(501);
+
+	var _reactRedux = __webpack_require__(493);
+
+	var _redux = __webpack_require__(470);
+
+	var _twitterActions = __webpack_require__(564);
+
+	var twitterActions = _interopRequireWildcard(_twitterActions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -92880,67 +92927,108 @@
 	var ReactDOM = __webpack_require__(330);
 	var Modal = __webpack_require__(692);
 
+
 	__webpack_require__(717);
 
 	var SignInModal = function (_React$Component) {
-	  _inherits(SignInModal, _React$Component);
+	    _inherits(SignInModal, _React$Component);
 
-	  function SignInModal(props) {
-	    _classCallCheck(this, SignInModal);
+	    function SignInModal(props) {
+	        _classCallCheck(this, SignInModal);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SignInModal).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SignInModal).call(this, props));
 
-	    _this.state = { open: false };
-	    _this.openModal = _this.openModal.bind(_this);
-	    _this.closeModal = _this.closeModal.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(SignInModal, [{
-	    key: 'openModal',
-	    value: function openModal() {
-	      this.setState({ open: true });
+	        _this.state = {
+	            open: false,
+	            email: '',
+	            password: ''
+	        };
+	        _this.openModal = _this.openModal.bind(_this);
+	        _this.closeModal = _this.closeModal.bind(_this);
+	        _this.signIn = _this.signIn.bind(_this);
+	        _this.onChange = _this.onChange.bind(_this);
+	        return _this;
 	    }
-	  }, {
-	    key: 'closeModal',
-	    value: function closeModal() {
-	      this.setState({ open: false });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'button',
-	          { onClick: this.openModal },
-	          'Sign In Test'
-	        ),
-	        _react2.default.createElement(
-	          Modal,
-	          { isOpen: this.state.open, shouldCloseOnOverlayClick: true, className: 'login-modal' },
-	          _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'inside-modal-div' },
-	            _react2.default.createElement('input', { placeholder: 'Email Address' }),
-	            _react2.default.createElement('input', { placeholder: 'Password', type: 'password' }),
-	            _react2.default.createElement(
-	              'button',
-	              { onClick: this.closeModal, className: 'sign-up-button' },
-	              'Sign In!'
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
 
-	  return SignInModal;
+	    _createClass(SignInModal, [{
+	        key: 'onChange',
+	        value: function onChange(event) {
+	            console.log('updated state');
+	            var field = event.target.name;
+	            var property = this.state;
+	            property[field] = event.target.value;
+	            return this.setState({ property: property });
+	        }
+	    }, {
+	        key: 'openModal',
+	        value: function openModal() {
+	            this.setState({ open: true });
+	        }
+	    }, {
+	        key: 'closeModal',
+	        value: function closeModal() {
+	            this.setState({ open: false });
+	        }
+	    }, {
+	        key: 'signIn',
+	        value: function signIn() {
+	            var user = {
+	                email: this.state.email,
+	                password: this.state.password
+	            };
+	            this.props.actions.userLogin(user);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log(this.state.email);
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'modal-parent-div' },
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.openModal, className: 'sign-in-nav-button' },
+	                    'Sign In'
+	                ),
+	                _react2.default.createElement(
+	                    Modal,
+	                    { isOpen: this.state.open, onRequestClose: this.closeModal, className: 'signin-modal' },
+	                    _react2.default.createElement('img', { src: 'https://support.domo.com/public/images/logo-400.png', height: '100', width: '100' }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'inside-modal-div' },
+	                        _react2.default.createElement('input', { onChange: this.onChange, name: 'email', value: this.state.email, placeholder: 'Email Address' }),
+	                        _react2.default.createElement('input', { onChange: this.onChange, name: 'password', value: this.state.password, placeholder: 'Password', type: 'password' }),
+	                        _react2.default.createElement(
+	                            'button',
+	                            { onClick: this.signIn, className: 'sign-up-button' },
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: 'charts' },
+	                                'CONTINUE'
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return SignInModal;
 	}(_react2.default.Component);
 
-	exports.default = SignInModal;
+	function mapStateToProps(state, ownProps) {
+
+	    return {};
+	}
+
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SignInModal);
 
 /***/ },
 /* 717 */
@@ -92977,7 +93065,7 @@
 
 
 	// module
-	exports.push([module.id, ".login-modal {\nposition: absolute;\nheight: 400px;\nwidth: 400px;\ntop: 66px;\nleft: 580px;\nright: 40px;\nbottom: 40px;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\n/*padding: 20px;*/\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
+	exports.push([module.id, ".sign-in-nav-button {\n  background-color: transparent;\n  border: none;\n  outline: none;\n}\n\n.signin-modal {\nposition: absolute;\nheight: 400px;\nwidth: 400px;\ntop: 37%;\nleft: 50%;\ntransform: translate(-50%, -50%) !important;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.signin-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
 
 	// exports
 
@@ -93163,7 +93251,8 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ChartLandingPage).call(this, props, context));
 
 	        _this.state = {
-	            counter: _this.props.twitter.counter
+	            counter: _this.props.twitter.counter,
+	            isUserLoggedIn: _this.props.twitter.isUserLoggedIn
 	        };
 	        _this.getTwitterFeed = _this.getTwitterFeed.bind(_this);
 	        return _this;
@@ -93172,17 +93261,19 @@
 	    _createClass(ChartLandingPage, [{
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
-	            this.props.actions.twitterGet();
+	            this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
 	        }
 	    }, {
 	        key: 'getTwitterFeed',
 	        value: function getTwitterFeed() {
-	            this.props.actions.twitterGet();
+	            console.log(this.props.twitter);
+	            this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log(this.props);
+	            console.log('this is my chart landing page props', this.props);
+	            console.log('this is my chart landing page state', this.state);
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -93199,7 +93290,8 @@
 
 	function mapStateToProps(state, ownProps) {
 	    return {
-	        twitter: state.twitter
+	        twitter: state.twitter,
+	        isUserLoggedIn: state.isUserLoggedIn
 	    };
 	}
 
@@ -93265,21 +93357,21 @@
 	    _createClass(UpperNav, [{
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log('received props!');
+	            //console.log('received props!');
 	            this.setState({ show: nextProps.show });
 	        }
 	    }, {
 	        key: 'toggleDomoBuzz',
 	        value: function toggleDomoBuzz() {
 	            var curStatus = !this.props.show;
-	            console.log(curStatus);
+	            //console.log(curStatus);
 	            this.props.actions.toggleDomoBuzz(curStatus);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 
-	            console.log('uppernav props ', this.props);
+	            //console.log('uppernav props ', this.props)
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'upper-nav-div' },
@@ -93595,17 +93687,24 @@
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DomoBuzzContainer).call(this, props));
 
-	        _this.state = { show: props.show };
-	        console.log('test ', props);
+	        _this.state = {
+	            show: props.show,
+	            messages: props.messages
+	        };
+	        //console.log('test ', props);
 	        _this.toggleDomoBuzz = _this.toggleDomoBuzz.bind(_this);
+	        _this.addMessage = _this.addMessage.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(DomoBuzzContainer, [{
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log('received props!');
-	            this.setState({ show: nextProps.show });
+	            //console.log('received props!');
+	            this.setState({
+	                show: nextProps.show,
+	                messages: nextProps.messages
+	            });
 	        }
 	    }, {
 	        key: 'toggleDomoBuzz',
@@ -93615,20 +93714,29 @@
 	            this.props.actions.toggleDomoBuzz(curStatus);
 	        }
 	    }, {
+	        key: 'addMessage',
+	        value: function addMessage() {
+	            //console.log('adding message');
+	            var newMessage = {
+	                user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+	                user_name: 'Darth Vader',
+	                date: 'July 28, 2016 11:01am',
+	                content: 'Test Message'
+	            };
+	            this.props.actions.addMessage(newMessage);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log('these are my domobuzz props ', this.props);
-	            console.log('these are my domobuzz state ', this.state);
+	            //console.log('these are my domobuzz props ', this.props);
+	            //console.log('these are my domobuzz state ', this.state);
 	            var stuff = this.state.show ? 'domobuzz' : 'domobuzz hide';
 	            return _react2.default.createElement(
 	                'div',
 	                { className: stuff },
-	                this.state.show ? _react2.default.createElement(_DomoBuzz2.default, null) : _react2.default.createElement('div', null),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.toggleDomoBuzz },
-	                    'Show/Hide'
-	                )
+	                _react2.default.createElement(_DomoBuzz2.default, {
+	                    messages: this.state.messages,
+	                    onAddMessage: this.addMessage })
 	            );
 	        }
 	    }]);
@@ -93640,7 +93748,8 @@
 
 	    return {
 	        twitter: state.twitter.twitterData,
-	        show: state.twitter.showDomoBuzz
+	        show: state.twitter.showDomoBuzz,
+	        messages: state.twitter.domoBuzzMessages
 	    };
 	}
 
@@ -93656,7 +93765,7 @@
 /* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -93668,11 +93777,67 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var DomoBuzz = function DomoBuzz() {
+	var DomoBuzz = function DomoBuzz(_ref) {
+	    var messages = _ref.messages;
+	    var onAddMessage = _ref.onAddMessage;
+
+	    //console.log(messages, onAddMessage);
 	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        'Yo'
+	        "div",
+	        { className: "domobuzz-content" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "buzz-header" },
+	            _react2.default.createElement(
+	                "h2",
+	                null,
+	                "buzz"
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "buzz-messages" },
+	            messages.map(function (message, index) {
+	                return _react2.default.createElement(
+	                    "div",
+	                    { key: index, className: "individual-message" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "user-img" },
+	                        _react2.default.createElement("img", { className: "user-img", src: message.user_image, alt: "vader" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "message-content" },
+	                        _react2.default.createElement(
+	                            "h3",
+	                            { className: "user-name" },
+	                            message.user_name
+	                        ),
+	                        _react2.default.createElement(
+	                            "p",
+	                            { className: "message-date" },
+	                            message.date
+	                        ),
+	                        _react2.default.createElement(
+	                            "p",
+	                            { className: "user-message" },
+	                            message.content
+	                        )
+	                    )
+	                );
+	            })
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "message-holder" },
+	            _react2.default.createElement("textarea", { className: "message", cols: "30", rows: "1", placeholder: "Write something..." }),
+	            _react2.default.createElement(
+	                "button",
+	                { onClick: onAddMessage },
+	                "Submit"
+	            )
+	        )
 	    );
 	};
 	exports.default = DomoBuzz;
@@ -93709,10 +93874,11 @@
 
 	exports = module.exports = __webpack_require__(714)();
 	// imports
-
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Pacifico);", ""]);
+	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Lobster);", ""]);
 
 	// module
-	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 500px;\n    background: lightgrey;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n}\n\n.hide {\n    display: none;\n}", ""]);
+	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 450px;\n    background: #fff;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n    border-left: solid 1px darkgray;\n\n}\n\n.domobuzz-content{\n    position: relative;\n    height: 100%;\n    width: 100%;\n}\n\n.hide {\n    display: none;\n}\n\n.buzz-header {\n    height: 60px;\n    width: 100%;\n    background: #99CCEE;\n    color: #fff;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n\n.buzz-header h2 {\n    font-size: 30px;\n    font-family: 'Lobster', cursive;\n    display: inline-block;\n    margin: auto;\n}\n\n.message-holder {\n    position: fixed;\n    bottom: 10px;\n    width: 450px;\n    display: flex;\n    justify-content: center;\n}\n\n.message{\n    width: 90%;\n    border: solid 1px lightgrey;\n    padding: 10px;\n}\n\n.individual-message {\n    padding: 10px;\n    clear: both;\n    margin-bottom: 25px;\n}\n\n.message-content {\n    float: left;\n    position: relative;\n    width: 86%;\n}\n\n.user-img {\n    height: 45px;\n    width: 45px;\n    margin-right: 5px;\n    overflow: auto;\n    border-radius: 50%;\n    float: left;\n}\n\n.user-name {\n    font-size: 17px;\n    font-weight: bolder;\n    display: inline-block;\n    float: left;\n\n}\n\n.message-date {\n    display: inline-block;\n    position: absolute;\n    right: 5px;\n}\n\n.user-message {\n    margin-top: 25px;\n    clear: both;\n}", ""]);
 
 	// exports
 
@@ -93818,23 +93984,27 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-filter' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-bell' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-star' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description-glyphicon' },
-	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-resize-full' })
+	                        { className: 'glyphicon-container-div' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'description-glyphicon' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-filter' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'description-glyphicon' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-bell' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'description-glyphicon' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-star' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'description-glyphicon' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-resize-full' })
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -93911,7 +94081,7 @@
 
 
 	// module
-	exports.push([module.id, ".large-card-div {\n  background-color: #ffffff;\n  height: 100vh;\n}\n\n.path-header {\n  height: 39px;\n  width: auto;\n  background-color: #fbfbfb;\n  border-bottom: solid .5px #989898;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 39px;\n  position: relative;\n  top: 101px;\n  margin-bottom: 10px;\n}\n\n.path-h1 {\n  color: #6497ba;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.path-h2 {\n  margin-left: 5px;\n  color: #989898;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.description-header {\n  height: 62px;\n  width: auto;\n  background-color: #ffffff;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 62px;\n  position: relative;\n  top: 91px;\n}\n\n.title-h2 {\n  color: #000;\n  font-size: 24px;\n  font-weight: lighter;\n  letter-spacing: .75px;\n  margin-right: 975px;\n}\n\n.description-glyphicon {\nmargin-right: 35px;\nmargin-top: 5px;\n}\n\n.description-glyphicon .glyphicon {\n  color: #a3a3a3;\n  font-size: 24px;\n}\n\n.large-graph-div {\n  height: 65vh;\n  position: relative;\n  top: 100px;\n  text-align: center;\n  /*display: flex;*/\n}\n\n.large-graph-div img {\n  width: 1000px;\n  height: auto;\n}\n\n.left-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  left: 0;\n  top: 100px;\n  border-radius: 0px 5px 5px 0px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n}\n\n.left-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.right-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  right: 0;\n  bottom: 160px;\n  border-radius: 5px 0px 0px 5px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n}\n\n.right-pointer-div .glyphicon {\n  color: #989898;\n}\n", ""]);
+	exports.push([module.id, ".large-card-div {\n  background-color: #ffffff;\n  height: 100vh;\n}\n\n.path-header {\n  height: 39px;\n  width: auto;\n  background-color: #fbfbfb;\n  border-bottom: solid .5px #989898;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 39px;\n  position: relative;\n  top: 101px;\n  margin-bottom: 10px;\n}\n\n.path-h1 {\n  color: #6497ba;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.path-h2 {\n  margin-left: 5px;\n  color: #989898;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.description-header {\n  height: 62px;\n  width: auto;\n  background-color: #ffffff;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 62px;\n  position: relative;\n  top: 91px;\n}\n\n.title-h2 {\n  color: #000;\n  font-size: 24px;\n  font-weight: lighter;\n  letter-spacing: .75px;\n}\n\n.glyphicon-container-div {\n  position: absolute;\n  right: 0;\n  height: 100%;\n  width: 300px;\n  display: flex;\n}\n\n.description-glyphicon {\nmargin-right: 35px;\nmargin-top: 5px;\n}\n\n.description-glyphicon .glyphicon {\n  color: #a3a3a3;\n  font-size: 24px;\n}\n\n.description-glyphicon .glyphicon:hover {\n  color:#99CCEE;\n}\n\n.large-graph-div {\n  height: 65vh;\n  position: relative;\n  top: 100px;\n  text-align: center;\n  /*display: flex;*/\n}\n\n.large-graph-div img {\n  width: 1000px;\n  height: auto;\n}\n\n.left-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  border-radius: 0px 5px 5px 0px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n  top: 50%;\n  left: 0;\n  transform: translate(0%, -50%) !important;\n}\n\n.left-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.right-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  border-radius: 5px 0px 0px 5px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n  top: 50%;\n  right: 0;\n  transform: translate(0%, -50%) !important;\n}\n\n.right-pointer-div .glyphicon {\n  color: #989898;\n}\n", ""]);
 
 	// exports
 
@@ -93986,12 +94156,12 @@
 	    _createClass(ExampleCard, [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
-	            this.props.actions.twitterGet();
+	            this.props.actions.twitterGet(this.props.user.twitterHandle);
 	        }
 	    }, {
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log('received props!');
+	            //console.log('received props!');
 	            this.setState({ twitter: nextProps.twitter });
 	        }
 	    }, {
@@ -94003,7 +94173,7 @@
 	        key: "render",
 	        value: function render() {
 	            console.log(this.props);
-	            console.log(this.state);
+	            // console.log(this.state);
 	            return _react2.default.createElement(
 	                "div",
 	                null,
@@ -94207,7 +94377,8 @@
 
 	function mapStateToProps(state, ownProps) {
 	    return {
-	        twitter: state.twitter.twitterData
+	        twitter: state.twitter.twitterData,
+	        user: state.twitter.user
 	    };
 	}
 
@@ -94793,7 +94964,7 @@
 
 
 	// module
-	exports.push([module.id, ".add-card-container {\n  top: 49px;\n  height: 128px;\n  width: 235px;\n  position: absolute;\n  display: flex;\n  justify-content: space-around;\n  align-items: center;\n  background-color: white;\n  border: 4px solid #d2d1d1;\n  border-radius: 4px;\n  overflow: visible;\n  left: auto;\n  right: 29px;\n}\n\n\n.option-container {\n  display: flex;\n  height: 95px;\n  width: 203px;\n  justify-content: space-between;\n  font-size: small;\n  font-weight: 100;\n  color: #555555;\n  position: relative;\n}\n\n.options-wrapper {\n  position: relative;\n}\n\n.build-new-desc {\n  display: none;\n  justify-content: center;\n  align-items: center;\n  height: 20px;\n  width: 135px;\n  background: #333;\n  opacity: .9;\n  border-radius: 2px;\n  color: white;\n  position: absolute;\n  z-index: 5;\n  top: -28px;\n  left: -18px;\n}\n\n.add-card-option-triangle {\n  display: none;\n  top: 13px;\n  left: -55px;\n  color: #333;\n  opacity: .9;\n  font-size: smaller;\n}\n\n.glyphicon-triangle-bottom:hover {\n  color: #333;\n}\n\n.assign-build-new-desc {\n  display: none;\n  flex-wrap: wrap;\n  justify-content: center;\n  align-items: center;\n  height: 40px;\n  width: 135px;\n  background: #333;\n  opacity: .9;\n  border-radius: 2px;\n  color: white;\n  position: absolute;\n  z-index: 5;\n  top: -48px;\n  left: 85px;\n}\n\n.build-new-text {\n  width: 100%;\n  padding-top: 6px;\n  padding-left: 10px;\n}\n\n.add-card-option {\n  height: 95px;\n  width: 95px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  background-color: #e8e8e8;\n\n}\n\n.add-card.glyphicon {\n  margin-bottom: 10px;\n  font-size: 20px\n}\n\n.add-card-option:hover {\n  background-color: #4b87b0;\n  color: white;\n}\n\n#add-card-option:hover .build-new-desc {\n  display: flex;\n}\n\n#add-card-option:hover .add-card-option-triangle {\n  display: flex;\n  color: #333;\n}\n\n.add-card-option:hover .glyphicon {\n  color: white;\n}\n\n#assign-card-option:hover .assign-build-new-desc {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.assign-build-triangle {\n  top: 4px;\n}\n\n\n#assign-card-option:hover .assign-build-triangle {\n  color: #333;\n}\n", ""]);
+	exports.push([module.id, ".add-card-container {\n  top: 49px;\n  height: 128px;\n  width: 235px;\n  position: absolute;\n  display: flex;\n  justify-content: space-around;\n  align-items: center;\n  background-color: white;\n  border: 4px solid #d2d1d1;\n  border-radius: 4px;\n  overflow: visible;\n  left: auto;\n  right: 29px;\n  z-index: 5;\n}\n\n\n.option-container {\n  display: flex;\n  height: 95px;\n  width: 203px;\n  justify-content: space-between;\n  font-size: small;\n  font-weight: 100;\n  color: #555555;\n  position: relative;\n}\n\n.options-wrapper {\n  position: relative;\n}\n\n.build-new-desc {\n  display: none;\n  justify-content: center;\n  align-items: center;\n  height: 20px;\n  width: 135px;\n  background: #333;\n  opacity: .9;\n  border-radius: 2px;\n  color: white;\n  position: absolute;\n  z-index: 5;\n  top: -28px;\n  left: -18px;\n}\n\n.add-card-option-triangle {\n  display: none;\n  top: 13px;\n  left: -55px;\n  color: #333;\n  opacity: .9;\n  font-size: smaller;\n}\n\n.glyphicon-triangle-bottom:hover {\n  color: #333;\n}\n\n.assign-build-new-desc {\n  display: none;\n  flex-wrap: wrap;\n  justify-content: center;\n  align-items: center;\n  height: 40px;\n  width: 135px;\n  background: #333;\n  opacity: .9;\n  border-radius: 2px;\n  color: white;\n  position: absolute;\n  z-index: 5;\n  top: -48px;\n  left: 85px;\n}\n\n.build-new-text {\n  width: 100%;\n  padding-top: 6px;\n  padding-left: 10px;\n}\n\n.add-card-option {\n  height: 95px;\n  width: 95px;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  background-color: #e8e8e8;\n\n}\n\n.add-card.glyphicon {\n  margin-bottom: 10px;\n  font-size: 20px\n}\n\n.add-card-option:hover {\n  background-color: #4b87b0;\n  color: white;\n}\n\n#add-card-option:hover .build-new-desc {\n  display: flex;\n}\n\n#add-card-option:hover .add-card-option-triangle {\n  display: flex;\n  color: #333;\n}\n\n.add-card-option:hover .glyphicon {\n  color: white;\n}\n\n#assign-card-option:hover .assign-build-new-desc {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.assign-build-triangle {\n  top: 4px;\n}\n\n\n#assign-card-option:hover .assign-build-triangle {\n  color: #333;\n}\n", ""]);
 
 	// exports
 
@@ -95056,7 +95227,7 @@
 	                                _react2.default.createElement(
 	                                    'div',
 	                                    { className: 'default-description' },
-	                                    'Make all aards small'
+	                                    'Make all cards small'
 	                                )
 	                            ),
 	                            _react2.default.createElement(
@@ -95128,7 +95299,7 @@
 
 
 	// module
-	exports.push([module.id, ".option-popup-container {\n  top: 49px;\n  width: 212px;\n  height: 257px;\n  position: absolute;\n  display: flex;\n  justify-content: space-around;\n  background-color: white;\n  border: 4px solid #d2d1d1;\n  border-radius: 4px;\n  overflow: visible;\n  left: auto;\n  right: 2px;\n}\n\n.options-list-container {\n  margin-top: 10px;\n  margin-bottom: 5px;\n}\n\n.options-list {\n  padding-left: 9px;\n  height: 33px;\n  width: 210px;\n  display: flex;\n  font-weight: normal;\n  align-items: center;\n  font-size: 15px;\n}\n\n.options-list:hover {\n  background-color: rgb(156, 202, 235)\n}\n\n.options-list-text {\n  margin-left: 7px;\n}\n\n.options-break {\n  margin-top: 2px;\n  margin-bottom: 2px;\n}\n\n.last {\n  margin-bottom: 12px;\n}\n\n.options-graph-size {\n  display: flex;\n  padding-left: 0px;\n}\n\n.custom {\n  height: 14px;\n  width: 14px;\n  margin-top: 2px;\n}\n\n.options-graph-size-container {\n  display: flex;\n  justify-content: center;\n  width: 100%;\n}\n\n.options-box {\n  width: 42.5px;\n  height: 33px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border: 1px solid #eee;\n  position: relative;\n}\n\n.default-description {\n  top: 36px;\n  left: -40px;\n  visibility: hidden;\n  background-color: #333;\n  border-radius: 2px;\n  opacity: .9;\n  color: white;\n  width: 148px;\n  height: 20px;\n  font-size: 10px;\n  align-items: center;\n  justify-content: center;\n  transition: visibility 0s 0s linear\n}\n\n.desc-medium {\n  left: -56px;\n}\n\n.desc-large {\n  left: -70px;\n}\n\n.default-desc-arrow {\n  visibility: hidden;\n  font-size: 10px;\n  top: 7px;\n  opacity: .9;\n}\n\n.glyph-pad {\n  padding-left: 10px;\n}\n\n.options-box:hover {\n  background-color: #e8e8e8;\n  flex-direction: column;\n}\n\n.options-box:hover .default-description {\n  display: flex;\n  visibility: visible;\n  transition: visibility .25s .75s linear\n}\n\n.options-box:hover .default-desc-arrow {\n  display: flex;\n  visibility: visible;\n  transition: visibility .25s .75s linear\n}\n\n.options-box:hover .glyphicon-options-page {\n  padding-top: 6.5px;\n}\n\n.options-box:hover .glyph-pad {\n  padding-left: 0px;\n}\n\n.options-box:hover .glyphicon-stop {\n  top: -1px\n}\n\n.glyphicon-options-page {\n  color: #555555;\n}\n\n.glyphicon-options-page:hover {\n  color: #555555;\n}\n\n.glyphicon-stop {\n  font-size: 18.5px;\n  top: 0px;\n  color: #555555\n}\n\n.default-description {\n  font-size: small;\n  position: absolute;\n}\n", ""]);
+	exports.push([module.id, ".option-popup-container {\n  top: 49px;\n  width: 212px;\n  height: 257px;\n  position: absolute;\n  display: flex;\n  justify-content: space-around;\n  background-color: white;\n  border: 4px solid #d2d1d1;\n  border-radius: 4px;\n  overflow: visible;\n  left: auto;\n  right: 2px;\n  z-index: 5;\n}\n\n.options-list-container {\n  margin-top: 10px;\n  margin-bottom: 5px;\n}\n\n.options-list {\n  padding-left: 9px;\n  height: 33px;\n  width: 210px;\n  display: flex;\n  font-weight: normal;\n  align-items: center;\n  font-size: 15px;\n}\n\n.options-list:hover {\n  background-color: rgb(156, 202, 235)\n}\n\n.options-list-text {\n  margin-left: 7px;\n}\n\n.options-break {\n  margin-top: 2px;\n  margin-bottom: 2px;\n}\n\n.last {\n  margin-bottom: 12px;\n}\n\n.options-graph-size {\n  display: flex;\n  padding-left: 0px;\n}\n\n.custom {\n  height: 14px;\n  width: 14px;\n  margin-top: 2px;\n}\n\n.options-graph-size-container {\n  display: flex;\n  justify-content: center;\n  width: 100%;\n}\n\n.options-box {\n  width: 42.5px;\n  height: 33px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border: 1px solid #eee;\n  position: relative;\n}\n\n.default-description {\n  top: 36px;\n  left: -40px;\n  visibility: hidden;\n  background-color: #333;\n  border-radius: 2px;\n  opacity: .9;\n  color: white;\n  width: 148px;\n  height: 20px;\n  font-size: 10px;\n  align-items: center;\n  justify-content: center;\n  transition: visibility 0s 0s linear\n}\n\n.desc-medium {\n  left: -56px;\n}\n\n.desc-large {\n  left: -70px;\n}\n\n.default-desc-arrow {\n  visibility: hidden;\n  font-size: 10px;\n  top: 7px;\n  opacity: .9;\n}\n\n.glyph-pad {\n  padding-left: 10px;\n}\n\n.options-box:hover {\n  background-color: #e8e8e8;\n  flex-direction: column;\n}\n\n.options-box:hover .default-description {\n  display: flex;\n  visibility: visible;\n  transition: visibility .25s .75s linear\n}\n\n.options-box:hover .default-desc-arrow {\n  display: flex;\n  visibility: visible;\n  transition: visibility .25s .75s linear\n}\n\n.options-box:hover .glyphicon-options-page {\n  padding-top: 6.5px;\n}\n\n.options-box:hover .glyph-pad {\n  padding-left: 0px;\n}\n\n.options-box:hover .glyphicon-stop {\n  top: -1px\n}\n\n.glyphicon-options-page {\n  color: #555555;\n}\n\n.glyphicon-options-page:hover {\n  color: #555555;\n}\n\n.glyphicon-stop {\n  font-size: 18.5px;\n  top: 0px;\n  color: #555555\n}\n\n.default-description {\n  font-size: small;\n  position: absolute;\n}\n", ""]);
 
 	// exports
 

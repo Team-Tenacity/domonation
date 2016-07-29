@@ -6,10 +6,10 @@ var SALT_WORK_FACTOR = 10;
 
 var userSchema = new Schema({
   name: {
-    first: {type: String, required: true},
-    last: {type: String, required: true}
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true}
   },
-  twitterHandle: {type: String, unique: true},
+  twitterHandle: {type: String, unique: true, default: 'devmtn'},
   email: {type: String, unique: true, required: true},
   password: {type: String, required: true},
   user_image: {type: String}

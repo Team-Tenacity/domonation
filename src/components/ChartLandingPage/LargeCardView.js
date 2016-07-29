@@ -32,17 +32,19 @@ class LargeCard extends React.Component {
                 </div>
                 <div className="description-header">
                     <h2 className="title-h2">{this.props.twitter[0].card_name}</h2>
-                    <div className="description-glyphicon">
-                        <span className="glyphicon glyphicon-filter"></span>
-                    </div>
-                    <div className="description-glyphicon">
-                        <span className="glyphicon glyphicon-bell"></span>
-                    </div>
-                    <div className="description-glyphicon">
-                        <span className="glyphicon glyphicon-star"></span>
-                    </div>
-                    <div className="description-glyphicon">
-                        <span className="glyphicon glyphicon-resize-full"></span>
+                    <div className="glyphicon-container-div">
+                        <div className="description-glyphicon">
+                            <span className="glyphicon glyphicon-filter"></span>
+                        </div>
+                        <div className="description-glyphicon">
+                            <span className="glyphicon glyphicon-bell"></span>
+                        </div>
+                        <div className="description-glyphicon">
+                            <span className="glyphicon glyphicon-star"></span>
+                        </div>
+                        <div className="description-glyphicon">
+                            <span className="glyphicon glyphicon-resize-full"></span>
+                        </div>
                     </div>
                 </div>
                 <div className="large-graph-div">
@@ -75,4 +77,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LargeCard);
-

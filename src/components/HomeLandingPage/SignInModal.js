@@ -2,31 +2,58 @@ import React from "react";
 var ReactDOM = require('react-dom');
 var Modal = require('react-modal');
 import {Link} from 'react-router';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as twitterActions from '../../actions/twitterActions';
+
 
 require('./SignInModal.css');
 
   class SignInModal extends React.Component {
     constructor (props) {
       super(props);
-      this.state = {open: false};
+      this.state = {
+          open: false,
+          email: '',
+          password: ''
+      };
       this.openModal = this.openModal.bind(this);
       this.closeModal = this.closeModal.bind(this);
+      this.signIn = this.signIn.bind(this);
+      this.onChange = this.onChange.bind(this);
+    }
+
+    onChange(event) {
+        console.log('updated state');
+        const field = event.target.name;
+        let property = this.state;
+        property[field] = event.target.value;
+        return this.setState({property: property})
     }
 
     openModal () { this.setState({open: true}); }
 
     closeModal () { this.setState({open: false}); }
 
+    signIn () {
+        let user = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        this.props.actions.userLogin(user);
+    }
+
     render () {
+        console.log(this.state.email);
       return (
         <div className="modal-parent-div">
           <button onClick={this.openModal} className="sign-in-nav-button">Sign In</button>
               <Modal isOpen={this.state.open} onRequestClose={this.closeModal} className="signin-modal">
                 <img src="https://support.domo.com/public/images/logo-400.png" height="100" width="100" />
                     <div className="inside-modal-div">
-                        <input placeholder="Email Address"></input>
-                        <input placeholder="Password" type="password"></input>
-                        <button className="sign-up-button"><Link to="charts">CONTINUE</Link></button>
+                        <input onChange={this.onChange}  name="email" value={this.state.email} placeholder="Email Address"></input>
+                        <input onChange={this.onChange} name="password" value={this.state.password} placeholder="Password" type="password"></input>
+                        <button onClick={this.signIn} className="sign-up-button"><Link to="charts">CONTINUE</Link></button>
                     </div>
               </Modal>
         </div>
@@ -34,4 +61,17 @@ require('./SignInModal.css');
     }
   }
 
-  export default SignInModal;
+function mapStateToProps(state, ownProps) {
+
+    return {
+
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(twitterActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInModal);

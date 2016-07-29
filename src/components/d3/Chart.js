@@ -15,7 +15,7 @@ import LineChartTest from './LineChartTest';
 export default class Chart extends React.Component{
     constructor(props) {
         super(props);
-        console.log(props);
+        //console.log(props);
         this.state = {
             width   : parseInt(props.width),
             height  : parseInt(props.height),
@@ -28,14 +28,14 @@ export default class Chart extends React.Component{
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('received props!');
+        //console.log('received props!');
         this.setState({ data: nextProps.data})
     }
 
 
     render() {
-        console.log('this is chart props ', this.props );
-        console.log('these are the refs ', this.refs);
+        //console.log('this is chart props ', this.props );
+        //console.log('these are the refs ', this.refs);
 
         return (
         <div>

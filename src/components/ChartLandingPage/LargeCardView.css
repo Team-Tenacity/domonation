@@ -49,7 +49,14 @@
   font-size: 24px;
   font-weight: lighter;
   letter-spacing: .75px;
-  margin-right: 975px;
+}
+
+.glyphicon-container-div {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 300px;
+  display: flex;
 }
 
 .description-glyphicon {
@@ -60,6 +67,10 @@ margin-top: 5px;
 .description-glyphicon .glyphicon {
   color: #a3a3a3;
   font-size: 24px;
+}
+
+.description-glyphicon .glyphicon:hover {
+  color:#99CCEE;
 }
 
 .large-graph-div {
@@ -80,12 +91,13 @@ margin-top: 5px;
   height: 216px;
   width: 28px;
   position: absolute;
-  left: 0;
-  top: 100px;
   border-radius: 0px 5px 5px 0px;
   text-align: center;
   vertical-align: middle;
   line-height: 200px;
+  top: 50%;
+  left: 0;
+  transform: translate(0%, -50%) !important;
 }
 
 .left-pointer-div .glyphicon {
@@ -97,12 +109,13 @@ margin-top: 5px;
   height: 216px;
   width: 28px;
   position: absolute;
-  right: 0;
-  bottom: 160px;
   border-radius: 5px 0px 0px 5px;
   text-align: center;
   vertical-align: middle;
   line-height: 200px;
+  top: 50%;
+  right: 0;
+  transform: translate(0%, -50%) !important;
 }
 
 .right-pointer-div .glyphicon {
