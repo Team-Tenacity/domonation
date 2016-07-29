@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PropTypes} from "react";
 var ReactDOM = require('react-dom');
 var Modal = require('react-modal');
 import {Link} from 'react-router';
@@ -41,6 +41,10 @@ require('./SignInModal.css');
             password: this.state.password
         }
         this.props.actions.userLogin(user);
+<<<<<<< HEAD
+=======
+        this.context.router.push('charts');
+>>>>>>> master
     }
 
     render () {
@@ -53,7 +57,7 @@ require('./SignInModal.css');
                     <div className="inside-modal-div">
                         <input onChange={this.onChange}  name="email" value={this.state.email} placeholder="Email Address"></input>
                         <input onChange={this.onChange} name="password" value={this.state.password} placeholder="Password" type="password"></input>
-                        <button onClick={this.signIn} className="sign-up-button"><Link to="charts">CONTINUE</Link></button>
+                        <button onClick={this.signIn} className="sign-up-button">CONTINUE</button>
                     </div>
               </Modal>
         </div>
@@ -67,6 +71,11 @@ function mapStateToProps(state, ownProps) {
 
     };
 }
+
+SignInModal.contextTypes = {
+    router: PropTypes.object
+};
+
 
 function mapDispatchToProps(dispatch) {
     return {
