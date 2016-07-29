@@ -36,8 +36,21 @@ export function toggleDomoBuzz(response) {
 }
 
 export function addMessage(message) {
+    let messageObj = {
+        content: message.content,
+        user: message.user
+    }
     return function(dispatch) {
-        dispatch(addMessageSuccess(message))
+        axios.post('http://localhost:3001/api/messages', messageObj)
+            .then(response =>{
+                console.log(response);
+                if(response.status==200) {
+                    return dispatch(addMessageSuccess(message))
+                }
+                else{
+                    return alert('There was an issue sending your message, please try again.')
+                }
+            })
     }
 }
 
