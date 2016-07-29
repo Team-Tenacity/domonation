@@ -29,11 +29,11 @@ class ExampleCard extends React.Component {
         // this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
     componentWillMount() {
-        this.props.actions.twitterGet();
+        this.props.actions.twitterGet(this.props.user.twitterHandle);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('received props!');
+        //console.log('received props!');
         this.setState({ twitter: nextProps.twitter})
     }
 
@@ -42,7 +42,7 @@ class ExampleCard extends React.Component {
     }
     render() {
         console.log(this.props);
-        console.log(this.state);
+        // console.log(this.state);
         return (
             <div>
                 <TitleDiv />
@@ -172,7 +172,8 @@ class ExampleCard extends React.Component {
 }
 function mapStateToProps(state, ownProps) {
     return {
-        twitter: state.twitter.twitterData
+        twitter: state.twitter.twitterData,
+        user: state.twitter.user
     };
 }
 

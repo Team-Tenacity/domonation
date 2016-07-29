@@ -9,7 +9,7 @@ var userSchema = new Schema({
     first: {type: String, required: true},
     last: {type: String, required: true}
   },
-  twitterHandle: {type: String, unique: true},
+  twitterHandle: {type: String, unique: true, default: 'devmtn'},
   email: {type: String, unique: true, required: true},
   password: {type: String, required: true},
   user_image: {type: String}

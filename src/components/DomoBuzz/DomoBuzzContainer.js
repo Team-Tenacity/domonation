@@ -14,12 +14,13 @@ class DomoBuzzContainer extends React.Component {
             show: props.show,
             messages: props.messages
         };
-        console.log('test ', props);
+        //console.log('test ', props);
         this.toggleDomoBuzz = this.toggleDomoBuzz.bind(this);
+        this.addMessage = this.addMessage.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('received props!');
+        //console.log('received props!');
         this.setState(
             { 
                 show: nextProps.show,
@@ -32,15 +33,28 @@ class DomoBuzzContainer extends React.Component {
         console.log(curStatus);
         this.props.actions.toggleDomoBuzz(curStatus)
     }
+    
+    addMessage() {
+        //console.log('adding message');
+        let newMessage = {
+            user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
+            user_name: 'Darth Vader',
+            date: 'July 28, 2016 11:01am',
+            content: 'Test Message'
+        }
+        this.props.actions.addMessage(newMessage);
+    }
 
 
     render() {
-        console.log('these are my domobuzz props ', this.props);
-        console.log('these are my domobuzz state ', this.state);
+        //console.log('these are my domobuzz props ', this.props);
+        //console.log('these are my domobuzz state ', this.state);
         let stuff = this.state.show?'domobuzz':'domobuzz hide';
         return (
             <div className={stuff}>
-                   <DomoBuzz messages={this.state.messages}/>
+                   <DomoBuzz 
+                       messages={this.state.messages}
+                        onAddMessage = {this.addMessage}/>
             </div>
         )
     }
