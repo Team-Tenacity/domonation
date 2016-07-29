@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 module.exports = {
 
   create: (req, res, next) => {
+    
     User.create(req.body, function(err, r){
       if (err) {
         console.log(err);
