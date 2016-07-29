@@ -12,6 +12,8 @@ export default function counterReducer(state=initialState, action) {
             return Object.assign({}, state, {twitterData: action.userTweets});
         case types.TOGGLE_SUCCESS:
             return Object.assign({}, state, {showDomoBuzz: action.response});
+        case types.GET_MESSAGES_SUCCESS:
+            return Object.assign({}, state, {domoBuzzMessages: action.messages})
         case types.ADD_MESSAGE_SUCCESS:
             return Object.assign({}, state, {domoBuzzMessages:[...state.domoBuzzMessages, action.message]})
         case types.USER_LOGIN_SUCCESS:

@@ -40,6 +40,11 @@
     margin: auto;
 }
 
+.buzz-messages {
+    overflow: scroll;
+    height: 60%;
+}
+
 .message-holder {
     position: fixed;
     bottom: 10px;

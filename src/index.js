@@ -5,13 +5,13 @@ import configureStore from './store/configureStore';
 import {Provider} from 'react-redux';
 import { Router, browserHistory, hashHistory } from 'react-router';
 import routes from './routes';
-//import {loadShopperProducts} from './actions/shopperProductActions';
+import {getMessages} from './actions/twitterActions';
 import initialState from './reducers/initialState';
 
 //this accepts an initial state as a param, which is useful for initializing store with data  from server
 const store = configureStore();
 
-//store.dispatch(loadUsers());
+store.dispatch(getMessages());
 console.log('This is what is in my store: ',store.getState());
 
 render(
