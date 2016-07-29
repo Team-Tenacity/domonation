@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Message = require('../models/messageModel.js');
-mongoose.Promise = require('q').Promise
+const moment = require('moment');
+// mongoose.Promise = require('q').Promise
 
 module.exports = {
 
@@ -26,13 +27,28 @@ module.exports = {
 
 
   read: (req, res, next) => {
+    let message = []
     Message.find({}).populate('user').exec(function(e, r) {
       if (e) {
         console.log(e);
         return res.status(500).send(e);
       }
       console.log(r);
-      res.status(200).json(r);
+      for (let i = 0; i < r.length; i++){
+        formatDate = moment(r[i].date).format("dddd, MMMM Do, h:mm:ss a")
+        message.push({
+          content: r[i].content,
+          date: formatDate,
+          user: r[i].user,
+          _id: r[i]._id,
+          __v: r[i].__v
+        })
+      }
+
+      console.log(message)
+        res.status(200).json(message);
+
+
     })
     // Message.find({}, function(err, r) {
     //   if (err) {

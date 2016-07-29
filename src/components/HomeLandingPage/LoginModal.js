@@ -51,6 +51,7 @@ require('./LoginModal.css');
         }
         this.props.actions.registerUser(user);
         this.closeModal();
+        alert('Registration Successful! Please Login.')
     }
 
     render () {
