@@ -68,9 +68,11 @@ function mapStateToProps(state, ownProps) {
 
     };
 }
+
 SignInModal.contextTypes = {
     router: PropTypes.object
 };
+
 
 function mapDispatchToProps(dispatch) {
     return {

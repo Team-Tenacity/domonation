@@ -25,7 +25,7 @@ class DomoBuzzContainer extends React.Component {
     componentWillReceiveProps(nextProps) {
         //console.log('received props!');
         this.setState(
-            { 
+            {
                 show: nextProps.show,
                 messages: nextProps.messages
             })
@@ -36,7 +36,7 @@ class DomoBuzzContainer extends React.Component {
         console.log(curStatus);
         this.props.actions.toggleDomoBuzz(curStatus)
     }
-    
+
     addMessage() {
         if(!this.props.user.userId){
             return alert("Please login before trying to send a message");
@@ -61,13 +61,14 @@ class DomoBuzzContainer extends React.Component {
     }
 
 
+
     render() {
-        console.log('these are my domobuzz props ', this.props);
-        console.log('these are my domobuzz state ', this.state);
+        //console.log('these are my domobuzz props ', this.props);
+        //console.log('these are my domobuzz state ', this.state);
         let stuff = this.state.show?'domobuzz':'domobuzz hide';
         return (
             <div className={stuff}>
-                   <DomoBuzz 
+                   <DomoBuzz
                        messages={this.state.messages}
                         onAddMessage = {this.addMessage}
                         onChange = {this.onChange}

@@ -28,6 +28,11 @@ export function userLoginSuccess(user) {
 }
 
 
+export function userRegisterSuccess(user) {
+    return {type: types.USER_REGISTER_SUCCESS, user}
+}
+
+
 
 export function toggleDomoBuzz(response) {
     return function(dispatch) {
@@ -67,10 +72,28 @@ export function userLogin(user) {
 }
 
 
+    }
+}
+
+
+export function registerUser(user) {
+  console.log('this is the new user', user);
+  return function(dispatch){
+      axios.post('http://localhost:3001/api/user', user)
+          .then(response => {
+              console.log('server response for new user: ', response);
+              return dispatch(userRegisterSuccess(response.data))
+          })
+  }
+}
+
+
+
 
 export function twitterGet(handle) {
     console.log(handle);
     return function(dispatch) {
+
 
         axios.get('http://localhost:3001/api/twitter/timeline/'+handle)
             .then(response => {

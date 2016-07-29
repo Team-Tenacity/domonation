@@ -1,6 +1,7 @@
 import React from 'react'
 
 const DomoBuzz = ({messages, onAddMessage, onChange, message}) => {
+
     //console.log(messages, onAddMessage);
     return(
         <div className="domobuzz-content">
@@ -15,7 +16,7 @@ const DomoBuzz = ({messages, onAddMessage, onChange, message}) => {
                         <h3 className="user-name">{message.user_name}</h3>
                         <p className="message-date">{message.date}</p>
                         <p className="user-message">{message.content}</p>
-                        
+
                     </div>
                 </div>
                 )}
