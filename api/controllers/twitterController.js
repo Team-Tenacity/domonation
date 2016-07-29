@@ -21,7 +21,7 @@ var OAuth   = require('oauth-1.0a');
 // };
 
 
-const twitterController = {
+var twitterController = {
     index: function(req, res) {
         console.log(req.params.id);
 
