@@ -66,6 +66,8 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
+	var _twitterActions = __webpack_require__(564);
+
 	var _initialState = __webpack_require__(486);
 
 	var _initialState2 = _interopRequireDefault(_initialState);
@@ -75,9 +77,7 @@
 	//this accepts an initial state as a param, which is useful for initializing store with data  from server
 	var store = (0, _configureStore2.default)();
 
-	//store.dispatch(loadUsers());
-
-	//import {loadShopperProducts} from './actions/shopperProductActions';
+	store.dispatch((0, _twitterActions.getMessages)());
 	console.log('This is what is in my store: ', store.getState());
 
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -30004,6 +30004,8 @@
 	            return Object.assign({}, state, { twitterData: action.userTweets });
 	        case types.TOGGLE_SUCCESS:
 	            return Object.assign({}, state, { showDomoBuzz: action.response });
+	        case types.GET_MESSAGES_SUCCESS:
+	            return Object.assign({}, state, { domoBuzzMessages: action.messages });
 	        case types.ADD_MESSAGE_SUCCESS:
 	            return Object.assign({}, state, { domoBuzzMessages: [].concat(_toConsumableArray(state.domoBuzzMessages), [action.message]) });
 	        case types.USER_LOGIN_SUCCESS:
@@ -30032,6 +30034,10 @@
 	var ADD_MESSAGE_SUCCESS = exports.ADD_MESSAGE_SUCCESS = 'ADD_MESSAGE_SUCCESS';
 
 	var USER_LOGIN_SUCCESS = exports.USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
+
+	var USER_REGISTER_SUCCESS = exports.USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS';
+
+	var GET_MESSAGES_SUCCESS = exports.GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 
 /***/ },
 /* 486 */
@@ -36703,9 +36709,13 @@
 	exports.toggleSuccess = toggleSuccess;
 	exports.addMessageSuccess = addMessageSuccess;
 	exports.userLoginSuccess = userLoginSuccess;
+	exports.userRegisterSuccess = userRegisterSuccess;
+	exports.getMessagesSuccess = getMessagesSuccess;
 	exports.toggleDomoBuzz = toggleDomoBuzz;
 	exports.addMessage = addMessage;
+	exports.getMessages = getMessages;
 	exports.userLogin = userLogin;
+	exports.registerUser = registerUser;
 	exports.twitterGet = twitterGet;
 	exports.increment = increment;
 	exports.decrement = decrement;
@@ -36751,6 +36761,14 @@
 	    return { type: types.USER_LOGIN_SUCCESS, user: user };
 	}
 
+	function userRegisterSuccess(user) {
+	    return { type: types.USER_REGISTER_SUCCESS, user: user };
+	}
+
+	function getMessagesSuccess(messages) {
+	    return { type: types.GET_MESSAGES_SUCCESS, messages: messages };
+	}
+
 	function toggleDomoBuzz(response) {
 	    return function (dispatch) {
 	        dispatch(toggleSuccess(response));
@@ -36758,8 +36776,39 @@
 	}
 
 	function addMessage(message) {
+	    var messageObj = {
+	        content: message.content,
+	        user: message.user
+	    };
 	    return function (dispatch) {
-	        dispatch(addMessageSuccess(message));
+	        _axios2.default.post('/api/messages', messageObj).then(function (response) {
+	            console.log(response);
+	            if (response.status == 200) {
+	                return dispatch(addMessageSuccess(message));
+	            } else {
+	                return alert('There was an issue sending your message, please try again.');
+	            }
+	        });
+	    };
+	}
+
+	function getMessages() {
+	    return function (dispatch) {
+	        _axios2.default.get('/api/messages').then(function (response) {
+	            var messages = _underscore2.default.map(response.data, function (message) {
+	                //console.log(tweet.text);
+	                return {
+	                    user: message.user._id,
+	                    user_image: "https://www.b1g1.com/assets/admin/images/no_image_user.png",
+	                    content: message.content,
+	                    date: message.date,
+	                    user_name: message.user.name.firstName + " " + message.user.name.lastName
+
+	                };
+	            });
+	            console.log(messages);
+	            return dispatch(getMessagesSuccess(messages));
+	        });
 	    };
 	}
 
@@ -36769,6 +36818,15 @@
 	        _axios2.default.post('/api/login', user).then(function (response) {
 	            console.log('this is our response from the server ', response);
 	            return dispatch(userLoginSuccess(response.data));
+	        });
+	    };
+	}
+
+	function registerUser(user) {
+	    console.log('this is the new user', user);
+	    return function (dispatch) {
+	        _axios2.default.post('/api/user', user).then(function (response) {
+	            return dispatch(userRegisterSuccess(response.data));
 	        });
 	    };
 	}
@@ -90496,6 +90554,18 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(501);
+
+	var _reactRedux = __webpack_require__(493);
+
+	var _redux = __webpack_require__(470);
+
+	var _twitterActions = __webpack_require__(564);
+
+	var twitterActions = _interopRequireWildcard(_twitterActions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -90507,6 +90577,7 @@
 	var ReactDOM = __webpack_require__(330);
 	var Modal = __webpack_require__(692);
 
+
 	__webpack_require__(712);
 
 	var LoginModal = function (_React$Component) {
@@ -90517,13 +90588,33 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginModal).call(this, props));
 
-	    _this.state = { open: false };
+	    _this.state = {
+	      open: false,
+	      name: {
+	        firstName: '',
+	        lastName: ''
+	      },
+	      email: '',
+	      password: '',
+	      twitterHandle: ''
+	    };
 	    _this.openModal = _this.openModal.bind(_this);
 	    _this.closeModal = _this.closeModal.bind(_this);
+	    _this.signUp = _this.signUp.bind(_this);
+	    _this.onChange = _this.onChange.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(LoginModal, [{
+	    key: 'onChange',
+	    value: function onChange(event) {
+	      console.log('updated state');
+	      var field = event.target.name;
+	      var property = this.state;
+	      property[field] = event.target.value;
+	      return this.setState({ property: property });
+	    }
+	  }, {
 	    key: 'openModal',
 	    value: function openModal() {
 	      this.setState({ open: true });
@@ -90532,6 +90623,22 @@
 	    key: 'closeModal',
 	    value: function closeModal() {
 	      this.setState({ open: false });
+	    }
+	  }, {
+	    key: 'signUp',
+	    value: function signUp() {
+	      var user = {
+	        name: {
+	          firstName: this.state.firstName,
+	          lastName: this.state.lastName
+	        },
+	        email: this.state.email,
+	        password: this.state.password,
+	        twitterHandle: this.state.twitterHandle
+	      };
+	      this.props.actions.registerUser(user);
+	      this.closeModal();
+	      alert('Registration Successful! Please Login.');
 	    }
 	  }, {
 	    key: 'render',
@@ -90551,14 +90658,14 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'inside-modal-div' },
-	            _react2.default.createElement('input', { placeholder: 'First Name' }),
-	            _react2.default.createElement('input', { placeholder: 'Last Name' }),
-	            _react2.default.createElement('input', { placeholder: 'Email Address' }),
-	            _react2.default.createElement('input', { placeholder: 'Password', type: 'password' }),
-	            _react2.default.createElement('input', { placeholder: 'Twitter Handle' }),
+	            _react2.default.createElement('input', { onChange: this.onChange, name: 'firstName', value: this.state.firstName, placeholder: 'First Name' }),
+	            _react2.default.createElement('input', { onChange: this.onChange, name: 'lastName', value: this.state.lastName, placeholder: 'Last Name' }),
+	            _react2.default.createElement('input', { onChange: this.onChange, name: 'email', value: this.state.email, placeholder: 'Email Address' }),
+	            _react2.default.createElement('input', { onChange: this.onChange, name: 'password', value: this.state.password, placeholder: 'Password', type: 'password' }),
+	            _react2.default.createElement('input', { onChange: this.onChange, name: 'twitterHandle', value: this.state.twitterHandle, placeholder: 'Twitter Handle' }),
 	            _react2.default.createElement(
 	              'button',
-	              { onClick: this.closeModal, className: 'sign-up-button' },
+	              { onClick: this.signUp, className: 'sign-up-button' },
 	              'CONTINUE'
 	            )
 	          )
@@ -90570,7 +90677,18 @@
 	  return LoginModal;
 	}(_react2.default.Component);
 
-	exports.default = LoginModal;
+	function mapStateToProps(state, ownProps) {
+
+	  return {};
+	}
+
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    actions: (0, _redux.bindActionCreators)(twitterActions, dispatch)
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginModal);
 
 /***/ },
 /* 692 */
@@ -92953,7 +93071,6 @@
 	    _createClass(SignInModal, [{
 	        key: 'onChange',
 	        value: function onChange(event) {
-	            console.log('updated state');
 	            var field = event.target.name;
 	            var property = this.state;
 	            property[field] = event.target.value;
@@ -92977,11 +93094,11 @@
 	                password: this.state.password
 	            };
 	            this.props.actions.userLogin(user);
+	            this.context.router.push('charts');
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log(this.state.email);
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'modal-parent-div' },
@@ -93002,11 +93119,7 @@
 	                        _react2.default.createElement(
 	                            'button',
 	                            { onClick: this.signIn, className: 'sign-up-button' },
-	                            _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: 'charts' },
-	                                'CONTINUE'
-	                            )
+	                            'CONTINUE'
 	                        )
 	                    )
 	                )
@@ -93021,6 +93134,10 @@
 
 	    return {};
 	}
+
+	SignInModal.contextTypes = {
+	    router: _react.PropTypes.object
+	};
 
 	function mapDispatchToProps(dispatch) {
 	    return {
@@ -93263,6 +93380,9 @@
 	        value: function componentWillMount() {
 	            this.props.actions.twitterGet(this.props.twitter.user.twitterHandle);
 	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {}
 	    }, {
 	        key: 'getTwitterFeed',
 	        value: function getTwitterFeed() {
@@ -93689,11 +93809,15 @@
 
 	        _this.state = {
 	            show: props.show,
-	            messages: props.messages
+	            messages: props.messages,
+	            user: props.user,
+	            message: ''
 	        };
 	        //console.log('test ', props);
 	        _this.toggleDomoBuzz = _this.toggleDomoBuzz.bind(_this);
 	        _this.addMessage = _this.addMessage.bind(_this);
+	        _this.onChange = _this.onChange.bind(_this);
+	        _this.getMessages = _this.getMessages.bind(_this);
 	        return _this;
 	    }
 
@@ -93706,6 +93830,11 @@
 	                messages: nextProps.messages
 	            });
 	        }
+
+	        // componentWillMount(){
+	        //     this.props.actions.getMessages();
+	        // }
+
 	    }, {
 	        key: 'toggleDomoBuzz',
 	        value: function toggleDomoBuzz() {
@@ -93715,15 +93844,35 @@
 	        }
 	    }, {
 	        key: 'addMessage',
-	        value: function addMessage() {
-	            //console.log('adding message');
-	            var newMessage = {
-	                user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
-	                user_name: 'Darth Vader',
-	                date: 'July 28, 2016 11:01am',
-	                content: 'Test Message'
-	            };
-	            this.props.actions.addMessage(newMessage);
+	        value: function addMessage(e) {
+
+	            if (e.keyCode == 13) {
+	                if (!this.props.user.userId) {
+	                    return alert("Please login before trying to send a message");
+	                }
+	                var newMessage = {
+	                    user_image: 'https://www.b1g1.com/assets/admin/images/no_image_user.png',
+	                    user_name: this.props.user.name,
+	                    user: this.props.user.userId,
+	                    content: this.state.message
+	                };
+	                this.setState({ message: '' });
+	                this.props.actions.addMessage(newMessage);
+	            }
+	        }
+	    }, {
+	        key: 'getMessages',
+	        value: function getMessages() {
+	            this.props.actions.getMessages();
+	        }
+	    }, {
+	        key: 'onChange',
+	        value: function onChange(event) {
+	            console.log('updated state');
+	            var field = event.target.name;
+	            var property = this.state;
+	            property[field] = event.target.value;
+	            return this.setState({ property: property });
 	        }
 	    }, {
 	        key: 'render',
@@ -93736,7 +93885,9 @@
 	                { className: stuff },
 	                _react2.default.createElement(_DomoBuzz2.default, {
 	                    messages: this.state.messages,
-	                    onAddMessage: this.addMessage })
+	                    onAddMessage: this.addMessage,
+	                    onChange: this.onChange,
+	                    message: this.state.message })
 	            );
 	        }
 	    }]);
@@ -93749,7 +93900,8 @@
 	    return {
 	        twitter: state.twitter.twitterData,
 	        show: state.twitter.showDomoBuzz,
-	        messages: state.twitter.domoBuzzMessages
+	        messages: state.twitter.domoBuzzMessages,
+	        user: state.twitter.user
 	    };
 	}
 
@@ -93780,6 +93932,9 @@
 	var DomoBuzz = function DomoBuzz(_ref) {
 	    var messages = _ref.messages;
 	    var onAddMessage = _ref.onAddMessage;
+	    var onChange = _ref.onChange;
+	    var message = _ref.message;
+
 
 	    //console.log(messages, onAddMessage);
 	    return _react2.default.createElement(
@@ -93831,12 +93986,7 @@
 	        _react2.default.createElement(
 	            "div",
 	            { className: "message-holder" },
-	            _react2.default.createElement("textarea", { className: "message", cols: "30", rows: "1", placeholder: "Write something..." }),
-	            _react2.default.createElement(
-	                "button",
-	                { onClick: onAddMessage },
-	                "Submit"
-	            )
+	            _react2.default.createElement("textarea", { onKeyDown: onAddMessage, name: "message", value: message, onChange: onChange, className: "message", cols: "30", rows: "1", placeholder: "Write something..." })
 	        )
 	    );
 	};
@@ -93878,7 +94028,7 @@
 	exports.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Lobster);", ""]);
 
 	// module
-	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 450px;\n    background: #fff;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n    border-left: solid 1px darkgray;\n\n}\n\n.domobuzz-content{\n    position: relative;\n    height: 100%;\n    width: 100%;\n}\n\n.hide {\n    display: none;\n}\n\n.buzz-header {\n    height: 60px;\n    width: 100%;\n    background: #99CCEE;\n    color: #fff;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n\n.buzz-header h2 {\n    font-size: 30px;\n    font-family: 'Lobster', cursive;\n    display: inline-block;\n    margin: auto;\n}\n\n.message-holder {\n    position: fixed;\n    bottom: 10px;\n    width: 450px;\n    display: flex;\n    justify-content: center;\n}\n\n.message{\n    width: 90%;\n    border: solid 1px lightgrey;\n    padding: 10px;\n}\n\n.individual-message {\n    padding: 10px;\n    clear: both;\n    margin-bottom: 25px;\n}\n\n.message-content {\n    float: left;\n    position: relative;\n    width: 86%;\n}\n\n.user-img {\n    height: 45px;\n    width: 45px;\n    margin-right: 5px;\n    overflow: auto;\n    border-radius: 50%;\n    float: left;\n}\n\n.user-name {\n    font-size: 17px;\n    font-weight: bolder;\n    display: inline-block;\n    float: left;\n\n}\n\n.message-date {\n    display: inline-block;\n    position: absolute;\n    right: 5px;\n}\n\n.user-message {\n    margin-top: 25px;\n    clear: both;\n}", ""]);
+	exports.push([module.id, ".domobuzz {\n    height: 100vh;\n    width: 450px;\n    background: #fff;\n    position: fixed;\n    right:0px;\n    top: 101px;\n    z-index: 1000;\n    border-left: solid 1px darkgray;\n\n}\n\n.domobuzz-content{\n    position: relative;\n    height: 100%;\n    width: 100%;\n}\n\n.hide {\n    display: none;\n}\n\n.buzz-header {\n    height: 60px;\n    width: 100%;\n    background: #99CCEE;\n    color: #fff;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n\n.buzz-header h2 {\n    font-size: 30px;\n    font-family: 'Lobster', cursive;\n    display: inline-block;\n    margin: auto;\n}\n\n.buzz-messages {\n    overflow: scroll;\n    height: 60%;\n}\n\n.message-holder {\n    position: fixed;\n    bottom: 10px;\n    width: 450px;\n    display: flex;\n    justify-content: center;\n}\n\n.message{\n    width: 90%;\n    border: solid 1px lightgrey;\n    padding: 10px;\n}\n\n.individual-message {\n    padding: 10px;\n    clear: both;\n    margin-bottom: 25px;\n}\n\n.message-content {\n    float: left;\n    position: relative;\n    width: 86%;\n}\n\n.user-img {\n    height: 45px;\n    width: 45px;\n    margin-right: 5px;\n    overflow: auto;\n    border-radius: 50%;\n    float: left;\n}\n\n.user-name {\n    font-size: 17px;\n    font-weight: bolder;\n    display: inline-block;\n    float: left;\n\n}\n\n.message-date {\n    display: inline-block;\n    position: absolute;\n    right: 5px;\n}\n\n.user-message {\n    margin-top: 25px;\n    clear: both;\n}", ""]);
 
 	// exports
 
