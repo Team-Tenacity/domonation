@@ -106,8 +106,7 @@ export function registerUser(user) {
   return function(dispatch){
       axios.post('http://localhost:3001/api/user', user)
           .then(response => {
-              console.log('server response for new user: ', response);
-              return dispatch(userRegisterSuccess(response.data))
+              return dispatch(userRegisterSuccess(response.data));
           })
   }
 }

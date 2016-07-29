@@ -50,6 +50,8 @@ require('./LoginModal.css');
             twitterHandle: this.state.twitterHandle
         }
         this.props.actions.registerUser(user);
+        this.closeModal();
+        alert('Registration Successful! Please Login.')
     }
 
     render () {
