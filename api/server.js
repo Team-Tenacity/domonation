@@ -64,7 +64,7 @@ app.post('/api/login', userController.show);
 
 /**************Message Endpoints**************/
 app.post('/api/messages', messageController.create);
-app.get('/api/messages/:user', messageController.read);
+app.get('/api/messages/', messageController.read);
 
 
 app.listen(port, function() {
