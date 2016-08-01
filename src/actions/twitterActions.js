@@ -92,8 +92,12 @@ export function userLogin(user) {
     return function(dispatch){
         axios.post('http://localhost:3001/api/login', user)
             .then(response => {
+                if(response.data.success===false){
+                } else {
+                    return dispatch(userLoginSuccess(response.data));
+
+                }
                 console.log('this is our response from the server ',response);
-                return dispatch(userLoginSuccess(response.data));
             })
 
     }
