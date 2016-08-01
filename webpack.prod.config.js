@@ -1,4 +1,9 @@
 var path = require('path');
+var webpack = require('webpack');
+
+var GLOBALS = {
+    'process.env.NODE_ENV': JSON.stringify('production')
+};
 
 module.exports = {
     entry: "./src/index.js",
@@ -6,6 +11,9 @@ module.exports = {
         filename: "bundle.js",
         path: "./public"
     },
+    plugins: [
+        new webpack.DefinePlugin(GLOBALS)
+    ],
 
     module: {
         loaders: [
