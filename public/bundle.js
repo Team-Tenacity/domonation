@@ -36698,7 +36698,7 @@
 /* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -36737,6 +36737,17 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var config = '../../config.json';
+
+
+	var serverString = void 0;
+	if (process.env.NODE_ENV === 'production') {
+	    serverString = '';
+	} else {
+	    serverString = 'http://localhost:3001';
+	}
+
+	console.log(process.env.NODE_ENV);
+
 	function incrementSuccess(counter) {
 	    return { type: types.INCREMENT, counter: counter };
 	}
@@ -36781,7 +36792,7 @@
 	        user: message.user
 	    };
 	    return function (dispatch) {
-	        _axios2.default.post('/api/messages', messageObj).then(function (response) {
+	        _axios2.default.post(serverString + '/api/messages', messageObj).then(function (response) {
 	            console.log(response);
 	            if (response.status == 200) {
 	                return dispatch(addMessageSuccess(message));
@@ -36794,7 +36805,7 @@
 
 	function getMessages() {
 	    return function (dispatch) {
-	        _axios2.default.get('/api/messages').then(function (response) {
+	        _axios2.default.get(serverString + '/api/messages').then(function (response) {
 	            var messages = _underscore2.default.map(response.data, function (message) {
 	                //console.log(tweet.text);
 	                return {
@@ -36815,9 +36826,11 @@
 	function userLogin(user) {
 	    console.log('this is my user: ', user);
 	    return function (dispatch) {
-	        _axios2.default.post('/api/login', user).then(function (response) {
+	        _axios2.default.post(serverString + '/api/login', user).then(function (response) {
+	            if (response.data.success === false) {} else {
+	                return dispatch(userLoginSuccess(response.data));
+	            }
 	            console.log('this is our response from the server ', response);
-	            return dispatch(userLoginSuccess(response.data));
 	        });
 	    };
 	}
@@ -36825,7 +36838,7 @@
 	function registerUser(user) {
 	    console.log('this is the new user', user);
 	    return function (dispatch) {
-	        _axios2.default.post('/api/user', user).then(function (response) {
+	        _axios2.default.post(serverString + '/api/user', user).then(function (response) {
 	            return dispatch(userRegisterSuccess(response.data));
 	        });
 	    };
@@ -36835,7 +36848,7 @@
 	    console.log(handle);
 	    return function (dispatch) {
 
-	        _axios2.default.get('/api/twitter/timeline/' + handle).then(function (response) {
+	        _axios2.default.get(serverString + '/api/twitter/timeline/' + handle).then(function (response) {
 	            var userTweets = _underscore2.default.map(response.data, function (tweet) {
 	                //console.log(tweet.text);
 	                return {
@@ -36882,6 +36895,7 @@
 	        dispatch(decrementSuccess(counter));
 	    };
 	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
 
 /***/ },
 /* 565 */
@@ -93089,12 +93103,20 @@
 	    }, {
 	        key: 'signIn',
 	        value: function signIn() {
+	            var _this2 = this;
+
 	            var user = {
 	                email: this.state.email,
 	                password: this.state.password
 	            };
 	            this.props.actions.userLogin(user);
-	            this.context.router.push('charts');
+	            window.setTimeout(function () {
+	                if (_this2.props.twitter.isUserLoggedIn === true) {
+	                    _this2.context.router.push('charts');
+	                } else {
+	                    alert('Username or password was incorrect, please try again.');
+	                }
+	            }, 1000);
 	        }
 	    }, {
 	        key: 'render',
@@ -93132,7 +93154,10 @@
 
 	function mapStateToProps(state, ownProps) {
 
-	    return {};
+	    return {
+	        twitter: state.twitter
+
+	    };
 	}
 
 	SignInModal.contextTypes = {
