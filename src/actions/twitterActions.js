@@ -144,11 +144,14 @@ export function twitterGet(handle) {
                             title: tweet.text,
                             series2: tweet.retweet_count,
                             series1: tweet.favorite_count,
+                            retweet_count: tweet.retweet_count,
+                            favorite_count: tweet.favorite_count,
                             date: tweet.created_at
 
                         }
                     )
                 });
+                userTweets = userTweets.reverse();
                 var userTweets2 = _.map(response.data, function (tweet) {
                     //console.log(tweet.text);
                     return (
@@ -159,11 +162,14 @@ export function twitterGet(handle) {
                         title: tweet.text,
                         series1: tweet.retweet_count,
                         series2: tweet.favorite_count,
+                        retweet_count: tweet.retweet_count,
+                        favorite_count: tweet.favorite_count,
                         date: tweet.created_at
 
                     }
                     )
                 });
+                userTweets2 = userTweets2.reverse();
                 var tweets = [userTweets, userTweets2];
                 //console.log(test);
                 //console.log(response.data[0]);
