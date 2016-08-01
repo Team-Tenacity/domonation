@@ -7,16 +7,16 @@ import OptionButton from './titlePageOptionsButton';
 import './titleDiv.css'
 
 
-const TitleDiv = () => {
+const TitleDiv = ({data}) => {
     return (
       <div className="main-title-container">
           <div className="title-divs-container-left">
             <div className="title">
-            Example Cards
+                @{data.twitterHandle} Twitter Cards
             </div>
           </div>
           <div className="title-divs-container-right">
-              <DomoDiv />
+              <DomoDiv data={data} />
               <SharedDiv />
               <AddCardButton />
               <OptionButton />

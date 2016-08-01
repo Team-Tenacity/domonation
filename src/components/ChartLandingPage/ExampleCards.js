@@ -45,7 +45,7 @@ class ExampleCard extends React.Component {
         // console.log(this.state);
         return (
             <div>
-                <TitleDiv />
+                <TitleDiv data={this.props.user} />
                 <div className="deck-div">
                     <Link to="chartDetail/0" className="large-view-link">
                         <div className="card-div">

@@ -121,3 +121,24 @@ margin-top: 5px;
 .right-pointer-div .glyphicon {
   color: #989898;
 }
+
+.insights-div {
+  margin: auto;
+  text-align: left;
+  width: 60%;
+}
+
+.insights-div h3 {
+  margin-top: 6px;
+}
+
+.stat-title{
+  color: #99CCEE;
+  font-weight: bolder;
+  font-size: 1.2rem;
+}
+
+.stats-header{
+  font-weight: bolder;
+  font-size: 1.4rem;
+}

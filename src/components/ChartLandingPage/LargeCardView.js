@@ -12,7 +12,16 @@ require("./LargeCardView.css");
 class LargeCard extends React.Component {
     constructor(props){
         super(props);
-        this.state = {data:{}}
+        let minDate = new Date(this.props.twitter[0].date);
+        let maxDate = new Date(this.props.twitter[this.props.twitter.length-1].date);
+        this.state = {
+                        data:{},
+                        minDateString: (minDate.getMonth()+1)+'/'+minDate.getDate()+'/'+minDate.getFullYear(),
+                        maxDateString: (maxDate.getMonth()+1)+'/'+maxDate.getDate()+'/'+maxDate.getFullYear()
+                    };
+
+
+        this.findBestTweet = this.findBestTweet.bind(this);
         //this.getTwitterFeed = this.getTwitterFeed.bind(this);
     }
     // componentWillMount() {
@@ -23,7 +32,29 @@ class LargeCard extends React.Component {
     //     this.props.actions.twitterGet();
     // }
 
+    findBestTweet() {
+        let bestTweet;
+        let high=0;
+        let arr = this.props.twitter;
+        for(let i=0; i<this.props.twitter.length; i++){
+            if(arr[i].series1 >= high){
+                high = arr[i].series1;
+                bestTweet=arr[i];
+            };
+        }
+        return <div className="insights-div">
+            <h2 className="stats-header">TOP TWEET FOR THIS CARD:</h2>
+            <h3><span className="stat-title">Date:</span> {bestTweet.date}</h3>
+            <h3><span className="stat-title">Tweet:</span> {bestTweet.title}</h3>
+            <h3><span className="stat-title">Favorite Count:</span> {bestTweet.favorite_count}</h3>
+            <h3><span className="stat-title">Retweet Count:</span> {bestTweet.retweet_count}</h3>
+        </div>;
+    }
+
+
     render() {
+        console.log(this.props.twitter);
+
         return (
             <div className="large-card-div">
                 <div className="path-header">
@@ -51,7 +82,10 @@ class LargeCard extends React.Component {
                     <div className="left-pointer-div">
                         <span className="glyphicon glyphicon-chevron-left"></span>
                     </div>
+                    <p>The data on this chart ranges from {this.state.minDateString} to {this.state.maxDateString}</p>
                     <Chart data={this.props.twitter} height="300" width="500" padding="30"/>
+                    {this.findBestTweet()}
+
                     <div className="right-pointer-div">
                         <span className="glyphicon glyphicon-chevron-right"></span>
                     </div>
