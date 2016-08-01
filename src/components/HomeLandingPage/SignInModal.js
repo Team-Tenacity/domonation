@@ -39,8 +39,18 @@ require('./SignInModal.css');
             email: this.state.email,
             password: this.state.password
         }
-        this.props.actions.userLogin(user)
-        this.context.router.push('charts');
+        this.props.actions.userLogin(user);
+        window.setTimeout(() => {
+                if (this.props.twitter.isUserLoggedIn === true) {
+                    this.context.router.push('charts')
+                } else{
+                    alert('Username or password was incorrect, please try again.')
+                }
+        }
+                ,
+                1000
+
+        )
     }
 
     render () {
@@ -63,6 +73,7 @@ require('./SignInModal.css');
 function mapStateToProps(state, ownProps) {
 
     return {
+        twitter: state.twitter
 
     };
 }
