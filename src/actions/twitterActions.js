@@ -3,6 +3,15 @@ var config = '../../config.json';
 import axios from 'axios';
 import _ from 'underscore';
 
+let serverString;
+if(process.env.NODE_ENV === 'production'){
+    serverString = ''
+} else {
+    serverString = 'http://localhost:3001'
+}
+
+console.log(process.env.NODE_ENV);
+
 export function incrementSuccess(counter){
     return { type: types.INCREMENT, counter }
 }
@@ -50,7 +59,7 @@ export function addMessage(message) {
         user: message.user
     }
     return function(dispatch) {
-        axios.post('http://localhost:3001/api/messages', messageObj)
+        axios.post(serverString + '/api/messages', messageObj)
             .then(response =>{
                 console.log(response);
                 if(response.status==200) {
@@ -65,7 +74,7 @@ export function addMessage(message) {
 
 export function getMessages(){
     return function(dispatch) {
-        axios.get('http://localhost:3001/api/messages')
+        axios.get(serverString + '/api/messages')
             .then(response => {
                 var messages = _.map(response.data, function (message) {
                     //console.log(tweet.text);
@@ -90,7 +99,7 @@ export function getMessages(){
 export function userLogin(user) {
     console.log('this is my user: ', user);
     return function(dispatch){
-        axios.post('http://localhost:3001/api/login', user)
+        axios.post(serverString + '/api/login', user)
             .then(response => {
                 if(response.data.success===false){
                 } else {
@@ -108,7 +117,7 @@ export function userLogin(user) {
 export function registerUser(user) {
   console.log('this is the new user', user);
   return function(dispatch){
-      axios.post('http://localhost:3001/api/user', user)
+      axios.post(serverString + '/api/user', user)
           .then(response => {
               return dispatch(userRegisterSuccess(response.data));
           })
@@ -123,7 +132,7 @@ export function twitterGet(handle) {
     return function(dispatch) {
 
 
-        axios.get('http://localhost:3001/api/twitter/timeline/'+handle)
+        axios.get(serverString + '/api/twitter/timeline/'+handle)
             .then(response => {
                 var userTweets = _.map(response.data, function (tweet) {
                     //console.log(tweet.text);
