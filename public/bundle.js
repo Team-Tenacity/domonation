@@ -28830,7 +28830,7 @@
 	    showDomoBuzz: true,
 	    twitterData: {},
 	    isUserLoggedIn: false,
-	    user: { twitterHandle: 'devmtn' },
+	    user: { twitterHandle: 'devmtn', name: 'Guest' },
 	    domoBuzzMessages: [{
 	        user_image: 'https://media2.popsugar-assets.com/files/2015/05/11/825/n/1922398/d5db8e92_shutterstock_239338216.xxxlarge_2x.jpg',
 	        user_name: 'Darth Vader',
@@ -35597,10 +35597,13 @@
 	                    title: tweet.text,
 	                    series2: tweet.retweet_count,
 	                    series1: tweet.favorite_count,
+	                    retweet_count: tweet.retweet_count,
+	                    favorite_count: tweet.favorite_count,
 	                    date: tweet.created_at
 
 	                };
 	            });
+	            userTweets = userTweets.reverse();
 	            var userTweets2 = _underscore2.default.map(response.data, function (tweet) {
 	                //console.log(tweet.text);
 	                return {
@@ -35609,10 +35612,13 @@
 	                    title: tweet.text,
 	                    series1: tweet.retweet_count,
 	                    series2: tweet.favorite_count,
+	                    retweet_count: tweet.retweet_count,
+	                    favorite_count: tweet.favorite_count,
 	                    date: tweet.created_at
 
 	                };
 	            });
+	            userTweets2 = userTweets2.reverse();
 	            var tweets = [userTweets, userTweets2];
 	            //console.log(test);
 	            //console.log(response.data[0]);
@@ -92849,7 +92855,15 @@
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LargeCard).call(this, props));
 
-	        _this.state = { data: {} };
+	        var minDate = new Date(_this.props.twitter[0].date);
+	        var maxDate = new Date(_this.props.twitter[_this.props.twitter.length - 1].date);
+	        _this.state = {
+	            data: {},
+	            minDateString: minDate.getMonth() + 1 + '/' + minDate.getDate() + '/' + minDate.getFullYear(),
+	            maxDateString: maxDate.getMonth() + 1 + '/' + maxDate.getDate() + '/' + maxDate.getFullYear()
+	        };
+
+	        _this.findBestTweet = _this.findBestTweet.bind(_this);
 	        //this.getTwitterFeed = this.getTwitterFeed.bind(this);
 	        return _this;
 	    }
@@ -92862,8 +92876,76 @@
 	    // }
 
 	    _createClass(LargeCard, [{
+	        key: 'findBestTweet',
+	        value: function findBestTweet() {
+	            var bestTweet = void 0;
+	            var high = 0;
+	            var arr = this.props.twitter;
+	            for (var i = 0; i < this.props.twitter.length; i++) {
+	                if (arr[i].series1 >= high) {
+	                    high = arr[i].series1;
+	                    bestTweet = arr[i];
+	                };
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'insights-div' },
+	                _react2.default.createElement(
+	                    'h2',
+	                    { className: 'stats-header' },
+	                    'TOP TWEET FOR THIS CARD:'
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'stat-title' },
+	                        'Date:'
+	                    ),
+	                    ' ',
+	                    bestTweet.date
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'stat-title' },
+	                        'Tweet:'
+	                    ),
+	                    ' ',
+	                    bestTweet.title
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'stat-title' },
+	                        'Favorite Count:'
+	                    ),
+	                    ' ',
+	                    bestTweet.favorite_count
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'stat-title' },
+	                        'Retweet Count:'
+	                    ),
+	                    ' ',
+	                    bestTweet.retweet_count
+	                )
+	            );
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            console.log(this.props.twitter);
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'large-card-div' },
@@ -92927,7 +93009,16 @@
 	                        { className: 'left-pointer-div' },
 	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-chevron-left' })
 	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'The data on this chart ranges from ',
+	                        this.state.minDateString,
+	                        ' to ',
+	                        this.state.maxDateString
+	                    ),
 	                    _react2.default.createElement(_Chart2.default, { data: this.props.twitter, height: '300', width: '500', padding: '30' }),
+	                    this.findBestTweet(),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'right-pointer-div' },
@@ -92993,7 +93084,7 @@
 
 
 	// module
-	exports.push([module.id, ".large-card-div {\n  background-color: #ffffff;\n  height: 100vh;\n}\n\n.path-header {\n  height: 39px;\n  width: auto;\n  background-color: #fbfbfb;\n  border-bottom: solid .5px #989898;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 39px;\n  position: relative;\n  top: 101px;\n  margin-bottom: 10px;\n}\n\n.path-h1 {\n  color: #6497ba;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.path-h2 {\n  margin-left: 5px;\n  color: #989898;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.description-header {\n  height: 62px;\n  width: auto;\n  background-color: #ffffff;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 62px;\n  position: relative;\n  top: 91px;\n}\n\n.title-h2 {\n  color: #000;\n  font-size: 24px;\n  font-weight: lighter;\n  letter-spacing: .75px;\n}\n\n.glyphicon-container-div {\n  position: absolute;\n  right: 0;\n  height: 100%;\n  width: 300px;\n  display: flex;\n}\n\n.description-glyphicon {\nmargin-right: 35px;\nmargin-top: 5px;\n}\n\n.description-glyphicon .glyphicon {\n  color: #a3a3a3;\n  font-size: 24px;\n}\n\n.description-glyphicon .glyphicon:hover {\n  color:#99CCEE;\n}\n\n.large-graph-div {\n  height: 65vh;\n  position: relative;\n  top: 100px;\n  text-align: center;\n  /*display: flex;*/\n}\n\n.large-graph-div img {\n  width: 1000px;\n  height: auto;\n}\n\n.left-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  border-radius: 0px 5px 5px 0px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n  top: 50%;\n  left: 0;\n  transform: translate(0%, -50%) !important;\n}\n\n.left-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.right-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  border-radius: 5px 0px 0px 5px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n  top: 50%;\n  right: 0;\n  transform: translate(0%, -50%) !important;\n}\n\n.right-pointer-div .glyphicon {\n  color: #989898;\n}\n", ""]);
+	exports.push([module.id, ".large-card-div {\n  background-color: #ffffff;\n  height: 100vh;\n}\n\n.path-header {\n  height: 39px;\n  width: auto;\n  background-color: #fbfbfb;\n  border-bottom: solid .5px #989898;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 39px;\n  position: relative;\n  top: 101px;\n  margin-bottom: 10px;\n}\n\n.path-h1 {\n  color: #6497ba;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.path-h2 {\n  margin-left: 5px;\n  color: #989898;\n  font-size: 12px;\n  font-weight: bold;\n  letter-spacing: .75px;\n}\n\n.description-header {\n  height: 62px;\n  width: auto;\n  background-color: #ffffff;\n  display: flex;\n  padding-left: 50px;\n  vertical-align: middle;\n  line-height: 62px;\n  position: relative;\n  top: 91px;\n}\n\n.title-h2 {\n  color: #000;\n  font-size: 24px;\n  font-weight: lighter;\n  letter-spacing: .75px;\n}\n\n.glyphicon-container-div {\n  position: absolute;\n  right: 0;\n  height: 100%;\n  width: 300px;\n  display: flex;\n}\n\n.description-glyphicon {\nmargin-right: 35px;\nmargin-top: 5px;\n}\n\n.description-glyphicon .glyphicon {\n  color: #a3a3a3;\n  font-size: 24px;\n}\n\n.description-glyphicon .glyphicon:hover {\n  color:#99CCEE;\n}\n\n.large-graph-div {\n  height: 65vh;\n  position: relative;\n  top: 100px;\n  text-align: center;\n  /*display: flex;*/\n}\n\n.large-graph-div img {\n  width: 1000px;\n  height: auto;\n}\n\n.left-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  border-radius: 0px 5px 5px 0px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n  top: 50%;\n  left: 0;\n  transform: translate(0%, -50%) !important;\n}\n\n.left-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.right-pointer-div {\n  background-color: #f0f0f0;\n  height: 216px;\n  width: 28px;\n  position: absolute;\n  border-radius: 5px 0px 0px 5px;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 200px;\n  top: 50%;\n  right: 0;\n  transform: translate(0%, -50%) !important;\n}\n\n.right-pointer-div .glyphicon {\n  color: #989898;\n}\n\n.insights-div {\n  margin: auto;\n  text-align: left;\n  width: 60%;\n}\n\n.insights-div h3 {\n  margin-top: 6px;\n}\n\n.stat-title{\n  color: #99CCEE;\n  font-weight: bolder;\n  font-size: 1.2rem;\n}\n\n.stats-header{\n  font-weight: bolder;\n  font-size: 1.4rem;\n}\n", ""]);
 
 	// exports
 
@@ -93089,7 +93180,7 @@
 	            return _react2.default.createElement(
 	                "div",
 	                null,
-	                _react2.default.createElement(_titleDiv2.default, null),
+	                _react2.default.createElement(_titleDiv2.default, { data: this.props.user }),
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "deck-div" },
@@ -93336,7 +93427,9 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var TitleDiv = function TitleDiv() {
+	var TitleDiv = function TitleDiv(_ref) {
+	    var data = _ref.data;
+
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'main-title-container' },
@@ -93346,13 +93439,15 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'title' },
-	                'Example Cards'
+	                '@',
+	                data.twitterHandle,
+	                ' Twitter Cards'
 	            )
 	        ),
 	        _react2.default.createElement(
 	            'div',
 	            { className: 'title-divs-container-right' },
-	            _react2.default.createElement(_DomoDiv2.default, null),
+	            _react2.default.createElement(_DomoDiv2.default, { data: data }),
 	            _react2.default.createElement(_SharedDiv2.default, null),
 	            _react2.default.createElement(_AddCardButton2.default, null),
 	            _react2.default.createElement(_titlePageOptionsButton2.default, null)
@@ -93497,7 +93592,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(299);
@@ -93508,22 +93603,24 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var DomoDiv = function DomoDiv() {
-	  return _react2.default.createElement(
-	    'div',
-	    { className: 'title-domo-logo' },
-	    _react2.default.createElement('img', { className: 'title-logo', src: 'https://support.domo.com/public/images/logo-400.png' }),
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'text-container' },
-	      'Owner',
-	      _react2.default.createElement(
+	var DomoDiv = function DomoDiv(_ref) {
+	    var data = _ref.data;
+
+	    return _react2.default.createElement(
 	        'div',
-	        { className: 'lower-text-container' },
-	        'DomoSupport'
-	      )
-	    )
-	  );
+	        { className: 'title-domo-logo' },
+	        _react2.default.createElement('img', { className: 'title-logo', src: 'https://support.domo.com/public/images/logo-400.png' }),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'text-container' },
+	            'Owner',
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'lower-text-container' },
+	                data.name
+	            )
+	        )
+	    );
 	};
 
 	exports.default = DomoDiv;
