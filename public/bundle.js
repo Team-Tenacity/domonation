@@ -89384,7 +89384,8 @@
 	    }
 	  }, {
 	    key: 'signUp',
-	    value: function signUp() {
+	    value: function signUp(e) {
+	      e.preventDefault();
 	      var user = {
 	        name: {
 	          firstName: this.state.firstName,
@@ -89416,15 +89417,19 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'inside-modal-div' },
-	            _react2.default.createElement('input', { onChange: this.onChange, name: 'firstName', value: this.state.firstName, placeholder: 'First Name' }),
-	            _react2.default.createElement('input', { onChange: this.onChange, name: 'lastName', value: this.state.lastName, placeholder: 'Last Name' }),
-	            _react2.default.createElement('input', { onChange: this.onChange, name: 'email', value: this.state.email, placeholder: 'Email Address' }),
-	            _react2.default.createElement('input', { onChange: this.onChange, name: 'password', value: this.state.password, placeholder: 'Password', type: 'password' }),
-	            _react2.default.createElement('input', { onChange: this.onChange, name: 'twitterHandle', value: this.state.twitterHandle, placeholder: 'Twitter Handle' }),
 	            _react2.default.createElement(
-	              'button',
-	              { onClick: this.signUp, className: 'sign-up-button' },
-	              'CONTINUE'
+	              'form',
+	              null,
+	              _react2.default.createElement('input', { className: 'modal-div-inputs', onChange: this.onChange, name: 'firstName', value: this.state.firstName, placeholder: 'First Name' }),
+	              _react2.default.createElement('input', { className: 'modal-div-inputs', onChange: this.onChange, name: 'lastName', value: this.state.lastName, placeholder: 'Last Name' }),
+	              _react2.default.createElement('input', { className: 'modal-div-inputs', onChange: this.onChange, name: 'email', value: this.state.email, placeholder: 'Email Address' }),
+	              _react2.default.createElement('input', { className: 'modal-div-inputs', onChange: this.onChange, name: 'password', value: this.state.password, placeholder: 'Password', type: 'password' }),
+	              _react2.default.createElement('input', { className: 'modal-div-inputs', onChange: this.onChange, name: 'twitterHandle', value: this.state.twitterHandle, placeholder: 'Twitter Handle' }),
+	              _react2.default.createElement(
+	                'button',
+	                { onClick: this.signUp, type: 'submit', className: 'sign-up-button' },
+	                'CONTINUE'
+	              )
 	            )
 	          )
 	        )
@@ -91450,7 +91455,7 @@
 
 
 	// module
-	exports.push([module.id, ".sign-up-nav-button {\n  background-color: transparent;\n  border: none;\n  outline: none;\n}\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%) !important;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.inside-modal-div input {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
+	exports.push([module.id, ".sign-up-nav-button {\n  background-color: transparent;\n  border: none;\n  outline: none;\n}\n\n.login-modal {\nposition: absolute;\nheight: 550px;\nwidth: 400px;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%) !important;\nborder: 1px solid rgb(204, 204, 204);\noverflow: auto;\nborder-radius: 4px;\noutline: none;\nbackground: rgb(255, 255, 255);\ntext-align: center;\n}\n\n.exit-button {\n  position: absolute;\n  right: 0;\n  background-color: transparent;\n  border: none;\n}\n\n.login-modal img {\n  margin-top: 40px;\n}\n\n.inside-modal-div {\n  position: relative;\n  background-color: transparent;\n  width: 85%;\n  margin: 0 auto;\n  top: 40px;\n}\n\n.modal-div-inputs {\n  margin-bottom: 15px;\n  width: 300px;\n  height: 40px;\n  border-radius: 5px;\n  border: solid 1px #cccccc;\n}\n\n.sign-up-button {\n  color: white;\n  width: 302px;\n  height: 40px;\n  background-color: #FC8F13;\n  border: none;\n  border-radius: 5px;\n}\n", ""]);
 
 	// exports
 
@@ -91845,9 +91850,10 @@
 	        }
 	    }, {
 	        key: 'signIn',
-	        value: function signIn() {
+	        value: function signIn(e) {
 	            var _this2 = this;
 
+	            e.preventDefault();
 	            var user = {
 	                email: this.state.email,
 	                password: this.state.password
@@ -91879,12 +91885,16 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'inside-modal-div' },
-	                        _react2.default.createElement('input', { onChange: this.onChange, name: 'email', value: this.state.email, placeholder: 'Email Address' }),
-	                        _react2.default.createElement('input', { onChange: this.onChange, name: 'password', value: this.state.password, placeholder: 'Password', type: 'password' }),
 	                        _react2.default.createElement(
-	                            'button',
-	                            { onClick: this.signIn, className: 'sign-up-button' },
-	                            'CONTINUE'
+	                            'form',
+	                            null,
+	                            _react2.default.createElement('input', { onChange: this.onChange, name: 'email', value: this.state.email, placeholder: 'Email Address' }),
+	                            _react2.default.createElement('input', { onChange: this.onChange, name: 'password', value: this.state.password, placeholder: 'Password', type: 'password' }),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { onClick: this.signIn, type: 'submit', className: 'sign-up-button' },
+	                                'CONTINUE'
+	                            )
 	                        )
 	                    )
 	                )
