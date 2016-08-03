@@ -39,7 +39,8 @@ require('./LoginModal.css');
 
     closeModal () { this.setState({open: false}); }
 
-    signUp () {
+    signUp (e) {
+      e.preventDefault();
         let user = {
             name: {
               firstName: this.state.firstName,
@@ -48,7 +49,7 @@ require('./LoginModal.css');
             email: this.state.email,
             password: this.state.password,
             twitterHandle: this.state.twitterHandle
-        }
+      }
         this.props.actions.registerUser(user);
         this.closeModal();
         alert('Registration Successful! Please Login.')
@@ -61,12 +62,14 @@ require('./LoginModal.css');
               <Modal isOpen={this.state.open} onRequestClose={this.closeModal} className="login-modal">
                 <img src="https://support.domo.com/public/images/logo-400.png" height="100" width="100" />
                     <div className="inside-modal-div">
-                        <input onChange={this.onChange} name="firstName" value={this.state.firstName} placeholder="First Name"></input>
-                        <input onChange={this.onChange} name="lastName" value={this.state.lastName} placeholder="Last Name"></input>
-                        <input onChange={this.onChange} name="email" value={this.state.email} placeholder="Email Address"></input>
-                        <input onChange={this.onChange} name="password" value={this.state.password} placeholder="Password" type="password"></input>
-                        <input onChange={this.onChange} name="twitterHandle" value={this.state.twitterHandle} placeholder="Twitter Handle"></input>
-                        <button onClick={this.signUp} className="sign-up-button">CONTINUE</button>
+                      <form>
+                        <input className="modal-div-inputs" onChange={this.onChange} name="firstName" value={this.state.firstName} placeholder="First Name"></input>
+                        <input className="modal-div-inputs" onChange={this.onChange} name="lastName" value={this.state.lastName} placeholder="Last Name"></input>
+                        <input className="modal-div-inputs" onChange={this.onChange} name="email" value={this.state.email} placeholder="Email Address"></input>
+                        <input className="modal-div-inputs" onChange={this.onChange} name="password" value={this.state.password} placeholder="Password" type="password"></input>
+                        <input className="modal-div-inputs" onChange={this.onChange} name="twitterHandle" value={this.state.twitterHandle}  placeholder="Twitter Handle"></input>
+                        <button onClick={this.signUp} type="submit" className="sign-up-button">CONTINUE</button>
+                      </form>
                     </div>
               </Modal>
         </div>

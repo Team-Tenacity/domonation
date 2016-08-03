@@ -34,7 +34,8 @@ require('./SignInModal.css');
 
     closeModal () { this.setState({open: false}); }
 
-    signIn () {
+    signIn (e) {
+      e.preventDefault();
         let user = {
             email: this.state.email,
             password: this.state.password
@@ -60,9 +61,11 @@ require('./SignInModal.css');
               <Modal isOpen={this.state.open} onRequestClose={this.closeModal} className="signin-modal">
                 <img src="https://support.domo.com/public/images/logo-400.png" height="100" width="100" />
                     <div className="inside-modal-div">
+                      <form>
                         <input onChange={this.onChange}  name="email" value={this.state.email} placeholder="Email Address"></input>
                         <input onChange={this.onChange} name="password" value={this.state.password} placeholder="Password" type="password"></input>
-                        <button onClick={this.signIn} className="sign-up-button">CONTINUE</button>
+                        <button onClick={this.signIn} type="submit" className="sign-up-button">CONTINUE</button>
+                      </form>
                     </div>
               </Modal>
         </div>
