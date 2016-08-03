@@ -35213,7 +35213,7 @@
 
 	var _HomePage2 = _interopRequireDefault(_HomePage);
 
-	var _ChartLandingPage = __webpack_require__(714);
+	var _ChartLandingPage = __webpack_require__(717);
 
 	var _ChartLandingPage2 = _interopRequireDefault(_ChartLandingPage);
 
@@ -35221,11 +35221,11 @@
 
 	var _Chart2 = _interopRequireDefault(_Chart);
 
-	var _LargeCardView = __webpack_require__(725);
+	var _LargeCardView = __webpack_require__(728);
 
 	var _LargeCardView2 = _interopRequireDefault(_LargeCardView);
 
-	var _ExampleCards = __webpack_require__(728);
+	var _ExampleCards = __webpack_require__(731);
 
 	var _ExampleCards2 = _interopRequireDefault(_ExampleCards);
 
@@ -89158,6 +89158,10 @@
 
 	var _MainContent2 = _interopRequireDefault(_MainContent);
 
+	var _TextContent = __webpack_require__(714);
+
+	var _TextContent2 = _interopRequireDefault(_TextContent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89184,7 +89188,8 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(_Header2.default, null),
-	                _react2.default.createElement(_MainContent2.default, null)
+	                _react2.default.createElement(_MainContent2.default, null),
+	                _react2.default.createElement(_TextContent2.default, null)
 	            );
 	        }
 	    }]);
@@ -92099,6 +92104,90 @@
 	    value: true
 	});
 
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(491);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(715);
+
+	var TextContent = function TextContent() {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'text-content' },
+	        _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Like an operating system for your business.'
+	        ),
+	        _react2.default.createElement(
+	            'p',
+	            null,
+	            'Domo brings your business and all its data together in one intuitive platform. With Domo, it\'s easy to see the information you care about in one place and use it to make faster, better‑informed decisions.'
+	        ),
+	        _react2.default.createElement(
+	            'button',
+	            { className: 'learn-more-btn' },
+	            'LEARN MORE'
+	        )
+	    );
+	};
+
+	exports.default = TextContent;
+
+/***/ },
+/* 715 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(716);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(705)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./TextContent.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./TextContent.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 716 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(704)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".text-content {\n    font-weight: 100;\n    display: flex;\n    align-items: center;\n    flex-direction: column;\n    margin-top: 60px;\n}\n\n.text-content h2 {\n    text-align: center;\n    font-size: 44px;\n    margin-bottom: 10px;\n}\n\n.text-content p {\n    margin-top: 22px;\n    text-align: center;\n    width: 700px;\n    font-size: 20px;\n}\n\n.learn-more-btn {\n    height: 35px;\n    width: 130px;\n    background: #FF9922;\n    color: #fff;\n    border: none;\n    font-size: .8em;\n    transition-duration: .3s;\n    margin-top: 30px;\n    margin-bottom: 30px;\n}\n\n.learn-more-btn:hover {\n    background: #99CCEE;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 717 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(299);
@@ -92115,15 +92204,15 @@
 
 	var twitterActions = _interopRequireWildcard(_twitterActions);
 
-	var _UpperNav = __webpack_require__(715);
+	var _UpperNav = __webpack_require__(718);
 
 	var _UpperNav2 = _interopRequireDefault(_UpperNav);
 
-	var _Subheader = __webpack_require__(718);
+	var _Subheader = __webpack_require__(721);
 
 	var _Subheader2 = _interopRequireDefault(_Subheader);
 
-	var _DomoBuzzContainer = __webpack_require__(721);
+	var _DomoBuzzContainer = __webpack_require__(724);
 
 	var _DomoBuzzContainer2 = _interopRequireDefault(_DomoBuzzContainer);
 
@@ -92202,7 +92291,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ChartLandingPage);
 
 /***/ },
-/* 715 */
+/* 718 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -92237,7 +92326,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(716);
+	__webpack_require__(719);
 
 	var UpperNav = function (_React$Component) {
 	    _inherits(UpperNav, _React$Component);
@@ -92344,13 +92433,13 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UpperNav);
 
 /***/ },
-/* 716 */
+/* 719 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(717);
+	var content = __webpack_require__(720);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -92370,7 +92459,7 @@
 	}
 
 /***/ },
-/* 717 */
+/* 720 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -92384,7 +92473,7 @@
 
 
 /***/ },
-/* 718 */
+/* 721 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -92399,7 +92488,7 @@
 
 	var _reactRouter = __webpack_require__(491);
 
-	__webpack_require__(719);
+	__webpack_require__(722);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -92496,13 +92585,13 @@
 	exports.default = Subheader;
 
 /***/ },
-/* 719 */
+/* 722 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(720);
+	var content = __webpack_require__(723);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -92522,7 +92611,7 @@
 	}
 
 /***/ },
-/* 720 */
+/* 723 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -92536,7 +92625,7 @@
 
 
 /***/ },
-/* 721 */
+/* 724 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -92551,7 +92640,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _DomoBuzz = __webpack_require__(722);
+	var _DomoBuzz = __webpack_require__(725);
 
 	var _DomoBuzz2 = _interopRequireDefault(_DomoBuzz);
 
@@ -92575,7 +92664,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(723);
+	__webpack_require__(726);
 
 	var DomoBuzzContainer = function (_React$Component) {
 	    _inherits(DomoBuzzContainer, _React$Component);
@@ -92692,7 +92781,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DomoBuzzContainer);
 
 /***/ },
-/* 722 */
+/* 725 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -92771,13 +92860,13 @@
 	exports.default = DomoBuzz;
 
 /***/ },
-/* 723 */
+/* 726 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(724);
+	var content = __webpack_require__(727);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -92797,7 +92886,7 @@
 	}
 
 /***/ },
-/* 724 */
+/* 727 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -92812,7 +92901,7 @@
 
 
 /***/ },
-/* 725 */
+/* 728 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -92855,7 +92944,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(726);
+	__webpack_require__(729);
 
 	var LargeCard = function (_React$Component) {
 	    _inherits(LargeCard, _React$Component);
@@ -93060,13 +93149,13 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LargeCard);
 
 /***/ },
-/* 726 */
+/* 729 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(727);
+	var content = __webpack_require__(730);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -93086,7 +93175,7 @@
 	}
 
 /***/ },
-/* 727 */
+/* 730 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -93100,7 +93189,7 @@
 
 
 /***/ },
-/* 728 */
+/* 731 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -93133,7 +93222,7 @@
 
 	var _ = _interopRequireWildcard(_underscore);
 
-	var _titleDiv = __webpack_require__(729);
+	var _titleDiv = __webpack_require__(732);
 
 	var _titleDiv2 = _interopRequireDefault(_titleDiv);
 
@@ -93147,7 +93236,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(751);
+	__webpack_require__(754);
 
 	var ExampleCard = function (_React$Component) {
 	    _inherits(ExampleCard, _React$Component);
@@ -93404,7 +93493,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ExampleCard);
 
 /***/ },
-/* 729 */
+/* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -93417,23 +93506,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SharedDiv = __webpack_require__(730);
+	var _SharedDiv = __webpack_require__(733);
 
 	var _SharedDiv2 = _interopRequireDefault(_SharedDiv);
 
-	var _DomoDiv = __webpack_require__(733);
+	var _DomoDiv = __webpack_require__(736);
 
 	var _DomoDiv2 = _interopRequireDefault(_DomoDiv);
 
-	var _AddCardButton = __webpack_require__(736);
+	var _AddCardButton = __webpack_require__(739);
 
 	var _AddCardButton2 = _interopRequireDefault(_AddCardButton);
 
-	var _titlePageOptionsButton = __webpack_require__(743);
+	var _titlePageOptionsButton = __webpack_require__(746);
 
 	var _titlePageOptionsButton2 = _interopRequireDefault(_titlePageOptionsButton);
 
-	__webpack_require__(749);
+	__webpack_require__(752);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93468,7 +93557,7 @@
 	exports.default = TitleDiv;
 
 /***/ },
-/* 730 */
+/* 733 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -93481,7 +93570,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(731);
+	__webpack_require__(734);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93556,13 +93645,13 @@
 	exports.default = SharedDiv;
 
 /***/ },
-/* 731 */
+/* 734 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(732);
+	var content = __webpack_require__(735);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -93582,7 +93671,7 @@
 	}
 
 /***/ },
-/* 732 */
+/* 735 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -93596,7 +93685,7 @@
 
 
 /***/ },
-/* 733 */
+/* 736 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -93609,7 +93698,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(734);
+	__webpack_require__(737);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93636,13 +93725,13 @@
 	exports.default = DomoDiv;
 
 /***/ },
-/* 734 */
+/* 737 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(735);
+	var content = __webpack_require__(738);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -93662,7 +93751,7 @@
 	}
 
 /***/ },
-/* 735 */
+/* 738 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -93676,7 +93765,7 @@
 
 
 /***/ },
-/* 736 */
+/* 739 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -93695,11 +93784,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _AddCardPopup = __webpack_require__(737);
+	var _AddCardPopup = __webpack_require__(740);
 
 	var _AddCardPopup2 = _interopRequireDefault(_AddCardPopup);
 
-	__webpack_require__(741);
+	__webpack_require__(744);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93764,7 +93853,7 @@
 	exports.default = AddCardButton;
 
 /***/ },
-/* 737 */
+/* 740 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -93783,11 +93872,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactOnclickout = __webpack_require__(738);
+	var _reactOnclickout = __webpack_require__(741);
 
 	var _reactOnclickout2 = _interopRequireDefault(_reactOnclickout);
 
-	__webpack_require__(739);
+	__webpack_require__(742);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93871,7 +93960,7 @@
 	exports.default = AddCard;
 
 /***/ },
-/* 738 */
+/* 741 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -93949,13 +94038,13 @@
 
 
 /***/ },
-/* 739 */
+/* 742 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(740);
+	var content = __webpack_require__(743);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -93975,7 +94064,7 @@
 	}
 
 /***/ },
-/* 740 */
+/* 743 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -93989,13 +94078,13 @@
 
 
 /***/ },
-/* 741 */
+/* 744 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(742);
+	var content = __webpack_require__(745);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -94015,7 +94104,7 @@
 	}
 
 /***/ },
-/* 742 */
+/* 745 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -94029,7 +94118,7 @@
 
 
 /***/ },
-/* 743 */
+/* 746 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -94048,11 +94137,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _OptionPopup = __webpack_require__(744);
+	var _OptionPopup = __webpack_require__(747);
 
 	var _OptionPopup2 = _interopRequireDefault(_OptionPopup);
 
-	__webpack_require__(747);
+	__webpack_require__(750);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -94112,7 +94201,7 @@
 	exports.default = OptionButton;
 
 /***/ },
-/* 744 */
+/* 747 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -94131,11 +94220,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactOnclickout = __webpack_require__(738);
+	var _reactOnclickout = __webpack_require__(741);
 
 	var _reactOnclickout2 = _interopRequireDefault(_reactOnclickout);
 
-	__webpack_require__(745);
+	__webpack_require__(748);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -94284,13 +94373,13 @@
 	exports.default = OptionPopup;
 
 /***/ },
-/* 745 */
+/* 748 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(746);
+	var content = __webpack_require__(749);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -94310,7 +94399,7 @@
 	}
 
 /***/ },
-/* 746 */
+/* 749 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -94324,13 +94413,13 @@
 
 
 /***/ },
-/* 747 */
+/* 750 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(748);
+	var content = __webpack_require__(751);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -94350,7 +94439,7 @@
 	}
 
 /***/ },
-/* 748 */
+/* 751 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -94364,13 +94453,13 @@
 
 
 /***/ },
-/* 749 */
+/* 752 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(750);
+	var content = __webpack_require__(753);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -94390,7 +94479,7 @@
 	}
 
 /***/ },
-/* 750 */
+/* 753 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
@@ -94404,13 +94493,13 @@
 
 
 /***/ },
-/* 751 */
+/* 754 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(752);
+	var content = __webpack_require__(755);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(705)(content, {});
@@ -94430,7 +94519,7 @@
 	}
 
 /***/ },
-/* 752 */
+/* 755 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(704)();
