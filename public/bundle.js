@@ -28827,7 +28827,7 @@
 	});
 	exports.default = {
 	    counter: 1,
-	    showDomoBuzz: true,
+	    showDomoBuzz: false,
 	    twitterData: {},
 	    isUserLoggedIn: false,
 	    user: { twitterHandle: 'devmtn', name: 'Guest' },
